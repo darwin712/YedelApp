@@ -24,4 +24,3 @@ assignees: ''
 * [ ] Criterio de aceptación 1
 * [ ] Criterio de aceptación 2
 * [ ] Criterio de aceptación N
-
