@@ -1,0 +1,122 @@
+
+.ladoDerecho{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.ladoIzquierdo{
+    flex: 0 0 auto;
+
+}
+.contenedorPrincipal{
+    background-color: rgba(110, 222, 138, 0.12);
+    padding: 30px 40px 60px 40px;
+    gap: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    min-height: 520px;
+    width: 100%;
+    border-radius: 10px;
+    color: #1B4332;
+}
+
+.columna{
+    flex: 0 0 450px;
+}
+
+.Separador{
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+table, .datosTabla{
+    background-color: #caf1b1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding: 10px 5px;
+}
+
+#cuadroExtra{
+    background-color: #caf1b1;
+    border-radius: 8px;
+    width: 680px;
+    min-height: 250px;
+    padding: 25px;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    box-sizing: border-box;
+    margin: 20px auto;
+}
+
+#cuadroExtraDerecha{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+
+#cuadroExtraIzquierda{
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btnGuardar{
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.campoFormu{
+
+    font-weight: 600;
+    color: #1B4332;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+#horasInicioFInal{
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+}
+
+.columnaHoras{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+td{
+    border: 1px #568259 solid;
+    padding: 8px;
+}
+
+th{
+    background-color: #2D6A4F;
+    color: white;
+    font-weight: bolder;
+    text-align: center;
+    padding: 12px 10px;
+    border: 1px solid #2D6A4F;;
+}
+
+.carta{
+    max-height: 500px;
+    max-width: 500px;
+    overflow-y: auto;
+    border: 1px solid rgba(45, 106, 79, 0.5);
+    border-radius: 7px;
+    margin-bottom: 20px;
+}

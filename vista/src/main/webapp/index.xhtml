@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>SAUAP - Menu</title>
+        <style>
+            html, body{
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
+            }
+            body{
+                background-color: #7EBB63;
+                font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+            }
+            .barra{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 22px 50px;
+                background: #DCDCDC;
+                position: relative;
+                z-index: 10;
+            }
+            .barra .titulo{
+                font-size: 40px;
+                font-weight: bold;
+                letter-spacing: 1px;
+                margin: 0;
+            }
+            .barra .titulo .parte1{
+                color: #ABB679;
+            }
+            .barra .titulo .parte2{
+                color: #3E7B3E;
+            }
+            .menu-contenedor{
+                position: relative;
+            }
+            .boton-menu{
+                width: 54px;
+                height: 54px;
+                background: #3E7B3E;
+                border: none;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            .boton-menu:hover{
+                background: #336633;
+            }
+            .desplegable{
+                display: none;
+                position: absolute;
+                top: 64px;
+                right: 0;
+                width: 240px;
+                background: #FFFFFF;
+                border-radius: 10px;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+                overflow: hidden;
+            }
+            .desplegable.mostrar{
+                display: block;
+            }
+            .desplegable a, .desplegable .item-salir{
+                display: block;
+                padding: 14px 20px;
+                color: #1B1B1B;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: bold;
+                cursor: pointer;
+                border-bottom: 1px solid #EEEEEE;
+            }
+            .desplegable a:hover{
+                background: #F0F0F0;
+            }
+            .desplegable .item-salir{
+                color: #B23B3B;
+                border-bottom: none;
+            }
+            .desplegable .item-salir:hover{
+                background: #FBECEC;
+            }
+            .contenido{
+                display: flex;
+                justify-content: center;
+                padding: 70px 20px;
+            }
+            .tarjetas{
+                display: flex;
+                gap: 30px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .tarjeta{
+                width: 230px;
+                height: 380px;
+                background: #DCDCDC;
+                border-radius: 14px;
+                text-decoration: none;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 30px 24px;
+                box-sizing: border-box;
+            }
+            .tarjeta:hover{
+                background: #D0D0D0;
+            }
+            .tarjeta .icono{
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .logo{
+                height: 46px;
+            }
+            .icono-img{
+                width: 90px;
+                height: 90px;
+                object-fit: contain;
+            }
+            .tarjeta .nombre{
+                font-size: 17px;
+                font-weight: bold;
+                color: #1B1B1B;
+                margin: 0;
+                text-align: left;
+            }
+        </style>
+        <script>
+            function alternarMenu(){
+                document.getElementById('menuDesplegable').classList.toggle('mostrar');
+            }
+            document.addEventListener('click', function(evento){
+                var contenedor = document.getElementById('menuContenedor');
+                var desplegable = document.getElementById('menuDesplegable');
+                if(contenedor &amp;&amp; !contenedor.contains(evento.target)){
+                    desplegable.classList.remove('mostrar');
+                }
+            });
+        </script>
+    </h:head>
+    <h:body>
+        <div class="barra">
+            <p:graphicImage url="resources/images/logo.png" styleClass="logo" />
+
+            <div class="menu-contenedor" id="menuContenedor">
+                <button type="button" class="boton-menu" onclick="alternarMenu()">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+
+                <div class="desplegable" id="menuDesplegable">
+                    <h:link outcome="index">Menu</h:link>
+                    <h:link outcome="profesores">Alta de profesores</h:link>
+                    <h:link outcome="unidades">Unidades de aprendizaje</h:link>
+                    <h:link outcome="asignaciones">Asignaciones</h:link>
+                    <h:form>
+                        <h:commandLink styleClass="item-salir" value="Cerrar sesion" actionListener="#{loginUI.logout()}" />
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+        <div class="contenido">`
+            <div class="tarjetas">
+                <h:link outcome="profesores" styleClass="tarjeta">
+                    <div class="icono">
+                        <p:graphicImage url="resources/images/icono-profesores.png" styleClass="icono-img" />
+                    </div>
+                    <p class="nombre">Alta de profesores</p>
+                </h:link>
+
+                <h:link outcome="unidades" styleClass="tarjeta">
+                    <div class="icono">
+                        <p:graphicImage url="resources/images/icono-unidades.png" styleClass="icono-img" />
+                    </div>
+                    <p class="nombre">Unidades de aprendizaje</p>
+                </h:link>
+
+                <h:link outcome="asignaciones" styleClass="tarjeta">
+                    <div class="icono">
+                        <p:graphicImage url="resources/images/icono-asignaciones.png" styleClass="icono-img" />
+                    </div>
+                    <p class="nombre">Asignaciones</p>
+                </h:link>
+            </div>
+        </div>
+    </h:body>
+</html>

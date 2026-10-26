@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <title> <ui:insert name="titulo"> SAUAP </ui:insert> </title>
+    <style>
+        body{
+            font-family: Arial;
+            background-color: #4F9D69;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        header{
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 80px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.25);
+            background-color: #FFFDF9;
+            position: relative;
+            z-index: 10;
+        }
+        #titleDiv{
+            padding-left: 2%;
+        }
+        #menu{
+            padding-left: 2%;
+        }
+        #titulo{
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+        #subtitulo{
+            font-size:16px;
+            text-align: left;
+            font-weight: normal;
+            color: #5da180;
+        }
+        #btnMenu{
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+        #salirDiv{
+            margin-left: auto;
+            padding-right: 2%;
+            display: flex;
+            align-items: center;
+        }
+        .btn-salir{
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #FFFFFF;
+            color: #4FA974;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            padding: 6px 14px;
+            border: 2px solid #4FA974;
+            border-radius: 25px;
+            transition: 0.2s;
+            max-height: 35px;
+            box-sizing: border-box;
+        }
+        .btn-salir img{
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+        }
+        .btn-salir:hover{
+            background-color: #24221e;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+        #contenedorPrincipal{
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+        #sidebar{
+            width: 200px;
+            background-color: #4FA974;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+        #sidebar.hidden{
+            margin-left: -230px;
+        }
+        #sidebar button{
+            padding: 8px;
+            margin-bottom: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            background-color: #FFFDF9;
+            color: #21bd6e;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.25);
+            transition: 0.2s;
+        }
+        #sidebar button:hover{
+            background-color: #f6f6f6;
+            color: #4FA974;
+            transform: translateY(-2px);
+        }
+        #contenido{
+            flex: 1;
+            padding: 20px;
+            overflow: auto;
+            background-color: #F7F9F4;
+        }
+        #datos{
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 18px;
+            padding: 4% 15%;
+        }
+        .filaDoble{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .filaTriple{
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        .fieldLarge{
+            width: 100%;
+            height: 35px;
+            border: 2px solid #bfbfbf;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.01);
+            border-radius: 15px;
+            font-size: 15px;
+        }
+        .fieldSmall,
+        .fieldSelect{
+            width: 100%;
+            flex: 1;
+            height: 35px;
+            border-radius: 15px;
+            border: 2px solid #bfbfbf;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.01);
+            font-size: 14px;
+        }
+        #btnAgregar{
+            background-color: #4FA974;
+            color: white;
+            height: 40px;
+            border-radius: 25px;
+            font-size: 18px;
+            transition: 0.2s;
+            border: none;
+            margin-left: 20%;
+            margin-right: 20%;
+        }
+        #btnAgregar:hover{
+            background-color: #3dd666;
+            transform: translateY(-2px);
+            cursor: pointer;
+        }
+        .card {
+            background-color: #f7fdf4;
+            width: 90%;
+            margin: 30px auto;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            min-height: 500px;
+            box-sizing: border-box;
+        }
+        .busqueda {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        .busq {
+            flex-grow: 1;
+            padding: 10px 15px 10px 40px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            background-image: url('resources/buscar.png');
+            background-repeat: no-repeat;
+            background-position: 12px center;
+            background-size: 18px;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .btn-registrar {
+            background-color: #00aa4f;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .box-modificar {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #bce2a8;
+            margin-bottom: 20px;
+        }
+        .tabla {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+        .tabla th {
+            text-align: center;
+            background-color: #d1f7be;
+            color: #3f782c;
+            padding: 12px;
+            border: 2px solid #a2e283;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .tabla td {
+            text-align: center;
+            padding: 12px;
+            border: 2px solid #a2e283;
+            color: #555555;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .acciones {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-icono {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .btn-icono img {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+    <script>
+        function abrirSidebar(){
+            var sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+    </script>
+</h:head>
+<h:body>
+    <header>
+        <div id="menu">
+            <button id="btnMenu" onclick="abrirSidebar()">
+                <p:graphicImage url="resources/menu.png" style="width: 100%; height: 100%; object-fit: contain;" />
+            </button>
+        </div>
+        <div id="logo"> </div>
+        <div id="titleDiv">
+            <div id="titulo">
+                <p:graphicImage url="resources/Logo.png" alt="SAUAP" style="height: 40px; object-fit: contain;" />
+            </div>
+            <div id="subtitulo"> <ui:insert name="subtitulo"> Subtitulo </ui:insert> </div>
+        </div>
+        <div id="salirDiv">
+            <h:form id="formSalirHeader">
+                <h:commandLink id="salir" styleClass="btn-salir" actionListener="#{loginUI.logout()}">
+                    <p:graphicImage url="resources/salir.png" />
+                    <h:outputText value="Cerrar sesion" />
+                </h:commandLink>
+            </h:form>
+        </div>
+    </header>
+
+    <div id="contenedorPrincipal">
+        <div id="sidebar">
+            <button type="button" id="seccion" onclick="window.location.href='index.xhtml'"> Inicio </button>
+            <button type="button" id="seccion" onclick="window.location.href='registroProfesores.xhtml'"> Registro de Profesores </button>
+            <button type="button" id="seccion" onclick="window.location.href='registroUnidades.xhtml'"> Registro de Unidades </button>
+            <button type="button" id="seccion" onclick="window.location.href='unidadesCrud.xhtml'"> Consulta de unidades </button>
+            <button type="button" id="seccion" onclick="window.location.href='profesoresCrud.xhtml'"> Consulta de profesores </button>
+            <button type="button" id="seccion" onclick="window.location.href='AsignarUnidad.xhtml'"> Asignaciones </button>
+            <button type="button" id="seccion" onclick="window.location.href='consulta.xhtml'"> Consulta general </button>
+        </div>
+        <div id="contenido">
+            <ui:insert name="contenido">
+
+            </ui:insert>
+        </div>
+    </div>
+
+</h:body>
+</html>
