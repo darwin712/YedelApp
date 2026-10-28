@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="titulo"> Registro de profesores </ui:define>
+    <ui:define name="subtitulo"> Registro de profesores </ui:define>
+
+    <ui:define name="contenido">
+        <div class="contenedor">
+            <div class="datos">
+                <div class="campo">
+                    <label>Nombre(s)</label>
+                    <input type="text" name="Nombre" class="fieldLarge" placeholder="Nombre(s)" required="required"/>
+                </div>
+
+                <div class="filaDoble">
+                    <div class="campo">
+                        <label>Apellido paterno</label>
+                        <input type="text" name="Apellido_Paterno" class="fieldSmall" placeholder="Apellido Paterno" required="required"/>
+                    </div>
+
+                    <div class="campo">
+                        <label>Apellido materno</label>
+                        <input type="text" name="Apellido_Materno" class="fieldSmall" placeholder="Apellido Materno" required="required"/>
+                    </div>
+                </div>
+
+                <div class="filaDoble">
+                    <div class="campo">
+                        <label>Telefono</label>
+                        <input type="text" name="Telefono" class="fieldSmall" placeholder="Telefono" required="required"/>
+                    </div>
+
+                    <div class="campo">
+                        <label>Turno</label>
+                        <select name="Turno" class="fieldSelect">
+                            <option>Matutino</option>
+                            <option>Vespertino</option>
+                            <option>Mixto</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="campo">
+                    <label> Checkboxes </label>
+                    <div class="opciones">
+                        <label class="opcion">
+                            <span class="opcionTexto">
+                                Checkbox1
+                                <small>Descripcion</small>
+                            </span>
+                            <input type="checkbox" class="fieldCheckbox" name="checkbox1"/>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label>Radiobuttons</label>
+                    <div class="opciones">
+                        <label class="opcion">
+                            <span class="opcionTexto">
+                                Radiobutton1
+                                <small>Descripcion</small>
+                            </span>
+                            <input type="radio" class="fieldRadio" name="radiobuttons"/>
+                        </label>
+
+                        <label class="opcion">
+                            <span class="opcionTexto">
+                                Radiobutton2
+                                <small>Descripcion</small>
+                            </span>
+                            <input type="radio" class="fieldRadio" name="radiobuttons"/>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btnAgregar" onclick="abrirFormulario('test')"> Ejemplo de popup </button>
+            </div>
+        </div>
+
+        <div class="contenedor">
+            <h2>Titulo</h2>
+
+            <div class="tablaContenedor">
+                <table class="tabla">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>Juan Perez</td>
+                        <td>juan@gmail.com</td>
+                        <td><span class="estado activo">Activo</span></td>
+                        <td>
+                            <button class="btn-icono">Editar</button>
+                            <button class="btn-icono">Eliminar</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="fondoFormulario" id="fondoFormulario" onclick="cerrarFormulario()">
+            <div class="contenedor" onclick="event.stopPropagation()">
+                <div id="test">
+                    <div class="datos">
+                        <div class="campo">
+                            <label>Hola</label>
+                            <input type="text" name="Hola" class="fieldSmall" placeholder="saluda" required="required"/>
+                        </div>
+
+                        <button type="submit" class="btnAgregar" onclick="cerrarFormulario()"> Cerrar </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
