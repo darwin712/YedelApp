@@ -5,6 +5,8 @@ USE yedelApp;
 CREATE TABLE administrador (
     id_administrador INT PRIMARY KEY,
     nombre VARCHAR(100),
+    apellido_p VARCHAR(100),
+    apellido_m VARCHAR(100),
     correo VARCHAR(150),
     contrasena VARCHAR(255),
     telefono VARCHAR(20)
@@ -13,6 +15,8 @@ CREATE TABLE administrador (
 CREATE TABLE cliente (
     id_cliente INT PRIMARY KEY,
     nombre VARCHAR(100),
+    apellido_p VARCHAR(100),
+    apellido_m VARCHAR(100),
     correo VARCHAR(150),
     contrasena VARCHAR(255),
     telefono VARCHAR(20)
@@ -21,6 +25,8 @@ CREATE TABLE cliente (
 CREATE TABLE estilista (
     id_estilista INT PRIMARY KEY,
     nombre VARCHAR(100),
+    apellido_p VARCHAR(100),
+    apellido_m VARCHAR(100),
     especialidad VARCHAR(100),
     activo BOOLEAN
 );
