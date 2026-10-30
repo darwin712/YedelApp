@@ -21,6 +21,14 @@ public class FacadeAdministrador {
         delegateAdministrador.saveAdministrador(administrador);
     }
 
+    public void actualizarAdministrador(Administrador administrador){
+        delegateAdministrador.updateAdministrador(administrador);
+    }
+
+    public void eliminarAdministrador(Administrador administrador){
+        delegateAdministrador.deleteAdministrador(administrador);
+    }
+
     public List<Administrador> findAll(){
         return delegateAdministrador.findAll();
     }

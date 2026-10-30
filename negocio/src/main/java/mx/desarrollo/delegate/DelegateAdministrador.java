@@ -22,6 +22,14 @@ public class DelegateAdministrador {
         ServiceLocator.getInstanceAdministradorDAO().save(administrador);
     }
 
+    public void updateAdministrador(Administrador administrador){
+        ServiceLocator.getInstanceAdministradorDAO().update(administrador);
+    }
+
+    public void deleteAdministrador(Administrador administrador){
+        ServiceLocator.getInstanceAdministradorDAO().delete(administrador);
+    }
+
     public List<Administrador> findAll(){
         return ServiceLocator.getInstanceAdministradorDAO().findAll();
     }
