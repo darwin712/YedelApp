@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="titulo"> Registro de profesores </ui:define>
+    <ui:define name="subtitulo"> Registro de profesores </ui:define>
+
+    <ui:define name="contenido">
+        <div class="contenedor">
+            <div class="datos">
+                <div class="campo">
+                    <label>Nombre(s)</label>
+                    <input type="text" name="Nombre" class="fieldLarge" placeholder="Nombre(s)" required="required"/>
+                </div>
+
+                <div class="filaDoble">
+                    <div class="campo">
+                        <label>Apellido paterno</label>
+                        <input type="text" name="Apellido_Paterno" class="fieldSmall" placeholder="Apellido Paterno" required="required"/>
+                    </div>
+
+                    <div class="campo">
+                        <label>Apellido materno</label>
+                        <input type="text" name="Apellido_Materno" class="fieldSmall" placeholder="Apellido Materno" required="required"/>
+                    </div>
+                </div>
+
+                <div class="filaDoble">
+                    <div class="campo">
+                        <label>Telefono</label>
+                        <input type="text" name="Telefono" class="fieldSmall" placeholder="Telefono" required="required"/>
+                    </div>
+
+                    <div class="campo">
+                        <label>Turno</label>
+                        <select name="Turno" class="fieldSelect">
+                            <option>Matutino</option>
+                            <option>Vespertino</option>
+                            <option>Mixto</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="campo">
+                    <label> Checkboxes </label>
+                    <div class="opciones">
+                        <label class="opcion">
+                            <span class="opcionTexto">
+                                Checkbox1
+                                <small>Descripcion</small>
+                            </span>
+                            <input type="checkbox" class="fieldCheckbox" name="checkbox1"/>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label>Radiobuttons</label>
+                    <div class="opciones">
+                        <label class="opcion">
+                            <span class="opcionTexto">
+                                Radiobutton1
+                                <small>Descripcion</small>
+                            </span>
+                            <input type="radio" class="fieldRadio" name="radiobuttons"/>
+                        </label>
+
+                        <label class="opcion">
+                            <span class="opcionTexto">
+                                Radiobutton2
+                                <small>Descripcion</small>
+                            </span>
+                            <input type="radio" class="fieldRadio" name="radiobuttons"/>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btnAgregar" onclick="abrirFormulario('test')"> Ejemplo de popup </button>
+            </div>
+        </div>
+
+        <h:form id="formAdmin">
+
+            <p:messages id="messages" showDetail="true" closable="true">
+
+            </p:messages>
+
+            <div class="busqueda">
+                <h:inputText styleClass="busq" value="#{adminBean.filtroBusqueda}" placeholder="Buscar..."/>
+                <h:commandButton value="Buscar" styleClass="btn-registrar" action="#{adminBean.buscar()}" />
+            </div>
+
+            <h:panelGroup id="boxEdicion" rendered="#{adminBean.profesorSeleccionado != null}" layout="block" styleClass="box-modificar">
+                <h3>Modificar un profesor</h3>
+
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Correo:"/>
+                    <h:inputText maxlength="45" autocomplete="false" required="true" value="#{adminBean.profesorSeleccionado.correo}"/>
+
+                    <h:outputLabel value="Contrasena:"/>
+                    <h:inputText maxlength="45" autocomplete="false" required="true" value="#{adminBean.profesorSeleccionado.contrasena}"/>
+                </h:panelGrid>
+
+
+                <br/>
+                <h:commandButton value="Guardar cambios" action="#{adminBean.guardarEdicion()}" />
+                <h:commandButton value="Cancelar" immediate="true" action="#{adminBean.cancelarEdicion()}" style="margin-left: 10px;" />
+            </h:panelGroup>
+
+            <h:dataTable value="#{adminBean.listaProfesores}" var="prof" styleClass="tabla">
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                    <h:outputText value="##{prof.id}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Correo</f:facet>
+                    <h:outputText value="#{prof.correo}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Contrasena</f:facet>
+                    <h:outputText value="#{prof.contrasena}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header"></f:facet>
+                    <div class="acciones">
+                        <h:commandLink action="#{adminBean.setProfesorSeleccionado(prof)}" styleClass="btn-icono">
+                            <h:graphicImage url="resources/edit-icon.png"/>
+                        </h:commandLink>
+                        <h:commandLink action="#{adminBean.elim(prof)}" onclick="return confirm('Seguro de eliminarlo?');" styleClass="btn-icono">
+                            <h:graphicImage url="resources/elimin-icon.png"/>
+                        </h:commandLink>
+                    </div>
+                </h:column>
+            </h:dataTable>
+
+        </h:form>
+
+        <div class="fondoFormulario" id="fondoFormulario" onclick="cerrarFormulario()">
+            <div class="contenedor" onclick="event.stopPropagation()">
+                <div id="test">
+                    <div class="datos">
+                        <div class="campo">
+                            <label>Hola</label>
+                            <input type="text" name="Hola" class="fieldSmall" placeholder="saluda" required="required"/>
+                        </div>
+
+                        <button type="submit" class="btnAgregar" onclick="cerrarFormulario()"> Cerrar </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
