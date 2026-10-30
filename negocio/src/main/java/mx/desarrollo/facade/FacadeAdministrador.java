@@ -13,8 +13,8 @@ public class FacadeAdministrador {
         this.delegateAdministrador = new DelegateAdministrador();
     }
 
-    public Administrador login(String password, String usuario){
-        return delegateAdministrador.login(password, usuario);
+    public Administrador login(String password, String correo){
+        return delegateAdministrador.login(password, correo);
     }
 
     public void saveAdministrador(Administrador administrador){
@@ -23,6 +23,10 @@ public class FacadeAdministrador {
 
     public List<Administrador> findAll(){
         return delegateAdministrador.findAll();
+    }
+
+    public boolean esPrincipal(Integer id){
+        return delegateAdministrador.esPrincipal(id);
     }
 
 }

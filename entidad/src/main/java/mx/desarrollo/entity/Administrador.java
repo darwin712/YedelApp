@@ -11,34 +11,32 @@ import java.util.Set;
 @Table(name = "administrador")
 public class Administrador {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idadministrador", nullable = false)
+    @Column(name = "id_administrador", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
-    @NotNull
-    @Column(name = "nombre", nullable = false, length = 50)
+    @Size(max = 100)
+    @Column(name = "nombre", length = 100)
     private String nombre;
 
-    @Size(max = 50)
-    @NotNull
-    @Column(name = "appaterno", nullable = false, length = 50)
-    private String appaterno;
+    @Size(max = 100)
+    @Column(name = "apellido_p", length = 100)
+    private String apellidoP;
 
-    @Size(max = 50)
-    @NotNull
-    @Column(name = "apmaterno", nullable = false, length = 50)
-    private String apmaterno;
+    @Size(max = 100)
+    @Column(name = "apellido_m", length = 100)
+    private String apellidoM;
 
-    @Size(max = 45)
-    @NotNull
-    @Column(name = "usuario", nullable = false, length = 45)
-    private String usuario;
+    @Size(max = 150)
+    @Column(name = "correo", length = 150)
+    private String correo;
 
-    @Size(max = 45)
-    @NotNull
-    @Column(name = "contrasena", nullable = false, length = 45)
+    @Size(max = 255)
+    @Column(name = "contrasena")
     private String contrasena;
+
+    @Size(max = 20)
+    @Column(name = "telefono", length = 20)
+    private String telefono;
 
     public Integer getId() {
         return id;
@@ -56,28 +54,28 @@ public class Administrador {
         this.nombre = nombre;
     }
 
-    public String getAppaterno() {
-        return appaterno;
+    public String getApellidoP() {
+        return apellidoP;
     }
 
-    public void setAppaterno(String appaterno) {
-        this.appaterno = appaterno;
+    public void setApellidoP(String apellidoP) {
+        this.apellidoP = apellidoP;
     }
 
-    public String getApmaterno() {
-        return apmaterno;
+    public String getApellidoM() {
+        return apellidoM;
     }
 
-    public void setApmaterno(String apmaterno) {
-        this.apmaterno = apmaterno;
+    public void setApellidoM(String apellidoM) {
+        this.apellidoM = apellidoM;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getContrasena() {
@@ -86,6 +84,14 @@ public class Administrador {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
 }

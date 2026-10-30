@@ -3,138 +3,203 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
 <h:head>
-    <title>SAUAP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yedel Beauty Salón - Iniciar sesión</title>
     <style>
 
+        :root{
+            --rosa: #FAE8F8;
+            --rosa-boton: #F8DDF4;
+            --magenta: #D63CC8;
+            --texto: #111111;
+            --enlace: #2B8AD6;
+            --gris-campo: #F1F1F1;
+        }
+
+        *{
+            box-sizing: border-box;
+        }
+
         html, body{
-            height: 100%;
             margin: 0;
             padding: 0;
+            min-height: 100%;
         }
 
         body{
-            background-color: #76BB63;
-            font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+            background: #FFFFFF;
+            color: var(--texto);
+            font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
         }
 
-        .contenedor{
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
+        .pagina{
+            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            padding: 56px 28px 28px;
         }
 
-        div.login{
-            width: 420px;
-            padding: 45px 50px 40px;
-            background: #F2F2F0;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+        .encabezado{
             text-align: center;
-            box-sizing: border-box;
+            margin-bottom: 40px;
         }
 
-        .titulo{
-            margin: 0 0 32px;
-            font-size: 52px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #AFB56C 0%, #7FAC5B 45%, #4E8B3F 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: #6FA254;
+        .logo{
+            width: 240px;
+            max-width: 80%;
+            height: auto;
         }
 
-        .form-group{
-            margin-bottom: 18px;
+        .tarjeta{
+            width: 100%;
+            max-width: 340px;
         }
 
         .campo{
+            margin-bottom: 24px;
+        }
+
+        .campo label{
+            display: block;
+            margin: 0 0 8px 2px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .campo input{
             width: 100%;
-            box-sizing: border-box;
-            padding: 13px 16px;
-            border: 1px solid #4F4F4F;
-            border-radius: 10px;
-            background: #FFFFFF;
-            font-size: 15px;
-            color: #333333;
+            padding: 14px;
+            font-size: 16px;
             font-family: inherit;
-            box-shadow: none;
-        }
-
-        .campo::placeholder{
-            color: #9A9A9A;
-        }
-
-        .campo:focus{
+            color: var(--texto);
+            background: var(--gris-campo);
+            border: none;
+            border-bottom: 2px solid var(--magenta);
+            border-radius: 8px;
             outline: none;
-            border-color: #3E7B3E;
+        }
+
+        .campo input:focus{
+            box-shadow: 0 0 0 3px rgba(214, 60, 200, 0.18);
+        }
+
+        .acciones{
+            margin-top: 8px;
+            text-align: center;
         }
 
         .boton{
-            margin-top: 10px;
-            padding: 12px 30px;
-            background: #3E7B3E;
-            border: none;
-            border-radius: 22px;
-            box-shadow: none;
-        }
-
-        .boton .ui-button-text{
-            color: #FFFFFF;
+            min-width: 150px;
+            padding: 12px 28px;
+            font-size: 17px;
+            font-weight: 700;
             font-family: inherit;
-            font-size: 15px;
-            font-weight: bold;
-            font-style: italic;
-            padding: 0;
+            color: #3A2A38;
+            background: var(--rosa-boton);
+            border: none;
+            border-bottom: 2px solid var(--magenta);
+            border-radius: 12px;
+            box-shadow: 0 3px 6px rgba(214, 60, 200, 0.25);
+            cursor: pointer;
         }
 
         .boton:hover{
-            background: #336633;
+            background: #F4CFEE;
+        }
+
+        .registro{
+            margin-top: auto;
+            padding-top: 32px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .registro a{
+            color: var(--enlace);
+            text-decoration: none;
+        }
+
+        .registro a:hover{
+            text-decoration: underline;
         }
 
         .ui-messages{
-            width: 420px;
-            margin: 0 auto 14px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 600px){
+            .pagina{
+                justify-content: center;
+                padding: 40px 24px;
+            }
+
+            .encabezado{
+                margin-bottom: 28px;
+            }
+
+            .logo{
+                width: 300px;
+            }
+
+            .tarjeta{
+                max-width: 380px;
+                padding: 32px 36px 30px;
+                background: var(--rosa);
+                border-bottom: 2px solid var(--magenta);
+                border-radius: 10px;
+                box-shadow: 0 6px 18px rgba(214, 60, 200, 0.12);
+            }
+
+            .campo input{
+                background: #FFFFFF;
+            }
+
+            .registro{
+                margin-top: 24px;
+                padding-top: 0;
+            }
         }
     </style>
 </h:head>
 
 <h:body>
-    <div class="contenedor">
+    <main class="pagina">
 
-        <h:form>
+        <div class="encabezado">
+            <p:graphicImage url="resources/images/logo.png" alt="Yedel Beauty Salón" styleClass="logo" />
+        </div>
 
-            <p:messages id="messages" showDetail="true" closable="true">
+        <h:form id="formLogin" styleClass="tarjeta">
 
-            </p:messages>
-            <div class="login">
-                <div class="panel-header">
-                    <h1 class="titulo">SAUAP</h1>
-                </div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        <p:inputText styleClass="campo" placeholder="Nombre:" autocomplete="false" value="#{loginUI.usuario.usuario}" />
-                    </div>
-                    <div class="form-group">
-                        <p:password styleClass="campo" placeholder="Contraseña:" value="#{loginUI.usuario.contrasena}" />
-                    </div>
-                    <p:commandButton update="messages" styleClass="boton" value="Iniciar sesión" actionListener="#{loginUI.login()}" />
+            <p:messages id="mensajes" showDetail="true" closable="true" />
 
-                </div>
+            <div class="campo">
+                <h:outputLabel for="correo" value="Correo" />
+                <h:inputText id="correo" value="#{loginUI.correo}" pt:type="email" pt:autocomplete="email" />
+            </div>
+
+            <div class="campo">
+                <h:outputLabel for="contrasena" value="Contraseña" />
+                <h:inputSecret id="contrasena" value="#{loginUI.contrasena}" pt:autocomplete="current-password" />
+            </div>
+
+            <div class="acciones">
+                <h:commandButton id="ingresar" value="Ingresar" action="#{loginUI.login()}" styleClass="boton" />
             </div>
 
         </h:form>
 
-    </div>
+        <div class="registro">
+            <a href="registro.xhtml">¿No tienes una cuenta? Regístrate ahora</a>
+        </div>
 
+    </main>
 </h:body>
 </html>
