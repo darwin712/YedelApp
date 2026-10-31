@@ -32,4 +32,14 @@ public class ServiceLocator {
             return usuarioDAO;
         }
     }
+
+    private static CitaDAO citaDAO;
+
+    public static CitaDAO getInstanceCitaDAO() {
+        if (citaDAO == null) {
+            citaDAO = new CitaDAO(getEntityManager());
+        }
+        return citaDAO;
+    }
+
 }
