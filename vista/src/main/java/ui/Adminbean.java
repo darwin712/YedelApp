@@ -14,7 +14,7 @@ import java.util.List;
 
 @Named("adminBean")
 @ViewScoped
-public class AdminBean implements Serializable {
+public class Adminbean implements Serializable {
 
     private List<Administrador> administradores;
     private String filtroBusqueda;
