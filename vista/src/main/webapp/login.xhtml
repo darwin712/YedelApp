@@ -19,7 +19,7 @@
 
                 <div class="busqueda">
                     <h:inputText styleClass="busq" value="#{adminBean.filtroBusqueda}" placeholder="Buscar..."/>
-                    <h:commandButton value="Buscar" styleClass="btnRegistrar" action="#{adminBean.buscar()}" />
+                    <h:commandButton image = "resources/busqueda-icon.png" styleClass="btnRegistrar" action="#{adminBean.buscar()}" />
                 </div>
 
                 <h:panelGroup id="boxEdicion" rendered="#{adminBean.adminSeleccionado != null}" layout="block" styleClass="box-modificar">
