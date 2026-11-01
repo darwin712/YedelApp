@@ -44,7 +44,7 @@ public class Adminbean implements Serializable {
             ServiceFacadeLocator.getInstanceFacadeAdministrador().eliminarAdministrador(administrador);
             administradores = ServiceFacadeLocator.getInstanceFacadeAdministrador().findAll();
         } catch (Exception ex){
-            mensajeError("No se pudo eliminar al administrador. Verifique que no tenga registros relacionados.");
+            mensajeError("No se pudo eliminar al administrador.");
         }
     }
 
