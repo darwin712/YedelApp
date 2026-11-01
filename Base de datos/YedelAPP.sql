@@ -69,6 +69,19 @@ CREATE TABLE cita (
     estado VARCHAR(20)
 );
 
+CREATE TABLE cita_servicio (
+    id_cita INT NOT NULL,
+    id_servicio INT NOT NULL,
+    PRIMARY KEY (id_cita, id_servicio),
+    CONSTRAINT fk_citaservicio_cita 
+        FOREIGN KEY (id_cita) REFERENCES cita(id_cita) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_citaservicio_servicio 
+        FOREIGN KEY (id_servicio) REFERENCES servicio(id_servicio) 
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
 CREATE TABLE producto (
     id_producto  INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100),
