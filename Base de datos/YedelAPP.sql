@@ -42,6 +42,12 @@ CREATE TABLE estilista_servicio (
     id_estilista INT,
     id_servicio INT,
     PRIMARY KEY (id_estilista, id_servicio)
+    CONSTRAINT fk_estilista_servicio_estilista 
+        FOREIGN KEY (id_estilista) REFERENCES estilista(id_estilista) 
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_estilista_servicio_servicio 
+        FOREIGN KEY (id_servicio) REFERENCES servicio(id_servicio) 
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE horario (
