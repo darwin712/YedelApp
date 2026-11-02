@@ -8,19 +8,20 @@ import mx.desarrollo.persistence.persistence.AbstractDAO;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public class CitaDAO extends AbstractDAO<Cita> {
     private final EntityManager entityManager;
 
     public CitaDAO(EntityManager em){
-    super(Cita.class);
-    this.entityManager = em;
+        super(Cita.class);
+        this.entityManager = em;
     }
 
     public List<Cita> obtenerTodos(){
-    return entityManager
-        .createQuery("SELECT c FROM Cita c", Cita.class)
-        .getResultList();
+        return entityManager
+                .createQuery("SELECT c FROM Cita c", Cita.class)
+                .getResultList();
     }
 
     public void guardarCitaConServicios(Cita cita, List<Integer> idsServicios) {
@@ -55,7 +56,7 @@ public class CitaDAO extends AbstractDAO<Cita> {
                     "GROUP BY cita.id_cita, cita.hora_inicio";
 
             @SuppressWarnings("unchecked")
-                    List<Object[]> resultados= em.createNativeQuery(query).setParameter("idEstilista", idEstilista)
+            List<Object[]> resultados= em.createNativeQuery(query).setParameter("idEstilista", idEstilista)
                     .setParameter("fecha",fecha).getResultList();
 
             for (Object[] row : resultados) {
@@ -71,12 +72,17 @@ public class CitaDAO extends AbstractDAO<Cita> {
             return false;
         });
 
-        }
+    }
 
 
     @Override
     public EntityManager getEntityManager() {
         return entityManager;
+    }
+
+    public void eliminarCita(Integer idCita) {
+        Optional<Cita> citaOpt = find(idCita);
+        citaOpt.ifPresent(this::delete);
     }
 
 

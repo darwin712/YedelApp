@@ -14,7 +14,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class DelegateCita {
+    private CitaDAO citaDAO;
 
+    public DelegateCita() {
+        this.citaDAO = ServiceLocator.getInstanceCitaDAO();
+    }
 
     public void saveCita(Cita cita) {
         ServiceLocator.getInstanceCitaDAO().save(cita);
@@ -26,6 +30,10 @@ public class DelegateCita {
 
     public void deleteCita(Cita cita){
         ServiceLocator.getInstanceCitaDAO().delete(cita);
+    }
+
+    public void darDeBajaCita(Integer idCita) {
+        citaDAO.eliminarCita(idCita);
     }
 
     public List<Cita> findAll(){
