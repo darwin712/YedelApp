@@ -90,6 +90,26 @@
             font-size: 14px;
         }
 
+        .h2aqua {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 10px 0 15px 10px;
+            background: #20d1ce;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .h2fucsia {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 10px 0 15px 10px;
+            background: #D6249F;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .parteDerecha {
             display: flex;
             align-items: center;
@@ -255,6 +275,23 @@
             color: #78155b;
         }
 
+        .campo.aqua > label {
+            color: #1ca3a0;
+        }
+
+        .valorDato {
+            display: flex;
+            align-items: center;
+            min-height: 46px;
+            padding: 0 16px;
+            box-sizing: border-box;
+            border: 3px solid transparent;
+            border-radius: 14px;
+            background: linear-gradient(white, white) padding-box, linear-gradient(#E4D9EC, #E4D9EC) border-box;
+            color: #78155b;
+            font-size: 15px;
+        }
+
         .filaDoble {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -275,8 +312,7 @@
             box-sizing: border-box;
             border: 3px solid transparent;
             border-radius: 14px;
-            background: linear-gradient(white, white) padding-box,
-            linear-gradient(#E4D9EC, #E4D9EC) border-box;
+            background: linear-gradient(white, white) padding-box, linear-gradient(#E4D9EC, #E4D9EC) border-box;
             font-family: inherit;
             font-size: 15px;
             color: #78155b;
@@ -366,7 +402,7 @@
             --relleno: #22D3D0;
             --relleno-h: #14BDBA;
             --borde: #22D3D0;
-            --texto: #2A1B3D;
+            --texto: white;
             --anillo: linear-gradient(90deg, #8FE9E5, #B58CFF, #F5A3D6);
             padding: 10px 25px;
             border-radius: 20px;
@@ -854,14 +890,43 @@
     <script>
         function actualizarReloj() {
             var ahora = new Date();
-            document.getElementById('hora').textContent =
-                ahora.toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit' });
-            document.getElementById('fecha').textContent =
-                ahora.toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
+
+            var hora = document.getElementById('hora');
+            var fecha = document.getElementById('fecha');
+
+            if (hora != null) {
+                hora.textContent = ahora.toLocaleTimeString('es-MX', {
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+            }
+
+            if (fecha != null) {
+                fecha.textContent = ahora.toLocaleDateString('es-MX', {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'short'
+                });
+            }
         }
 
-        actualizarReloj();
-        setInterval(actualizarReloj, 30000);
+        function iniciarReloj() {
+            actualizarReloj();
+
+            var msHastaProximoMinuto = 60000 - (Date.now() % 60000);
+            setTimeout(function() {
+                actualizarReloj();
+                setInterval(actualizarReloj, 60000);
+            }, msHastaProximoMinuto);
+        }
+
+        document.addEventListener('DOMContentLoaded', iniciarReloj);
+
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                actualizarReloj();
+            }
+        });
 
         function alternarSidebar() {
             document.getElementById('sidebar').classList.toggle('abierta');
@@ -919,9 +984,9 @@
     </header>
 
     <div class="sidebar" id="sidebar">
-        <a href="#" class="apartado activo">Inicio</a>
-        <a href="#" class="apartado">Gestión de citas</a>
-        <a href="#" class="apartado">Inventario</a>
+        <a href="#" class="apartado #{view.viewId eq '/index.xhtml' ? 'activo' : ''}">Inicio</a>
+        <a href="#" class="apartado #{view.viewId eq '/gestionCitas.xhtml' ? 'activo' : ''}">Gestión de citas</a>
+        <a href="#" class="apartado #{view.viewId eq '/inventario.xhtml' ? 'activo' : ''}">Inventario</a>
     </div>
 
     <div class="fondoOscuro" id="fondoOscuro" onclick="cerrarSidebar()"> </div>
