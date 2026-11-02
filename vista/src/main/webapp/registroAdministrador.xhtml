@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<f:metadata>
+    <f:viewAction action="#{registroAdminUI.verificarAcceso()}" />
+</f:metadata>
+
+<h:head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yedel Beauty Salón - Registrar administrador</title>
+    <style>
+
+        :root{
+            --fondo: #F4EEF8;
+            --titulo: #B5258F;
+            --boton: #D6249F;
+            --borde: #E6E6E6;
+            --placeholder: #BBA6B8;
+        }
+
+        *{
+            box-sizing: border-box;
+        }
+
+        html, body{
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body{
+            background: var(--fondo);
+            font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        .pagina{
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 24px 16px;
+        }
+
+        .tarjeta{
+            width: 100%;
+            max-width: 640px;
+            padding: 28px 24px 36px;
+            background: #FFFFFF;
+            border-radius: 16px;
+        }
+
+        .tarjeta h1{
+            margin: 0 0 24px;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--titulo);
+        }
+
+        .campo{
+            margin-bottom: 22px;
+        }
+
+        .campo label{
+            display: block;
+            margin: 0 0 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--titulo);
+        }
+
+        .campo input{
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-family: inherit;
+            font-weight: 500;
+            color: #3A2A38;
+            background: #FFFFFF;
+            border: 3px solid var(--borde);
+            border-radius: 14px;
+            outline: none;
+        }
+
+        .campo input::placeholder{
+            color: var(--placeholder);
+        }
+
+        .campo input:focus{
+            border-color: var(--boton);
+        }
+
+        .acciones{
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .boton{
+            width: 100%;
+            max-width: 245px;
+            padding: 12px 24px;
+            font-size: 20px;
+            font-weight: 600;
+            font-family: inherit;
+            color: #FFFFFF;
+            background: var(--boton);
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+
+        .boton:hover{
+            background: #BF1E8D;
+        }
+
+        @media (min-width: 600px){
+            .pagina{
+                padding: 52px 24px;
+            }
+
+            .tarjeta{
+                padding: 28px 32px 40px;
+            }
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <main class="pagina">
+        <h:form id="formRegistroAdmin" styleClass="tarjeta">
+
+            <h1>Registrar administrador</h1>
+
+            <div class="campo">
+                <h:outputLabel for="correo" value="Correo electrónico" />
+                <h:inputText id="correo" pt:type="email" pt:placeholder="ejemplo@gmail.com" pt:autocomplete="off" />
+            </div>
+
+            <div class="campo">
+                <h:outputLabel for="contrasena" value="Contraseña" />
+                <h:inputSecret id="contrasena" pt:placeholder="*********" pt:autocomplete="new-password" />
+            </div>
+
+            <div class="acciones">
+                <h:commandButton id="registrar" value="Registrar" type="button" styleClass="boton" />
+            </div>
+
+        </h:form>
+    </main>
+</h:body>
+</html>

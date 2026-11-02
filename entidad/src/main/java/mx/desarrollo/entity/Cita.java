@@ -1,18 +1,16 @@
 package mx.desarrollo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "cita")
+@Table(name = "cita", schema = "yedelapp")
 public class Cita {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cita", nullable = false)
     private Integer id;
 
@@ -24,9 +22,6 @@ public class Cita {
 
     @Column(name = "id_estilista")
     private Integer idEstilista;
-
-    @Column(name = "id_servicio")
-    private Integer idServicio;
 
     @Column(name = "fecha")
     private LocalDate fecha;
@@ -68,14 +63,6 @@ public class Cita {
 
     public void setIdEstilista(Integer idEstilista) {
         this.idEstilista = idEstilista;
-    }
-
-    public Integer getIdServicio() {
-        return idServicio;
-    }
-
-    public void setIdServicio(Integer idServicio) {
-        this.idServicio = idServicio;
     }
 
     public LocalDate getFecha() {

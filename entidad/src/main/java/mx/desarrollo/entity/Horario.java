@@ -1,17 +1,15 @@
 package mx.desarrollo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "horario")
+@Table(name = "horario", schema = "yedelapp")
 public class Horario {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_horario", nullable = false)
     private Integer id;
 

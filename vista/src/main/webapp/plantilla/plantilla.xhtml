@@ -3,7 +3,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fn="jakarta.tags.functions">
 <h:head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0"> </meta>
     <title>  <ui:insert name="titulo"> YedelApp </ui:insert> </title>
@@ -88,6 +89,26 @@
 
         .subtitulo {
             font-size: 14px;
+        }
+
+        .h2aqua {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 10px 0 15px 10px;
+            background: #20d1ce;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .h2fucsia {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 10px 0 15px 10px;
+            background: #D6249F;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .parteDerecha {
@@ -255,6 +276,23 @@
             color: #78155b;
         }
 
+        .campo.aqua > label {
+            color: #1ca3a0;
+        }
+
+        .valorDato {
+            display: flex;
+            align-items: center;
+            min-height: 46px;
+            padding: 0 16px;
+            box-sizing: border-box;
+            border: 3px solid transparent;
+            border-radius: 14px;
+            background: linear-gradient(white, white) padding-box, linear-gradient(#E4D9EC, #E4D9EC) border-box;
+            color: #78155b;
+            font-size: 15px;
+        }
+
         .filaDoble {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -275,8 +313,7 @@
             box-sizing: border-box;
             border: 3px solid transparent;
             border-radius: 14px;
-            background: linear-gradient(white, white) padding-box,
-            linear-gradient(#E4D9EC, #E4D9EC) border-box;
+            background: linear-gradient(white, white) padding-box, linear-gradient(#E4D9EC, #E4D9EC) border-box;
             font-family: inherit;
             font-size: 15px;
             color: #78155b;
@@ -366,7 +403,7 @@
             --relleno: #22D3D0;
             --relleno-h: #14BDBA;
             --borde: #22D3D0;
-            --texto: #2A1B3D;
+            --texto: white;
             --anillo: linear-gradient(90deg, #8FE9E5, #B58CFF, #F5A3D6);
             padding: 10px 25px;
             border-radius: 20px;
@@ -723,6 +760,24 @@
             gap: 8px;
         }
 
+        .salir{
+            --boton: #D6249F;
+            display: inline-block;
+            padding: 10px 16px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--boton);
+            text-decoration: none;
+            border: 2px solid var(--boton);
+            border-radius: 999px;
+        }
+
+        .salir:hover{
+            --boton: #D6249F;
+            color: #FFFFFF;
+            background: var(--boton);
+        }
+
         /*todo esto es para la vista de celular de la pagina */
         @media (max-width: 768px) {
             header {
@@ -854,14 +909,43 @@
     <script>
         function actualizarReloj() {
             var ahora = new Date();
-            document.getElementById('hora').textContent =
-                ahora.toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit' });
-            document.getElementById('fecha').textContent =
-                ahora.toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
+
+            var hora = document.getElementById('hora');
+            var fecha = document.getElementById('fecha');
+
+            if (hora != null) {
+                hora.textContent = ahora.toLocaleTimeString('es-MX', {
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+            }
+
+            if (fecha != null) {
+                fecha.textContent = ahora.toLocaleDateString('es-MX', {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'short'
+                });
+            }
         }
 
-        actualizarReloj();
-        setInterval(actualizarReloj, 30000);
+        function iniciarReloj() {
+            actualizarReloj();
+
+            var msHastaProximoMinuto = 60000 - (Date.now() % 60000);
+            setTimeout(function() {
+                actualizarReloj();
+                setInterval(actualizarReloj, 60000);
+            }, msHastaProximoMinuto);
+        }
+
+        document.addEventListener('DOMContentLoaded', iniciarReloj);
+
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                actualizarReloj();
+            }
+        });
 
         function alternarSidebar() {
             document.getElementById('sidebar').classList.toggle('abierta');
@@ -874,6 +958,10 @@
         }
 
         function abrirFormulario(nombre) {
+            document.querySelectorAll('#fondoFormulario .panelFormulario').forEach(function (p)
+            {
+                p.hidden = true;
+            });
             document.getElementById(nombre).hidden = false;
             document.getElementById('fondoFormulario').classList.add('abierto');
         }
@@ -893,12 +981,12 @@
             </div>
 
             <nav class="navegacion">
-                <a href="#" class="apartado">
+                <a href="gestionCitas.xhtml" class="apartado">
                     <p:graphicImage url="resources/salir.png" class="icono"/>
-                    <span>Gestión de citas</span>
+                    <span>Agenda</span>
                 </a>
 
-                <a href="#" class="apartado">
+                <a href="inventario.xhtml" class="apartado">
                     <p:graphicImage url="resources/salir.png" class="icono"/>
                     <span>Inventario</span>
                 </a>
@@ -907,21 +995,25 @@
 
         <div class="parteDerecha">
             <div class="usuario">
-                <div class="avatar">AD</div>
-                <span>Administrador</span>
+                <div class="avatar">#{fn:toUpperCase(fn:substring(loginUI.usuario.nombre, 0, 2))}</div>
+                <span>#{loginUI.usuario.nombre}</span>
             </div>
 
             <div class="reloj">
                 <div class="hora" id="hora"></div>
                 <div class="fecha" id="fecha"></div>
             </div>
+
+            <h:form id="formSalir">
+                <h:commandLink id="salir" value="Cerrar sesión" action="#{loginUI.logout()}" styleClass="salir" />
+            </h:form>
         </div>
     </header>
 
     <div class="sidebar" id="sidebar">
-        <a href="#" class="apartado activo">Inicio</a>
-        <a href="#" class="apartado">Gestión de citas</a>
-        <a href="#" class="apartado">Inventario</a>
+        <a href="index.xhtml" class="apartado #{view.viewId eq '/index.xhtml' ? 'activo' : ''}">Inicio</a>
+        <a href="gestionCitas.xhtml" class="apartado #{view.viewId eq '/gestionCitas.xhtml' ? 'activo' : ''}">Agenda</a>
+        <a href="inventario.xhtml" class="apartado #{view.viewId eq '/inventario.xhtml' ? 'activo' : ''}">Inventario</a>
     </div>
 
     <div class="fondoOscuro" id="fondoOscuro" onclick="cerrarSidebar()"> </div>

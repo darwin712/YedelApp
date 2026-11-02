@@ -1,21 +1,27 @@
 package mx.desarrollo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "estilista")
+@Table(name = "estilista", schema = "yedelapp")
 public class Estilista {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_estilista", nullable = false)
     private Integer id;
 
     @Size(max = 100)
     @Column(name = "nombre", length = 100)
     private String nombre;
+
+    @Size(max = 100)
+    @Column(name = "apellido_p", length = 100)
+    private String apellidoP;
+
+    @Size(max = 100)
+    @Column(name = "apellido_m", length = 100)
+    private String apellidoM;
 
     @Size(max = 100)
     @Column(name = "especialidad", length = 100)
@@ -38,6 +44,22 @@ public class Estilista {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getApellidoP() {
+        return apellidoP;
+    }
+
+    public void setApellidoP(String apellidoP) {
+        this.apellidoP = apellidoP;
+    }
+
+    public String getApellidoM() {
+        return apellidoM;
+    }
+
+    public void setApellidoM(String apellidoM) {
+        this.apellidoM = apellidoM;
     }
 
     public String getEspecialidad() {

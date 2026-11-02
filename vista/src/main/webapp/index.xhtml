@@ -1,202 +1,179 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>SAUAP - Menu</title>
+<?xml version='1.0' encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="titulo"> Registro de profesores </ui:define>
+    <ui:define name="subtitulo"> Registro de profesores </ui:define>
+
+    <f:metadata>
+        <f:viewAction action="#{indexAdminUI.verificarAcceso()}" />
+    </f:metadata>
+
+    <ui:define name="contenido">
         <style>
+
+            :root{
+                --fondo: #F4EEF8;
+                --titulo: #B5258F;
+                --boton: #D6249F;
+                --texto: #3A2A38;
+                --suave: #7A5A76;
+            }
+
+            *{
+                box-sizing: border-box;
+            }
+
             html, body{
                 margin: 0;
                 padding: 0;
                 min-height: 100%;
             }
-            body{
-                background-color: #7EBB63;
-                font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-            }
+
             .barra{
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 22px 50px;
-                background: #DCDCDC;
-                position: relative;
-                z-index: 10;
-            }
-            .barra .titulo{
-                font-size: 40px;
-                font-weight: bold;
-                letter-spacing: 1px;
-                margin: 0;
-            }
-            .barra .titulo .parte1{
-                color: #ABB679;
-            }
-            .barra .titulo .parte2{
-                color: #3E7B3E;
-            }
-            .menu-contenedor{
-                position: relative;
-            }
-            .boton-menu{
-                width: 54px;
-                height: 54px;
-                background: #3E7B3E;
-                border: none;
-                border-radius: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-            }
-            .boton-menu:hover{
-                background: #336633;
-            }
-            .desplegable{
-                display: none;
-                position: absolute;
-                top: 64px;
-                right: 0;
-                width: 240px;
+                padding: 12px 16px;
                 background: #FFFFFF;
-                border-radius: 10px;
-                box-shadow: 0 8px 20px rgba(0,0,0,0.22);
-                overflow: hidden;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             }
-            .desplegable.mostrar{
-                display: block;
+
+            .logo{
+                height: 40px;
+                width: auto;
             }
-            .desplegable a, .desplegable .item-salir{
-                display: block;
-                padding: 14px 20px;
-                color: #1B1B1B;
+
+            .salir{
+                display: inline-block;
+                padding: 10px 16px;
+                font-size: 15px;
+                font-weight: 600;
+                color: var(--boton);
                 text-decoration: none;
-                font-size: 14px;
-                font-weight: bold;
-                cursor: pointer;
-                border-bottom: 1px solid #EEEEEE;
+                border: 2px solid var(--boton);
+                border-radius: 999px;
             }
-            .desplegable a:hover{
-                background: #F0F0F0;
+
+            .salir:hover{
+                color: #FFFFFF;
+                background: var(--boton);
             }
-            .desplegable .item-salir{
-                color: #B23B3B;
-                border-bottom: none;
+
+            .pagina{
+                width: 100%;
+                max-width: 860px;
+                margin: 0 auto;
+                padding: 24px 16px 40px;
             }
-            .desplegable .item-salir:hover{
-                background: #FBECEC;
+
+            .saludo{
+                margin-bottom: 20px;
             }
-            .contenido{
-                display: flex;
-                justify-content: center;
-                padding: 70px 20px;
+
+            .saludo h1{
+                margin: 0 0 4px;
+                font-size: 22px;
+                font-weight: 600;
+                color: var(--titulo);
             }
-            .tarjetas{
-                display: flex;
-                gap: 30px;
-                flex-wrap: wrap;
-                justify-content: center;
+
+            .saludo p{
+                margin: 0;
+                font-size: 15px;
+                color: var(--suave);
             }
-            .tarjeta{
-                width: 230px;
-                height: 380px;
-                background: #DCDCDC;
-                border-radius: 14px;
-                text-decoration: none;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                padding: 30px 24px;
-                box-sizing: border-box;
+
+            .menu{
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
             }
-            .tarjeta:hover{
-                background: #D0D0D0;
-            }
-            .tarjeta .icono{
-                flex: 1;
+
+            .opcion{
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                gap: 16px;
+                padding: 18px 20px;
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--texto);
+                text-decoration: none;
+                background: #FFFFFF;
+                border-bottom: 3px solid var(--boton);
+                border-radius: 16px;
+                box-shadow: 0 2px 8px rgba(181, 37, 143, 0.1);
             }
-            .logo{
-                height: 46px;
+
+            .opcion:hover{
+                box-shadow: 0 4px 14px rgba(181, 37, 143, 0.2);
             }
-            .icono-img{
-                width: 90px;
-                height: 90px;
+
+            .opcion img{
+                width: 56px;
+                height: 56px;
                 object-fit: contain;
+                flex-shrink: 0;
             }
-            .tarjeta .nombre{
-                font-size: 17px;
-                font-weight: bold;
-                color: #1B1B1B;
-                margin: 0;
-                text-align: left;
+
+            @media (min-width: 600px){
+                .logo{
+                    height: 48px;
+                }
+
+                .barra{
+                    padding: 12px 32px;
+                }
+
+                .pagina{
+                    padding: 40px 24px 56px;
+                }
+
+                .saludo h1{
+                    font-size: 26px;
+                }
+
+                .menu{
+                    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                    gap: 20px;
+                }
+
+                .opcion{
+                    flex-direction: column;
+                    gap: 14px;
+                    padding: 32px 20px;
+                    text-align: center;
+                }
             }
         </style>
-        <script>
-            function alternarMenu(){
-                document.getElementById('menuDesplegable').classList.toggle('mostrar');
-            }
-            document.addEventListener('click', function(evento){
-                var contenedor = document.getElementById('menuContenedor');
-                var desplegable = document.getElementById('menuDesplegable');
-                if(contenedor &amp;&amp; !contenedor.contains(evento.target)){
-                    desplegable.classList.remove('mostrar');
-                }
-            });
-        </script>
-    </h:head>
-    <h:body>
-        <div class="barra">
-            <p:graphicImage url="resources/images/logo.png" styleClass="logo" />
 
-            <div class="menu-contenedor" id="menuContenedor">
-                <button type="button" class="boton-menu" onclick="alternarMenu()">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                </button>
+        <section class="saludo">
+            <h1>Hola, #{loginUI.usuario.nombre}</h1>
+            <p>#{indexAdminUI.principal ? 'Administrador principal' : 'Administrador'}</p>
+        </section>
 
-                <div class="desplegable" id="menuDesplegable">
-                    <h:link outcome="index">Menu</h:link>
-                    <h:link outcome="profesores">Alta de profesores</h:link>
-                    <h:link outcome="unidades">Unidades de aprendizaje</h:link>
-                    <h:link outcome="asignaciones">Asignaciones</h:link>
-                    <h:form>
-                        <h:commandLink styleClass="item-salir" value="Cerrar sesion" actionListener="#{loginUI.logout()}" />
-                    </h:form>
-                </div>
-            </div>
-        </div>
+        <nav class="menu">
+            <a class="opcion" href="gestionCitas.xhtml">
+                <p:graphicImage url="resources/images/icono-agenda.png" alt="" />
+                <span>Agenda</span>
+            </a>
 
-        <div class="contenido">`
-            <div class="tarjetas">
-                <h:link outcome="profesores" styleClass="tarjeta">
-                    <div class="icono">
-                        <p:graphicImage url="resources/images/icono-profesores.png" styleClass="icono-img" />
-                    </div>
-                    <p class="nombre">Alta de profesores</p>
-                </h:link>
+            <a class="opcion" href="inventario.xhtml">
+                <p:graphicImage url="resources/images/icono-inventario.png" alt="" />
+                <span>Inventario</span>
+            </a>
 
-                <h:link outcome="unidades" styleClass="tarjeta">
-                    <div class="icono">
-                        <p:graphicImage url="resources/images/icono-unidades.png" styleClass="icono-img" />
-                    </div>
-                    <p class="nombre">Unidades de aprendizaje</p>
-                </h:link>
+            <h:panelGroup rendered="#{indexAdminUI.principal}">
+                <a class="opcion" href="registroAdministrador.xhtml">
+                    <p:graphicImage url="resources/images/icono-administradores.png" alt="" />
+                    <span>Gestión de administradores</span>
+                </a>
+            </h:panelGroup>
 
-                <h:link outcome="asignaciones" styleClass="tarjeta">
-                    <div class="icono">
-                        <p:graphicImage url="resources/images/icono-asignaciones.png" styleClass="icono-img" />
-                    </div>
-                    <p class="nombre">Asignaciones</p>
-                </h:link>
-            </div>
-        </div>
-    </h:body>
-</html>
+        </nav>
+    </ui:define>
+</ui:composition>

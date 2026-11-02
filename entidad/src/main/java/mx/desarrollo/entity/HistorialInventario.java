@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import java.time.Instant;
 
 @Entity
-@Table(name = "historial_inventario")
+@Table(name = "historial_inventario", schema = "yedelapp")
 public class HistorialInventario {
     @Id
     @Column(name = "id_historial", nullable = false)
