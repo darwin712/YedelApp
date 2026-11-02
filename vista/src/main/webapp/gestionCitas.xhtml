@@ -300,6 +300,36 @@
                 text-decoration: none;
             }
 
+            .ui-datepicker,
+            .ui-selectcheckboxmenu-panel,
+            .ui-selectonemenu-panel {
+                z-index: 3000 !important;
+            }
+
+            .ui-selectcheckboxmenu.custom-select {
+                background: #ffffff !important;
+                border: 1.5px solid #d8cde0 !important;
+                border-radius: 18px !important;
+                box-shadow: none !important;
+                height: 42px !important;
+                display: flex !important;
+                align-items: center !important;
+                padding: 2px 10px !important;
+            }
+
+            .ui-selectcheckboxmenu.custom-select .ui-selectcheckboxmenu-label {
+                color: #6b1250 !important;
+                font-weight: 500 !important;
+                background: transparent !important;
+                padding: 4px 8px !important;
+            }
+
+            .ui-selectcheckboxmenu.custom-select .ui-selectcheckboxmenu-trigger {
+                background: transparent !important;
+                border: none !important;
+                color: #6b1250 !important;
+            }
+
             @media (max-width: 768px) {
                 .calendario {
                     overflow-x: auto;
@@ -325,7 +355,7 @@
                     <h2 class="tituloCalendario">#{gestionCitasBean.titulo}</h2>
 
                     <div class="controlesEncabezado">
-                        <p:commandButton value="Agregar cita" styleClass="btnAgregar" type="button" />
+                        <p:commandButton value="Agregar cita" styleClass="btnAgregar" type="button"  onclick="abrirFormulario('formNuevaCita')" />
                         <h:selectOneMenu value="#{gestionCitasBean.estilistaSeleccionado}" styleClass="fieldSelect">
                             <f:selectItem itemLabel="Todas las citas" itemValue="0" />
                             <f:selectItems value="#{gestionCitasBean.opcionesEstilistas}" />
@@ -368,7 +398,7 @@
 
                                     <ui:repeat value="#{dia.citas}" var="cita">
                                         <div class="evento" style="#{cita.estiloColor}" title="#{cita.servicio}">
-                                            <p:commandLink styleClass="enlaceCita" action="#{gestionCitasBean.verCita(cita)}" update=":formCalendario:detalleCita" process="@this" oncomplete="abrirFormulario('formCalendario:detalleCita')">
+                                            <p:commandLink styleClass="enlaceCita" action="#{gestionCitasBean.verCita(cita)}" update=":formDetalle:detalleCita" process="@this" oncomplete="abrirFormulario('formDetalle')">
                                                 <strong>
                                                     <h:outputText value="#{cita.inicio}">
                                                         <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
@@ -414,7 +444,7 @@
                                 <div class="columnaDia #{col.finDeSemana ? 'finSemana' : ''} #{col.hoy ? 'hoy' : ''}" style="height: #{gestionCitasBean.alturaPixeles}px;">
                                     <ui:repeat value="#{col.citas}" var="cita">
                                         <div class="evento" style="#{cita.estiloPosicion}#{cita.estiloColor}" title="#{cita.servicio}">
-                                            <p:commandLink styleClass="enlaceCita" action="#{gestionCitasBean.verCita(cita)}" update=":formCalendario:detalleCita" process="@this" oncomplete="abrirFormulario('formCalendario:detalleCita')">
+                                            <p:commandLink styleClass="enlaceCita" action="#{gestionCitasBean.verCita(cita)}" update=":formDetalle:detalleCita" process="@this" oncomplete="abrirFormulario('formDetalle')">
                                                 <strong>
                                                     <h:outputText value="#{cita.inicio}">
                                                         <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
@@ -437,9 +467,11 @@
                     </div>
                 </ui:fragment>
             </h:panelGroup>
+        </h:form>
 
-            <div class="fondoFormulario" id="fondoFormulario" onclick="cerrarFormulario()">
-                <div class="contenedor" onclick="event.stopPropagation()">
+        <div class="fondoFormulario" id="fondoFormulario" onclick="cerrarFormulario()">
+            <div class="contenedor" onclick="event.stopPropagation()">
+                <h:form id="formDetalle" styleClass="panelFormulario">
                     <h:panelGroup id="detalleCita" layout="block">
                         <h2 class="h2aqua">Detalle de la cita</h2>
 
@@ -490,7 +522,7 @@
                                     <label>Horario</label>
                                     <div class="valorDato">
                                         <h:outputText value="#{gestionCitasBean.citaSeleccionada.inicio}"><f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" /></h:outputText>
-                                         -
+                                        -
                                         <h:outputText value="#{gestionCitasBean.citaSeleccionada.fin}"><f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" /></h:outputText>
                                     </div>
                                 </div>
@@ -505,8 +537,79 @@
                             <button type="button" class="btnRegistrar" onclick="cerrarFormulario()">Cerrar</button>
                         </div>
                     </h:panelGroup>
-                </div>
+                </h:form>
+
+                <h:form id="formNuevaCita" styleClass="panelFormulario">
+                    <h2 class="h2fucsia">Nueva cita</h2>
+                    <div class="datos">
+                        <div class="filaDoble">
+                            <div class="campo">
+                                <h:outputLabel for="nombreCliente" value="Cliente" />
+                                <h:selectOneMenu id="nombreCliente" value="#{RegistroUI.idClienteSeleccionado}" styleClass="fieldSelect">
+                                    <f:selectItem itemLabel="-- Seleccione un Cliente --" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{RegistroUI.listaCliente}" var="cliente" itemLabel="#{cliente.id} #{cliente.nombre} #{cliente.apellidoP} #{cliente.apellidoM}" itemValue="#{cliente.id}" />
+                                </h:selectOneMenu>
+                            </div>
+                            <div class="campo">
+                                <h:outputLabel for="nombreEstilista" value="Estilista" />
+                                <h:selectOneMenu id="nombreEstilista" value="#{RegistroUI.idEstilistaSeleccionado}" styleClass="fieldSelect">
+                                    <f:selectItem itemLabel="-- Seleccione un Estilista --" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItems value="#{RegistroUI.estilistasActivos}" var="estilista" itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}" itemValue="#{estilista.id}" />
+                                    <f:ajax listener="#{RegistroUI.onEstilistaChange}" render="tipoServicio" />
+                                </h:selectOneMenu>
+                            </div>
+                        </div>
+
+                        <div class="filaDoble">
+                            <div class="campo">
+                                <h:outputLabel for="tipoServicio" value="Servicios" />
+                                <p:selectCheckboxMenu id="tipoServicio" value="#{RegistroUI.idsServiciosSeleccionados}" label="Seleccione sus servicios" styleClass="custom-select" filter="true" filterMatchMode="contains" selectionLimit="5" selectionLimitMessage="Solo puedes seleccionar un máximo de 5 servicios.">
+                                    <f:selectItems value="#{RegistroUI.listaServicios}" var="servicio" itemLabel="#{servicio.nombre} ($#{servicio.precio} - #{servicio.duracionMin} min)" itemValue="#{servicio.id}" />
+                                    <p:ajax event="change" listener="#{RegistroUI.calcularTotales}" update="costoServicio duracionServicio" />
+                                    <p:ajax event="toggleSelect" listener="#{RegistroUI.calcularTotales}" update="costoServicio duracionServicio" />
+                                </p:selectCheckboxMenu>
+                            </div>
+                        </div>
+
+                        <div class="filaDoble">
+                            <div class="campo">
+                                <label>Costo aproximado</label>
+                                <div class="valorDato">
+                                    <h:outputText id="costoServicio" value="#{RegistroUI.precioServicio}">
+                                        <f:convertNumber type="currency" currencySymbol="$" />
+                                    </h:outputText>
+                                </div>
+                            </div>
+                            <div class="campo">
+                                <label>Duración estimada</label>
+                                <div class="valorDato">
+                                    <h:outputText id="duracionServicio" value="#{RegistroUI.duracionTotal} min" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="filaDoble">
+                            <div class="campo">
+                                <p:outputLabel for="hInicio" value="Hora inicio" />
+                                <p:datePicker id="hInicio" value="#{RegistroUI.horaInicio}" timeOnly="true" pattern="HH:mm" showIcon="true" icon="pi pi-clock" stepMinute="30" required="true" />
+                            </div>
+                            <div class="campo">
+                                <p:outputLabel for="fechaCita" value="Fecha" />
+                                <p:datePicker id="fechaCita" value="#{RegistroUI.fechaCita}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" styleClass="custom-select" />
+                            </div>
+                        </div>
+
+                        <p:messages id="mensajesPopup" showDetail="true" closable="true">
+                            <p:autoUpdate />
+                        </p:messages>
+
+                        <button type="button" class="btnAgregar" onclick="cerrarFormulario()">Cerrar</button>
+                        <h:commandButton value="Guardar cita" action="#{RegistroUI.guardarCita}" styleClass="btnAgregar" />
+                    </div>
+                </h:form>
+
             </div>
-        </h:form>
+        </div>
+
     </ui:define>
 </ui:composition>

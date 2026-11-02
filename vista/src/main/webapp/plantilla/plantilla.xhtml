@@ -958,6 +958,10 @@
         }
 
         function abrirFormulario(nombre) {
+            document.querySelectorAll('#fondoFormulario .panelFormulario').forEach(function (p)
+            {
+                p.hidden = true;
+            });
             document.getElementById(nombre).hidden = false;
             document.getElementById('fondoFormulario').classList.add('abierto');
         }

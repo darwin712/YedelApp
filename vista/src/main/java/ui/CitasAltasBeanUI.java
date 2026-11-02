@@ -48,6 +48,8 @@ public class CitasAltasBeanUI implements Serializable {
 
     @Inject
     private LoginBeanUI loginUI;
+    @Inject
+    private CalendarioCitasBean calendario;
 
     @PostConstruct
     public void init() {
@@ -162,6 +164,7 @@ public class CitasAltasBeanUI implements Serializable {
 
             this.helper.registrarCita(nuevaCita, this.idsServiciosSeleccionados);
 
+            calendario.recargar();
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "La cita se registró correctamente."));
@@ -262,7 +265,6 @@ public class CitasAltasBeanUI implements Serializable {
     public String getNombreCliente() {
         return nombreCliente;
     }
-
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
     }

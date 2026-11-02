@@ -9,7 +9,6 @@ import mx.desarrollo.persistence.persistence.HibernateUtil;
 public class ServiceLocator {
 
     private static AdministradorDAO administradorDAO;
-    private static UsuarioDAO usuarioDAO;
     private static CitaDAO citaDAO;
     private static ClienteDAO clienteDAO;
     private static ServicioDAO servicioDAO;
@@ -25,15 +24,6 @@ public class ServiceLocator {
             return administradorDAO;
         } else{
             return administradorDAO;
-        }
-    }
-
-    public static UsuarioDAO getInstanceUsuarioDAO() {
-        if(usuarioDAO == null){
-            usuarioDAO = new UsuarioDAO(getEntityManager());
-            return usuarioDAO;
-        } else{
-            return usuarioDAO;
         }
     }
 

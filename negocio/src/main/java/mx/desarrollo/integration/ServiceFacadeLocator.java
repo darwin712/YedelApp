@@ -5,7 +5,6 @@ import mx.desarrollo.facade.*;
 public class ServiceFacadeLocator {
 
     private static FacadeAdministrador facadeAdministrador;
-    private static FacadeUsuario facadeUsuario;
     private static FacadeCita facadeCita;
     private static FacadeCliente facadeCliente;
     private static FacadeServicio facadeServicio;
@@ -17,15 +16,6 @@ public class ServiceFacadeLocator {
             return facadeAdministrador;
         } else {
             return facadeAdministrador;
-        }
-    }
-
-    public static FacadeUsuario getInstanceFacadeUsuario() {
-        if (facadeUsuario == null) {
-            facadeUsuario = new FacadeUsuario();
-            return facadeUsuario;
-        } else {
-            return facadeUsuario;
         }
     }
 

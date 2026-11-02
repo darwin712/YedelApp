@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.faces.model.SelectItem;
 import jakarta.inject.Named;
+import jakarta.persistence.EntityManager;
 
 import java.io.Serializable;
 import java.time.DayOfWeek;
@@ -26,6 +27,7 @@ import mx.desarrollo.entity.Cliente;
 import mx.desarrollo.entity.Servicio;
 import mx.desarrollo.entity.Estilista;
 import mx.desarrollo.integration.ServiceFacadeLocator;
+import mx.desarrollo.persistence.persistence.HibernateUtil;
 
 @Named("gestionCitasBean")
 @ViewScoped
@@ -85,19 +87,31 @@ public class CalendarioCitasBean implements Serializable {
             servicios.put(s.getId(), s);
         }
 
+        Map<Integer, List<Integer>> serviciosPorCita = obtenerServiciosPorCita();
+
         citas.clear();
         List<Cita> listaCitas = ServiceFacadeLocator.getInstanceFacadeCita().findAll();
 
         for (Cita c : listaCitas) {
             if (c.getFecha() != null && c.getHoraInicio() != null) {
                 Cliente cliente = clientes.get(c.getIdCliente());
-                Servicio servicio = servicios.get(c.getIdServicio());
-                int duracion = duracionDefault;
 
-                if (servicio != null) {
-                    if (servicio.getDuracionMin() != null && servicio.getDuracionMin() > 0) {
-                        duracion = servicio.getDuracionMin();
+                List<Servicio> serviciosDeLaCita = new ArrayList<>();
+                for (Integer idServicio : serviciosPorCita.getOrDefault(c.getId(), new ArrayList<>())) {
+                    Servicio s = servicios.get(idServicio);
+                    if (s != null) {
+                        serviciosDeLaCita.add(s);
                     }
+                }
+
+                int duracion = 0;
+                for (Servicio s : serviciosDeLaCita) {
+                    if (s.getDuracionMin() != null) {
+                        duracion += s.getDuracionMin();
+                    }
+                }
+                if (duracion <= 0) {
+                    duracion = duracionDefault;
                 }
 
                 LocalDateTime inicio = c.getFecha().atTime(c.getHoraInicio());
@@ -120,13 +134,18 @@ public class CalendarioCitasBean implements Serializable {
                     }
                 }
 
-                if (servicio != null) {
-                    nombreServicio = servicio.getNombre();
+                List<String> nombres = new ArrayList<>();
+                for (Servicio s : serviciosDeLaCita) {
+                    nombres.add(s.getNombre());
 
-                    if (servicio.getPrecio() != null) {
-                        precio = servicio.getPrecio().floatValue();
+                    if (s.getPrecio() != null) {
+                        precio += s.getPrecio().floatValue();
                     }
                 }
+                if (!nombres.isEmpty()) {
+                    nombreServicio = String.join(", ", nombres);
+                }
+
                 if (nombreCliente == null) {
                     nombreCliente = "Sin cliente";
                 }
@@ -143,6 +162,36 @@ public class CalendarioCitasBean implements Serializable {
                 citas.add(new CitaVista(nombreCliente, nombreServicio, idEstilista, telefono, correo, nombreEstilista, duracion, precio, inicio, fin));
             }
         }
+    }
+
+    private Map<Integer, List<Integer>> obtenerServiciosPorCita() {
+        Map<Integer, List<Integer>> mapa = new HashMap<>();
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            List<Object[]> filas = em
+                    .createNativeQuery("SELECT id_cita, id_servicio FROM cita_servicio")
+                    .getResultList();
+
+            for (Object[] f : filas) {
+                int idCita = ((Number) f[0]).intValue();
+                int idServicio = ((Number) f[1]).intValue();
+
+                if (!mapa.containsKey(idCita)) {
+                    mapa.put(idCita, new ArrayList<>());
+                }
+                mapa.get(idCita).add(idServicio);
+            }
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+        return mapa;
+    }
+
+    public void recargar() {
+        cargarCitas();
+        actualizarCalendario();
     }
 
     private void cargarEstilistas() {

@@ -41,7 +41,7 @@ CREATE TABLE servicio (
 CREATE TABLE estilista_servicio (
     id_estilista INT,
     id_servicio INT,
-    PRIMARY KEY (id_estilista, id_servicio)
+    PRIMARY KEY (id_estilista, id_servicio),
     CONSTRAINT fk_estilista_servicio_estilista 
         FOREIGN KEY (id_estilista) REFERENCES estilista(id_estilista) 
         ON DELETE CASCADE ON UPDATE CASCADE,
@@ -63,7 +63,6 @@ CREATE TABLE cita (
     id_cliente INT,
     id_administrador INT,
     id_estilista INT,
-    id_servicio INT,
     fecha DATE,
     hora_inicio TIME,
     estado VARCHAR(20)
