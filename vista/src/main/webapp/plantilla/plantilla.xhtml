@@ -854,10 +854,24 @@
     <script>
         function actualizarReloj() {
             var ahora = new Date();
-            document.getElementById('hora').textContent =
-                ahora.toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit' });
-            document.getElementById('fecha').textContent =
-                ahora.toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
+
+            var hora = document.getElementById('hora');
+            var fecha = document.getElementById('fecha');
+
+            if (hora != null) {
+                hora.textContent = ahora.toLocaleTimeString('es-MX', {
+                    hour: 'numeric',
+                    minute: '2-digit'
+                });
+            }
+
+            if (fecha != null) {
+                fecha.textContent = ahora.toLocaleDateString('es-MX', {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'short'
+                });
+            }
         }
 
         actualizarReloj();

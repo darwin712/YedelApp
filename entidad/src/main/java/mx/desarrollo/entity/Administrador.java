@@ -12,32 +12,32 @@ import java.util.Set;
 public class Administrador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idadministrador", nullable = false)
+    @Column(name = "id_administrador", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
+    @Size(max = 100)
     @NotNull
-    @Column(name = "nombre", nullable = false, length = 50)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Size(max = 50)
+    @Size(max = 100)
     @NotNull
-    @Column(name = "appaterno", nullable = false, length = 50)
+    @Column(name = "apellido_p", nullable = false, length = 100)
     private String appaterno;
 
-    @Size(max = 50)
+    @Size(max = 100)
     @NotNull
-    @Column(name = "apmaterno", nullable = false, length = 50)
+    @Column(name = "apellido_m", nullable = false, length = 100)
     private String apmaterno;
 
-    @Size(max = 45)
+    @Size(max = 150)
     @NotNull
-    @Column(name = "usuario", nullable = false, length = 45)
+    @Column(name = "correo", nullable = false, length = 150)
     private String usuario;
 
-    @Size(max = 45)
+    @Size(max = 255)
     @NotNull
-    @Column(name = "contrasena", nullable = false, length = 45)
+    @Column(name = "contrasena", nullable = false, length = 255)
     private String contrasena;
 
     public Integer getId() {

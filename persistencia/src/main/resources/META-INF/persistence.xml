@@ -8,15 +8,23 @@
 
 
         <class>mx.desarrollo.entity.Administrador</class>
-        <class>mx.desarrollo.entity.Profesor</class>
-        <class>mx.desarrollo.entity.UnidadAprendizaje</class>
-        <class>mx.desarrollo.entity.Asignacion</class>
+        <class>mx.desarrollo.entity.Cita</class>
+        <class>mx.desarrollo.entity.Cliente</class>
+        <class>mx.desarrollo.entity.Estilista</class>
+        <class>mx.desarrollo.entity.EstilistaServicio</class>
+        <class>mx.desarrollo.entity.EstilistaServicioId</class>
+        <class>mx.desarrollo.entity.HistorialInventario</class>
+        <class>mx.desarrollo.entity.Horario</class>
+        <class>mx.desarrollo.entity.InventarioEstilista</class>
+        <class>mx.desarrollo.entity.InventarioEstilistaId</class>
+        <class>mx.desarrollo.entity.Producto</class>
+        <class>mx.desarrollo.entity.Servicio</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sauap?useSSL=false&amp;serverTimezone=UTC"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/yedelApp?useSSL=false&amp;serverTimezone=UTC"/>
             <property name="jakarta.persistence.jdbc.user" value="root"/>
             <property name="jakarta.persistence.jdbc.password" value="root"/>
 

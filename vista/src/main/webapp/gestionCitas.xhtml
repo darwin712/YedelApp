@@ -1,0 +1,448 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="titulo">Gestión de citas</ui:define>
+    <ui:define name="subtitulo">Gestión de citas</ui:define>
+
+    <ui:define name="contenido">
+        <style>
+            .calendario {
+                width: 100%;
+                margin: 0;
+                min-height: auto;
+            }
+
+            .barraCalendario {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-bottom: 14px;
+            }
+
+            .encabezadoCalendario {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-bottom: 16px;
+            }
+
+            .encabezadoCalendario .btnAgregar {
+                margin: 0;
+            }
+
+            .encabezadoCalendario .fieldSelect {
+                margin: 0;
+                flex: 0 0 auto;
+                width: auto;
+            }
+
+            .tituloCalendario {
+                font-size: 27px;
+                font-weight: bold;
+                margin: 0 0 0 10px;
+                background: #D6249F;
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            .controlesEncabezado {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+
+            .controlesCalendario {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+
+            .calendario .controlesCalendario .ui-button {
+                --relleno: #FFFFFF;
+                --relleno-h: #FDF2F9;
+                --borde: #E4D9EC;
+                --texto: #78155b;
+                --anillo: linear-gradient(90deg, #D6249F, #B58CFF, #8FE9E5);
+                border: 2px solid transparent;
+                background: linear-gradient(var(--relleno), var(--relleno)) padding-box,
+                linear-gradient(var(--borde), var(--borde)) border-box;
+                color: var(--texto);
+                font-family: inherit;
+                font-weight: bold;
+                font-size: 14px;
+                padding: 3px 12px;
+                border-radius: 16px;
+                box-shadow: none;
+                cursor: pointer;
+                transition: transform 0.15s, box-shadow 0.2s;
+            }
+
+            .calendario .controlesCalendario .ui-button .ui-button-text {
+                color: inherit;
+            }
+
+            .calendario .controlesCalendario .ui-button:enabled:hover {
+                background: linear-gradient(var(--relleno-h), var(--relleno-h)) padding-box,
+                var(--anillo) border-box;
+                color: var(--texto);
+                transform: scale(1.05);
+                box-shadow: 0 8px 20px rgba(214, 36, 159, 0.22);
+            }
+
+            .calendario .controlesCalendario .ui-button:enabled:focus {
+                box-shadow: none;
+            }
+
+            .calendario .controlesCalendario .ui-button:focus-visible {
+                outline: 3px solid #F5A3D6;
+                outline-offset: 3px;
+            }
+
+            .calendario .controlesCalendario .ui-button.vistaActiva {
+                --relleno: #D6249F;
+                --relleno-h: #B81B88;
+                --borde: #D6249F;
+                --texto: #FFFFFF;
+            }
+
+            .calendario .controlesCalendario .ui-button.btnHoy {
+                --relleno: #25ccc9;
+                --relleno-h: #23c1be;
+                --borde: #25ccc9;
+                --texto: #FFFFFF;
+                --anillo: linear-gradient(90deg, #8FE9E5, #B58CFF, #F5A3D6);
+            }
+
+            .vistaMes,
+            .vistaHoras {
+                border: 2px solid #E4D9EC;
+                border-radius: 14px;
+                overflow: hidden;
+            }
+
+            .diasSemana {
+                display: grid;
+                grid-template-columns: repeat(7, 1fr);
+                background: #f0b8da;
+            }
+
+            .diasSemana div {
+                text-align: center;
+                padding: 12px 5px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #6d1753;
+            }
+
+            .cuadriculaCalendario {
+                display: grid;
+                grid-template-columns: repeat(7, 1fr);
+                grid-auto-rows: minmax(115px, auto);
+                margin-bottom: -1px;
+            }
+
+            .diaCalendario {
+                border-right: 1px solid #e4d9ec98;
+                border-bottom: 1px solid #e4d9ec98;
+                padding: 8px;
+                min-width: 0;
+                box-sizing: border-box;
+            }
+
+            .diaCalendario.diaSabado {
+                border-right: none;
+            }
+
+            .numeroDia {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                font-size: 13px;
+                color: #78155b;
+                margin-bottom: 6px;
+            }
+
+            .diaActual .numeroDia {
+                background: #D6249F;
+                color: #FFFFFF;
+                font-weight: bold;
+            }
+
+            .encabezadoHoras,
+            .cuerpoHoras {
+                display: grid;
+            }
+
+            .encabezadoHoras {
+                background: #f0b8da;
+            }
+
+            .encabezadoDiaHoras {
+                padding: 8px 10px;
+                border-left: 1px solid #e4d9ec98;
+                min-width: 0;
+            }
+
+            .encabezadoDiaHoras .dia {
+                display: block;
+                font-size: 11px;
+                font-weight: bold;
+                color: #6d1753;
+                text-transform: capitalize;
+            }
+
+            .encabezadoDiaHoras .numero {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                font-size: 20px;
+                color: #6d1753;
+            }
+
+            .encabezadoDiaHoras.hoy .numero {
+                background: #D6249F;
+                color: #FFFFFF;
+            }
+
+            .etiquetaHora {
+                height: 60px;
+                box-sizing: border-box;
+                padding: 2px 8px 0 0;
+                text-align: right;
+                font-size: 12px;
+                color: #6d1753;
+            }
+
+            .columnaDia {
+                position: relative;
+                border-left: 1px solid #e4d9ec98;
+                min-width: 0;
+                background-color: #FFFFFF;
+                background-image: repeating-linear-gradient(to bottom, #e4d9ec98 0, #e4d9ec98 1px, transparent 1px, transparent 60px);
+            }
+
+            .columnaDia.finSemana {
+                background-color: #F5F0F8;
+            }
+
+            .columnaDia.hoy {
+                background-color: #FDF2F9;
+            }
+
+            /* Citas: bloque redondeado con borde de 2px y anillo de color al pasar el cursor,
+               igual que .opcion y los campos de la plantilla. Cada color solo cambia 3 variables. */
+            .evento {
+                --fondo: #F1DDF0;
+                --borde: #961570;
+                --texto: #78155b;
+                border: 2px solid transparent;
+                border-radius: 10px;
+                background: linear-gradient(var(--fondo), var(--fondo)) padding-box,
+                linear-gradient(var(--borde), var(--borde)) border-box;
+                color: var(--texto);
+                padding: 4px 8px;
+                margin-bottom: 5px;
+                font-size: 11px;
+                line-height: 1.4;
+                overflow-wrap: break-word;
+                cursor: pointer;
+                transition: transform 0.15s, box-shadow 0.2s;
+            }
+
+            .evento:hover {
+                background: linear-gradient(var(--fondo), var(--fondo)) padding-box,
+                linear-gradient(90deg, #D6249F, #B58CFF, #8FE9E5) border-box;
+                transform: scale(1.03);
+                box-shadow: 0 6px 18px rgba(214, 36, 159, 0.16);
+            }
+
+            .evento strong {
+                display: block;
+                font-size: 11px;
+            }
+
+            .columnaDia .evento {
+                position: absolute;
+                box-sizing: border-box;
+                overflow: hidden;
+                margin: 0;
+                box-shadow: 0 0 0 1px #FFFFFF;
+            }
+
+            .columnaDia .evento:hover {
+                z-index: 2;
+                box-shadow: 0 6px 18px rgba(214, 36, 159, 0.16);
+            }
+
+            .eventoMorado {
+                --fondo: #F1DDF0;
+                --borde: #961570;
+                --texto: #78155b;
+            }
+
+            .eventoRosa {
+                --fondo: #FCE2F1;
+                --borde: #D6249F;
+                --texto: #9C286D;
+            }
+
+            .eventoVerde {
+                --fondo: #DDF6F5;
+                --borde: #22D3D0;
+                --texto: #2A1B3D;
+            }
+
+            @media (max-width: 768px) {
+                .calendario {
+                    overflow-x: auto;
+                }
+
+                .tituloCalendario {
+                    font-size: 18px;
+                }
+
+                .vistaMes,
+                .vistaHoras {
+                    min-width: 650px;
+                }
+
+                .cuadriculaCalendario {
+                    grid-auto-rows: minmax(100px, auto);
+                }
+            }
+        </style>
+        <h:form id="formCalendario">
+            <h:panelGroup id="calendario" layout="block" styleClass="contenedor calendario">
+                <div class="encabezadoCalendario">
+                    <h2 class="tituloCalendario">#{gestionCitasBean.titulo}</h2>
+
+                    <div class="controlesEncabezado">
+                        <p:commandButton value="Agregar cita" icon="pi pi-plus" styleClass="btnAgregar" type="button" />
+                        <h:selectOneMenu value="#{gestionCitasBean.estilistaSeleccionado}" styleClass="fieldSelect">
+                            <f:selectItem itemLabel="General" itemValue="0" />
+                            <f:selectItems value="#{gestionCitasBean.opcionesEstilistas}" />
+                            <f:ajax event="change" listener="#{gestionCitasBean.filtrarPorEstilista}" render="calendario" />
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+
+                <div class="barraCalendario">
+                    <div class="controlesCalendario">
+                        <p:commandButton value="‹" action="#{gestionCitasBean.anterior}" update="calendario" process="@this" />
+                        <p:commandButton value="Hoy" action="#{gestionCitasBean.hoy}" styleClass="btnHoy" update="calendario" process="@this" />
+                        <p:commandButton value="›" action="#{gestionCitasBean.siguiente}" update="calendario" process="@this" />
+                    </div>
+
+                    <div class="controlesCalendario">
+                        <p:commandButton value="Mes" action="#{gestionCitasBean.cambiarVista('MES')}" styleClass="#{gestionCitasBean.vista == 'MES' ? 'vistaActiva' : ''}" update="calendario" process="@this" />
+                        <p:commandButton value="Semana" action="#{gestionCitasBean.cambiarVista('SEMANA')}" styleClass="#{gestionCitasBean.vista == 'SEMANA' ? 'vistaActiva' : ''}" update="calendario" process="@this" />
+                        <p:commandButton value="3 días" action="#{gestionCitasBean.cambiarVista('TRES_DIAS')}" styleClass="#{gestionCitasBean.vista == 'TRES_DIAS' ? 'vistaActiva' : ''}" update="calendario" process="@this" />
+                        <p:commandButton value="Día" action="#{gestionCitasBean.cambiarVista('DIA')}" styleClass="#{gestionCitasBean.vista == 'DIA' ? 'vistaActiva' : ''}" update="calendario" process="@this" />
+                    </div>
+                </div>
+
+                <ui:fragment rendered="#{gestionCitasBean.vistaMes}">
+                    <div class="vistaMes">
+                        <div class="diasSemana">
+                            <div>Dom</div>
+                            <div>Lun</div>
+                            <div>Mar</div>
+                            <div>Mié</div>
+                            <div>Jue</div>
+                            <div>Vie</div>
+                            <div>Sáb</div>
+                        </div>
+
+                        <div class="cuadriculaCalendario">
+                            <ui:repeat value="#{gestionCitasBean.dias}" var="dia">
+                                <div class="diaCalendario #{dia.sabado ? 'diaSabado' : ''} #{dia.hoy ? 'diaActual' : ''}" style="#{dia.estiloMes}">
+                                    <span class="numeroDia">#{dia.fecha.dayOfMonth}</span>
+
+                                    <ui:repeat value="#{dia.citas}" var="cita">
+                                        <div class="evento" title="#{cita.servicio}">
+                                            <strong>
+                                                <h:outputText value="#{cita.inicio}">
+                                                    <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
+                                                </h:outputText>
+                                            </strong>
+                                            #{cita.cliente}
+                                        </div>
+                                    </ui:repeat>
+                                </div>
+                            </ui:repeat>
+                        </div>
+                    </div>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{!gestionCitasBean.vistaMes}">
+                    <div class="vistaHoras">
+                        <div class="encabezadoHoras" style="grid-template-columns: 60px repeat(#{gestionCitasBean.dias.size()}, 1fr);">
+
+                            <div></div>
+
+                            <ui:repeat value="#{gestionCitasBean.dias}" var="col">
+                                <div class="encabezadoDiaHoras #{col.hoy ? 'hoy' : ''}">
+                                    <span class="dia">#{col.nombreDia}</span>
+                                    <span class="numero">#{col.fecha.dayOfMonth}</span>
+                                </div>
+                            </ui:repeat>
+
+                        </div>
+
+                        <div class="cuerpoHoras" style="grid-template-columns: 60px repeat(#{gestionCitasBean.dias.size()}, 1fr);">
+                            <div>
+                                <ui:repeat value="#{gestionCitasBean.horas}" var="hora">
+                                    <div class="etiquetaHora">
+                                        <h:outputText value="#{hora}">
+                                            <f:convertDateTime type="localTime" pattern="h a" locale="en" />
+                                        </h:outputText>
+                                    </div>
+                                </ui:repeat>
+                            </div>
+
+                            <ui:repeat value="#{gestionCitasBean.dias}" var="col">
+                                <div class="columnaDia #{col.finDeSemana ? 'finSemana' : ''} #{col.hoy ? 'hoy' : ''}" style="height: #{gestionCitasBean.alturaPixeles}px;">
+                                    <ui:repeat value="#{col.citas}" var="cita">
+                                        <div class="evento" style="#{cita.estiloPosicion}" title="#{cita.servicio}">
+                                            <strong>
+                                                <h:outputText value="#{cita.inicio}">
+                                                    <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
+                                                </h:outputText>
+                                                -
+                                                <h:outputText value="#{cita.fin}">
+                                                    <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
+                                                </h:outputText>
+                                            </strong>
+                                            #{cita.cliente}
+                                            <br />
+                                            #{cita.servicio}
+                                        </div>
+                                    </ui:repeat>
+                                </div>
+                            </ui:repeat>
+                        </div>
+
+                    </div>
+                </ui:fragment>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+</ui:composition>
