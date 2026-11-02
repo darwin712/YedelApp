@@ -75,6 +75,13 @@ public class LoginBeanUI implements Serializable{
     }
 
     
+    public void logout() throws IOException{
+        String appURL = "/login.xhtml";
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + appURL);
+    }
+
+    
     /* getters y setters*/
 
     public Administrador getUsuario() {
