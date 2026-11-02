@@ -250,9 +250,10 @@
             /* Citas: bloque redondeado con borde de 2px y anillo de color al pasar el cursor,
                igual que .opcion y los campos de la plantilla. Cada color solo cambia 3 variables. */
             .evento {
-                --fondo: #F1DDF0;
-                --borde: #961570;
-                --texto: #78155b;
+                --h: 320;
+                --fondo: hsl(var(--h), 70%, 92%);
+                --borde: hsl(var(--h), 65%, 45%);
+                --texto: hsl(var(--h), 60%, 25%);
                 border: 2px solid transparent;
                 border-radius: 10px;
                 background: linear-gradient(var(--fondo), var(--fondo)) padding-box,
@@ -292,22 +293,11 @@
                 box-shadow: 0 6px 18px rgba(214, 36, 159, 0.16);
             }
 
-            .eventoMorado {
-                --fondo: #F1DDF0;
-                --borde: #961570;
-                --texto: #78155b;
-            }
-
-            .eventoRosa {
-                --fondo: #FCE2F1;
-                --borde: #D6249F;
-                --texto: #9C286D;
-            }
-
-            .eventoVerde {
-                --fondo: #DDF6F5;
-                --borde: #22D3D0;
-                --texto: #2A1B3D;
+            .enlaceCita {
+                display: block;
+                height: 100%;
+                color: inherit;
+                text-decoration: none;
             }
 
             @media (max-width: 768px) {
@@ -335,9 +325,9 @@
                     <h2 class="tituloCalendario">#{gestionCitasBean.titulo}</h2>
 
                     <div class="controlesEncabezado">
-                        <p:commandButton value="Agregar cita" icon="pi pi-plus" styleClass="btnAgregar" type="button" />
+                        <p:commandButton value="Agregar cita" styleClass="btnAgregar" type="button" />
                         <h:selectOneMenu value="#{gestionCitasBean.estilistaSeleccionado}" styleClass="fieldSelect">
-                            <f:selectItem itemLabel="General" itemValue="0" />
+                            <f:selectItem itemLabel="Todas las citas" itemValue="0" />
                             <f:selectItems value="#{gestionCitasBean.opcionesEstilistas}" />
                             <f:ajax event="change" listener="#{gestionCitasBean.filtrarPorEstilista}" render="calendario" />
                         </h:selectOneMenu>
@@ -377,13 +367,15 @@
                                     <span class="numeroDia">#{dia.fecha.dayOfMonth}</span>
 
                                     <ui:repeat value="#{dia.citas}" var="cita">
-                                        <div class="evento" title="#{cita.servicio}">
-                                            <strong>
-                                                <h:outputText value="#{cita.inicio}">
-                                                    <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
-                                                </h:outputText>
-                                            </strong>
-                                            #{cita.cliente}
+                                        <div class="evento" style="#{cita.estiloColor}" title="#{cita.servicio}">
+                                            <p:commandLink styleClass="enlaceCita" action="#{gestionCitasBean.verCita(cita)}" update=":formCalendario:detalleCita" process="@this" oncomplete="abrirFormulario('formCalendario:detalleCita')">
+                                                <strong>
+                                                    <h:outputText value="#{cita.inicio}">
+                                                        <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
+                                                    </h:outputText>
+                                                </strong>
+                                                #{cita.cliente}
+                                            </p:commandLink>
                                         </div>
                                     </ui:repeat>
                                 </div>
@@ -421,19 +413,21 @@
                             <ui:repeat value="#{gestionCitasBean.dias}" var="col">
                                 <div class="columnaDia #{col.finDeSemana ? 'finSemana' : ''} #{col.hoy ? 'hoy' : ''}" style="height: #{gestionCitasBean.alturaPixeles}px;">
                                     <ui:repeat value="#{col.citas}" var="cita">
-                                        <div class="evento" style="#{cita.estiloPosicion}" title="#{cita.servicio}">
-                                            <strong>
-                                                <h:outputText value="#{cita.inicio}">
-                                                    <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
-                                                </h:outputText>
-                                                -
-                                                <h:outputText value="#{cita.fin}">
-                                                    <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
-                                                </h:outputText>
-                                            </strong>
-                                            #{cita.cliente}
-                                            <br />
-                                            #{cita.servicio}
+                                        <div class="evento" style="#{cita.estiloPosicion}#{cita.estiloColor}" title="#{cita.servicio}">
+                                            <p:commandLink styleClass="enlaceCita" action="#{gestionCitasBean.verCita(cita)}" update=":formCalendario:detalleCita" process="@this" oncomplete="abrirFormulario('formCalendario:detalleCita')">
+                                                <strong>
+                                                    <h:outputText value="#{cita.inicio}">
+                                                        <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
+                                                    </h:outputText>
+                                                    -
+                                                    <h:outputText value="#{cita.fin}">
+                                                        <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
+                                                    </h:outputText>
+                                                </strong>
+                                                #{cita.cliente}
+                                                <br />
+                                                #{cita.servicio}
+                                            </p:commandLink>
                                         </div>
                                     </ui:repeat>
                                 </div>
@@ -443,6 +437,76 @@
                     </div>
                 </ui:fragment>
             </h:panelGroup>
+
+            <div class="fondoFormulario" id="fondoFormulario" onclick="cerrarFormulario()">
+                <div class="contenedor" onclick="event.stopPropagation()">
+                    <h:panelGroup id="detalleCita" layout="block">
+                        <h2 class="h2aqua">Detalle de la cita</h2>
+
+                        <div class="datos">
+                            <div class="filaDoble">
+                                <div class="campo aqua">
+                                    <label>Cliente</label>
+                                    <div class="valorDato">#{gestionCitasBean.citaSeleccionada.cliente}</div>
+                                </div>
+                                <div class="campo aqua">
+                                    <label>Estilista</label>
+                                    <div class="valorDato">#{gestionCitasBean.citaSeleccionada.estilista}</div>
+                                </div>
+                            </div>
+
+                            <div class="filaDoble">
+                                <div class="campo aqua">
+                                    <label>Teléfono</label>
+                                    <div class="valorDato">
+                                        #{gestionCitasBean.citaSeleccionada.telefono}
+                                    </div>
+                                </div>
+                                <div class="campo aqua">
+                                    <label>Correo</label>
+                                    <div class="valorDato">
+                                        #{gestionCitasBean.citaSeleccionada.correo}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filaDoble">
+                                <div class="campo aqua">
+                                    <label>Servicio</label>
+                                    <div class="valorDato">
+                                        #{gestionCitasBean.citaSeleccionada.servicio}
+                                    </div>
+                                </div>
+                                <div class="campo aqua">
+                                    <label>Precio</label>
+                                    <div class="valorDato">
+                                        #{gestionCitasBean.citaSeleccionada.precio}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="filaDoble">
+                                <div class="campo aqua">
+                                    <label>Horario</label>
+                                    <div class="valorDato">
+                                        <h:outputText value="#{gestionCitasBean.citaSeleccionada.inicio}"><f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" /></h:outputText>
+                                         -
+                                        <h:outputText value="#{gestionCitasBean.citaSeleccionada.fin}"><f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" /></h:outputText>
+                                    </div>
+                                </div>
+                                <div class="campo aqua">
+                                    <label>Fecha</label>
+                                    <div class="valorDato">
+                                        <h:outputText value="#{gestionCitasBean.citaSeleccionada.inicio}"><f:convertDateTime type="localDateTime" pattern="d 'de' MMMM yyyy" locale="es" /></h:outputText>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btnRegistrar" onclick="cerrarFormulario()">Cerrar</button>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            </div>
         </h:form>
     </ui:define>
 </ui:composition>

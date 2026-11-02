@@ -1,4 +1,3 @@
-
 package ui;
 
 import jakarta.annotation.PostConstruct;
@@ -61,30 +60,27 @@ public class CalendarioCitasBean implements Serializable {
     private List<CitaVista> citas = new ArrayList<>();
     private List<Dia> dias = new ArrayList<>();
     private List<SelectItem> opcionesEstilistas = new ArrayList<>();
+    private CitaVista citaSeleccionada;
+    private Map<Integer, String> nombresEstilistas = new HashMap<>();
     private int estilistaSeleccionado = 0;
 
     @PostConstruct
     public void init() {
         fechaReferencia = LocalDate.now(zona);
-
-        cargarCitas();
         cargarEstilistas();
+        cargarCitas();
         actualizarCalendario();
     }
 
     private void cargarCitas() {
-        Map<Integer, String> clientes = new HashMap<>();
-        List<Cliente> listaClientes =
-                ServiceFacadeLocator.getInstanceFacadeCliente().findAll();
-
+        Map<Integer, Cliente> clientes = new HashMap<>();
+        List<Cliente> listaClientes = ServiceFacadeLocator.getInstanceFacadeCliente().findAll();
         for (Cliente c : listaClientes) {
-            clientes.put(c.getId(), c.getNombre());
+            clientes.put(c.getId(), c);
         }
 
         Map<Integer, Servicio> servicios = new HashMap<>();
-        List<Servicio> listaServicios =
-                ServiceFacadeLocator.getInstanceFacadeServicio().findAll();
-
+        List<Servicio> listaServicios = ServiceFacadeLocator.getInstanceFacadeServicio().findAll();
         for (Servicio s : listaServicios) {
             servicios.put(s.getId(), s);
         }
@@ -94,6 +90,7 @@ public class CalendarioCitasBean implements Serializable {
 
         for (Cita c : listaCitas) {
             if (c.getFecha() != null && c.getHoraInicio() != null) {
+                Cliente cliente = clientes.get(c.getIdCliente());
                 Servicio servicio = servicios.get(c.getIdServicio());
                 int duracion = duracionDefault;
 
@@ -105,12 +102,30 @@ public class CalendarioCitasBean implements Serializable {
 
                 LocalDateTime inicio = c.getFecha().atTime(c.getHoraInicio());
                 LocalDateTime fin = inicio.plusMinutes(duracion);
-                String nombreCliente = clientes.get(c.getIdCliente());
-                int idEstilista = c.getIdEstilista() == null ? 0 : c.getIdEstilista();
+                String nombreCliente = null;
+                String telefono = "";
+                String correo = "";
                 String nombreServicio = null;
+                float precio = 0;
+                int idEstilista = c.getIdEstilista() == null ? 0 : c.getIdEstilista();
+
+                if (cliente != null) {
+                    nombreCliente = cliente.getNombre();
+
+                    if (cliente.getTelefono() != null) {
+                        telefono = cliente.getTelefono();
+                    }
+                    if (cliente.getCorreo() != null) {
+                        correo = cliente.getCorreo();
+                    }
+                }
 
                 if (servicio != null) {
                     nombreServicio = servicio.getNombre();
+
+                    if (servicio.getPrecio() != null) {
+                        precio = servicio.getPrecio().floatValue();
+                    }
                 }
                 if (nombreCliente == null) {
                     nombreCliente = "Sin cliente";
@@ -119,17 +134,25 @@ public class CalendarioCitasBean implements Serializable {
                     nombreServicio = "Sin servicio";
                 }
 
-                citas.add(new CitaVista(nombreCliente, nombreServicio, idEstilista, inicio, fin));
+                String nombreEstilista = nombresEstilistas.get(idEstilista);
+
+                if (nombreEstilista == null) {
+                    nombreEstilista = "Sin estilista";
+                }
+
+                citas.add(new CitaVista(nombreCliente, nombreServicio, idEstilista, telefono, correo, nombreEstilista, duracion, precio, inicio, fin));
             }
         }
     }
 
     private void cargarEstilistas() {
         opcionesEstilistas.clear();
+        nombresEstilistas.clear();
         List<Estilista> listaEstilistas = ServiceFacadeLocator.getInstanceFacadeEstilista().findAll();
 
         for (Estilista e : listaEstilistas) {
-            opcionesEstilistas.add(new SelectItem(e.getId(), e.getNombre()));
+            opcionesEstilistas.add(new SelectItem(e.getId(), "Citas de "+e.getNombre()));
+            nombresEstilistas.put(e.getId(), e.getNombre());
         }
     }
 
@@ -310,6 +333,14 @@ public class CalendarioCitasBean implements Serializable {
         this.estilistaSeleccionado = estilistaSeleccionado;
     }
 
+    public void verCita(CitaVista cita) {
+        this.citaSeleccionada = cita;
+    }
+
+    public CitaVista getCitaSeleccionada() {
+        return citaSeleccionada;
+    }
+
     public List<SelectItem> getOpcionesEstilistas() {
         return opcionesEstilistas;
     }
@@ -318,16 +349,27 @@ public class CalendarioCitasBean implements Serializable {
         private final String cliente;
         private final String servicio;
         private final int idEstilista;
+        private final String telefono;
+        private final String correo;
+        private final String estilista;
+        private final int duracion;
+        private final float precio;
+
         private final LocalDateTime inicio;
         private final LocalDateTime fin;
 
         private int columna = 0;
         private int columnas = 1;
 
-        public CitaVista(String cliente, String servicio, int idEstilista, LocalDateTime inicio, LocalDateTime fin) {
+        public CitaVista(String cliente, String servicio, int idEstilista, String telefono, String correo, String estilista, int duracion, float precio, LocalDateTime inicio, LocalDateTime fin) {
             this.cliente = cliente;
             this.servicio = servicio;
             this.idEstilista = idEstilista;
+            this.telefono = telefono;
+            this.correo = correo;
+            this.estilista = estilista;
+            this.duracion = duracion;
+            this.precio = precio;
             this.inicio = inicio;
             this.fin = fin;
         }
@@ -352,6 +394,26 @@ public class CalendarioCitasBean implements Serializable {
             return idEstilista;
         }
 
+        public String getTelefono() {
+            return telefono;
+        }
+
+        public String getCorreo() {
+            return correo;
+        }
+
+        public String getEstilista() {
+            return estilista;
+        }
+
+        public int getDuracion() {
+            return duracion;
+        }
+
+        public String getPrecio() {
+            return String.format("$%.2f",precio);
+        }
+
         public void setColumna(int columna) {
             this.columna = columna;
         }
@@ -369,6 +431,14 @@ public class CalendarioCitasBean implements Serializable {
             int fin = minutosDesdeInicioDelDia(this.fin);
 
             return fin > 0 && inicio < minutosCalendario;
+        }
+
+        public String getEstiloColor() {
+            if (idEstilista == 0) {
+                return "--fondo:#F0ECF3;--borde:#b996ab;--texto:#6d1753;";
+            }
+            int tono = (int)((idEstilista * 137.508) % 360);
+            return "--h:"+tono+";";
         }
 
         public String getEstiloPosicion() {
