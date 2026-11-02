@@ -1,205 +1,98 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<?xml version='1.0' encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/plantilla/plantilla.xhtml">
 
-<h:head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Yedel Beauty Salón - Iniciar sesión</title>
-    <style>
+    <ui:define name="titulo"> Consulta de administradores </ui:define>
+    <ui:define name="subtitulo"> Consulta de administradores </ui:define>
 
-        :root{
-            --rosa: #FAE8F8;
-            --rosa-boton: #F8DDF4;
-            --magenta: #D63CC8;
-            --texto: #111111;
-            --enlace: #2B8AD6;
-            --gris-campo: #F1F1F1;
-        }
+    <ui:define name="contenido">
+        <div class="contenedor">
+            <h:form id="formAdmin">
 
-        *{
-            box-sizing: border-box;
-        }
+                <p:messages id="messages" showDetail="true" closable="true">
 
-        html, body{
-            margin: 0;
-            padding: 0;
-            min-height: 100%;
-        }
+                </p:messages>
 
-        body{
-            background: #FFFFFF;
-            color: var(--texto);
-            font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
-        }
+                <div class="busqueda">
+                    <h:inputText styleClass="busq" value="#{adminBean.filtroBusqueda}" placeholder="Buscar..."/>
+                    <h:commandButton image = "resources/busqueda-icon.png" styleClass="btnRegistrar" action="#{adminBean.buscar()}" />
+                </div>
 
-        .pagina{
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 56px 28px 28px;
-        }
+                <h:panelGroup id="boxEdicion" rendered="#{adminBean.adminSeleccionado != null}" layout="block" styleClass="fondoFormulario abierto">
+                    <div class="contenedor">
+                        <div class="datos">
+                            <h3>Modificar un administrador</h3>
 
-        .encabezado{
-            text-align: center;
-            margin-bottom: 40px;
-        }
+                            <div class="campo">
+                                <h:outputLabel value="Nombre"/>
+                                <h:inputText styleClass="fieldLarge" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.nombre}"/>
+                            </div>
 
-        .logo{
-            width: 240px;
-            max-width: 80%;
-            height: auto;
-        }
+                            <div class="filaDoble">
+                                <div class="campo">
+                                    <h:outputLabel value="Apellido paterno"/>
+                                    <h:inputText styleClass="fieldSmall" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.appaterno}"/>
+                                </div>
 
-        .tarjeta{
-            width: 100%;
-            max-width: 340px;
-        }
+                                <div class="campo">
+                                    <h:outputLabel value="Apellido materno"/>
+                                    <h:inputText styleClass="fieldSmall" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.apmaterno}"/>
+                                </div>
+                            </div>
 
-        .campo{
-            margin-bottom: 24px;
-        }
+                            <div class="filaDoble">
+                                <div class="campo">
+                                    <h:outputLabel value="Usuario"/>
+                                    <h:inputText styleClass="fieldSmall" maxlength="45" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.usuario}"/>
+                                </div>
 
-        .campo label{
-            display: block;
-            margin: 0 0 8px 2px;
-            font-size: 16px;
-            font-weight: 700;
-        }
+                                <div class="campo">
+                                    <h:outputLabel value="Contrasena"/>
+                                    <h:inputText styleClass="fieldSmall" maxlength="45" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.contrasena}"/>
+                                </div>
+                            </div>
 
-        .campo input{
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            font-family: inherit;
-            color: var(--texto);
-            background: var(--gris-campo);
-            border: none;
-            border-bottom: 2px solid var(--magenta);
-            border-radius: 8px;
-            outline: none;
-        }
+                            <div class="acciones">
+                                <h:commandLink action="#{adminBean.guardarEdicion()}" styleClass="btn-icono">
+                                    <h:graphicImage url="resources/confirmar-icon.png"/>
+                                </h:commandLink>
+                                <h:commandLink immediate="true" action="#{adminBean.cancelarEdicion()}" styleClass="btn-icono">
+                                    <h:graphicImage url="resources/cancelar-icon.png"/>
+                                </h:commandLink>
+                            </div>
+                        </div>
+                    </div>
+                </h:panelGroup>
 
-        .campo input:focus{
-            box-shadow: 0 0 0 3px rgba(214, 60, 200, 0.18);
-        }
+                <h:dataTable value="#{adminBean.listaAdmin}" var="admin" styleClass="tabla">
+                    <h:column>
+                        <f:facet name="header">Nombre completo</f:facet>
+                        <h:outputText value="#{admin.nombre} #{admin.appaterno} #{admin.apmaterno}"/>
+                    </h:column>
 
-        .acciones{
-            margin-top: 8px;
-            text-align: center;
-        }
+                    <h:column>
+                        <f:facet name="header">Usuario</f:facet>
+                        <h:outputText value="#{admin.usuario}"/>
+                    </h:column>
 
-        .boton{
-            min-width: 150px;
-            padding: 12px 28px;
-            font-size: 17px;
-            font-weight: 700;
-            font-family: inherit;
-            color: #3A2A38;
-            background: var(--rosa-boton);
-            border: none;
-            border-bottom: 2px solid var(--magenta);
-            border-radius: 12px;
-            box-shadow: 0 3px 6px rgba(214, 60, 200, 0.25);
-            cursor: pointer;
-        }
+                    <h:column>
+                        <f:facet name="header"></f:facet>
+                        <div class="acciones">
+                            <h:commandLink action="#{adminBean.setAdminSeleccionado(admin)}" styleClass="btn-icono">
+                                <h:graphicImage url="resources/edit-icon.png"/>
+                            </h:commandLink>
+                            <h:commandLink action="#{adminBean.elim(admin)}" onclick="return confirm('Seguro de eliminarlo?');" styleClass="btn-icono">
+                                <h:graphicImage url="resources/elimin-icon.png"/>
+                            </h:commandLink>
+                        </div>
+                    </h:column>
+                </h:dataTable>
 
-        .boton:hover{
-            background: #F4CFEE;
-        }
-
-        .registro{
-            margin-top: auto;
-            padding-top: 32px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .registro a{
-            color: var(--enlace);
-            text-decoration: none;
-        }
-
-        .registro a:hover{
-            text-decoration: underline;
-        }
-
-        .ui-messages{
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 600px){
-            .pagina{
-                justify-content: center;
-                padding: 40px 24px;
-            }
-
-            .encabezado{
-                margin-bottom: 28px;
-            }
-
-            .logo{
-                width: 300px;
-            }
-
-            .tarjeta{
-                max-width: 380px;
-                padding: 32px 36px 30px;
-                background: var(--rosa);
-                border-bottom: 2px solid var(--magenta);
-                border-radius: 10px;
-                box-shadow: 0 6px 18px rgba(214, 60, 200, 0.12);
-            }
-
-            .campo input{
-                background: #FFFFFF;
-            }
-
-            .registro{
-                margin-top: 24px;
-                padding-top: 0;
-            }
-        }
-    </style>
-</h:head>
-
-<h:body>
-    <main class="pagina">
-
-        <div class="encabezado">
-            <p:graphicImage url="resources/images/logo.png" alt="Yedel Beauty Salón" styleClass="logo" />
+            </h:form>
         </div>
-
-        <h:form id="formLogin" styleClass="tarjeta">
-
-            <p:messages id="mensajes" showDetail="true" closable="true" />
-
-            <div class="campo">
-                <h:outputLabel for="correo" value="Correo" />
-                <h:inputText id="correo" value="#{loginUI.correo}" pt:type="email" pt:autocomplete="email" />
-            </div>
-
-            <div class="campo">
-                <h:outputLabel for="contrasena" value="Contraseña" />
-                <h:inputSecret id="contrasena" value="#{loginUI.contrasena}" pt:autocomplete="current-password" />
-            </div>
-
-            <div class="acciones">
-                <h:commandButton id="ingresar" value="Ingresar" action="#{loginUI.login()}" styleClass="boton" />
-            </div>
-
-        </h:form>
-
-        <div class="registro">
-            <a href="registro.xhtml">¿No tienes una cuenta? Regístrate ahora</a>
-        </div>
-
-    </main>
-</h:body>
-</html>
+    </ui:define>
+</ui:composition>
