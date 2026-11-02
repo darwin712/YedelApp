@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "inventario_estilista")
+@Table(name = "inventario_estilista", schema = "yedelapp")
 public class InventarioEstilista {
     @EmbeddedId
     private InventarioEstilistaId id;

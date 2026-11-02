@@ -19,7 +19,10 @@ public class DelegateServicio {
     }
 
     public List<Servicio> findAll(){
-        return ServiceLocator.getInstanceServicioDAO().findAll();
+        return ServiceLocator.getInstanceServicioDAO().obtenerTodos();
     }
 
+    public List<Servicio> obtenerServiciosPorEstilista(Integer idEstilista){
+        return ServiceLocator.getInstanceServicioDAO().obtenerServiciosPorEstilista(idEstilista);
+    }
 }

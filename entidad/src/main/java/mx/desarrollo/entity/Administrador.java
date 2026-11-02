@@ -1,16 +1,13 @@
 package mx.desarrollo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 @Entity
-@Table(name = "administrador")
+@Table(name = "administrador", schema = "yedelapp")
 public class Administrador {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_administrador", nullable = false)
     private Integer id;
 

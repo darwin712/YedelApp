@@ -13,20 +13,24 @@ public class FacadeServicio {
         this.delegateServicio = new DelegateServicio();
     }
 
-    public void guardarServicio(Servicio servicio){
+    public void guardarServicio(Servicio servicio) {
         delegateServicio.saveServicio(servicio);
     }
 
-    public void actualizarServicio(Servicio servicio){
+    public void actualizarServicio(Servicio servicio) {
         delegateServicio.updateServicio(servicio);
     }
 
-    public void eliminarServicio(Servicio servicio){
+    public void eliminarServicio(Servicio servicio) {
         delegateServicio.deleteServicio(servicio);
     }
 
-    public List<Servicio> findAll(){
+    public List<Servicio> findAll() {
         return delegateServicio.findAll();
+    }
+
+    public List<Servicio> obtenerServiciosPorEstilista (Integer idEstilista){
+        return delegateServicio.obtenerServiciosPorEstilista(idEstilista);
     }
 
 }
