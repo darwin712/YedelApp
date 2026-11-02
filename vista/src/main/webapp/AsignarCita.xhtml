@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="titulo"> Registro de profesores </ui:define>
+    <ui:define name="subtitulo"> Registro de profesores </ui:define>
+
+    <ui:define name="contenido">
+        <link rel="stylesheet" type="text/css" href="resources/style.css" />
+        <style>
+            .ui-datepicker,
+            .ui-selectcheckboxmenu-panel,
+            .ui-selectonemenu-panel {
+                z-index: 3000 !important;
+            }
+
+            .ui-selectcheckboxmenu.custom-select {
+                background: #ffffff !important;
+                border: 1.5px solid #d8cde0 !important;
+                border-radius: 18px !important;
+                box-shadow: none !important;
+                height: 42px !important;
+                display: flex !important;
+                align-items: center !important;
+                padding: 2px 10px !important;
+            }
+
+            .ui-selectcheckboxmenu.custom-select .ui-selectcheckboxmenu-label {
+                color: #6b1250 !important;
+                font-weight: 500 !important;
+                background: transparent !important;
+                padding: 4px 8px !important;
+            }
+
+            .ui-selectcheckboxmenu.custom-select .ui-selectcheckboxmenu-trigger {
+                background: transparent !important;
+                border: none !important;
+                color: #6b1250 !important;
+            }
+
+        </style>
+        <div class="contenedor">
+            <div class="datos">
+
+
+                <div class="campo">
+                    <label>Nombre(s)</label>
+                    <input type="text" name="Nombre" class="fieldLarge" placeholder="Nombre(s)" required="required"/>
+                </div>
+
+                <div class="filaDoble">
+                    <div class="campo">
+                        <label>Apellido paterno</label>
+                        <input type="text" name="Apellido_Paterno" class="fieldSmall" placeholder="Apellido Paterno" required="required"/>
+                    </div>
+
+                    <div class="campo">
+                        <label>Apellido materno</label>
+                        <input type="text" name="Apellido_Materno" class="fieldSmall" placeholder="Apellido Materno" required="required"/>
+                    </div>
+                </div>
+
+                <div class="filaDoble">
+                    <div class="campo">
+                        <label>Telefono</label>
+                        <input type="text" name="Telefono" class="fieldSmall" placeholder="Telefono" required="required"/>
+                    </div>
+
+                    <div class="campo">
+                        <label>Turno</label>
+                        <select name="Turno" class="fieldSelect">
+                            <option>Matutino</option>
+                            <option>Vespertino</option>
+                            <option>Mixto</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="campo">
+                    <label> Checkboxes </label>
+                    <div class="opciones">
+                        <label class="opcion">
+                            <span class="opcionTexto">
+                                Checkbox1
+                                <small>Descripcion</small>
+                            </span>
+                            <input type="checkbox" class="fieldCheckbox" name="checkbox1"/>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label>Radiobuttons</label>
+                    <div class="opciones">
+                        <label class="opcion">
+                            <span class="opcionTexto">
+                                Radiobutton1
+                                <small>Descripcion</small>
+                            </span>
+                            <input type="radio" class="fieldRadio" name="radiobuttons"/>
+                        </label>
+
+                        <label class="opcion">
+                            <span class="opcionTexto">
+                                Radiobutton2
+                                <small>Descripcion</small>
+                            </span>
+                            <input type="radio" class="fieldRadio" name="radiobuttons"/>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="button" class="btnAgregar" onclick="abrirFormulario('test')"> Ejemplo de popup </button>
+            </div>
+        </div>
+
+        <div class="contenedor">
+            <h2>Titulo</h2>
+
+            <div class="tablaContenedor">
+                <table class="tabla">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>001</td>
+                        <td>Juan Perez</td>
+                        <td>juan@gmail.com</td>
+                        <td><span class="estado activo">Activo</span></td>
+                        <td>
+                            <button class="btn-icono">Editar</button>
+                            <button class="btn-icono">Eliminar</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="fondoFormulario" id="fondoFormulario" onclick="cerrarFormulario()">
+            <div class="contenedor" onclick="event.stopPropagation()">
+            <div id="test">
+
+
+                    <h:form id="contenedor">
+                        <div class="datos">
+
+                                <label>Nueva Cita</label>
+
+
+                            <div class="campo" style="margin-top: 14px;">
+
+
+                                <div class="filaDoble">
+
+                                    <div class="campo">
+                                        <h:outputLabel for="nombreCliente" value="Cliente:" />
+
+                                        <h:selectOneMenu id="nombreCliente"
+                                                         value="#{RegistroUI.idClienteSeleccionado}"
+                                                         styleClass="fieldSelect">
+                                            <f:selectItem itemLabel="-- Seleccione un Cliente --" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{RegistroUI.listaCliente}"
+                                                           var="cliente"
+                                                           itemLabel="#{cliente.id} - #{cliente.nombre} #{cliente.apellidoP} #{cliente.apellidoM}"
+                                                           itemValue="#{cliente.id}" />
+                                        </h:selectOneMenu>
+                                    </div>
+
+                                    <div class="campo">
+                                        <h:outputLabel for="nombreEstilista" value="Estilista:" />
+                                        <h:selectOneMenu id="nombreEstilista"
+                                                         value="#{RegistroUI.idEstilistaSeleccionado}"
+                                                         styleClass="fieldSelect">
+                                            <f:selectItem itemLabel="-- Seleccione un Estilista --" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{RegistroUI.estilistasActivos}"
+                                                           var="estilista"
+                                                           itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}"
+                                                           itemValue="#{estilista.id}" />
+                                            <f:ajax listener="#{RegistroUI.onEstilistaChange}" render="tipoServicio" />
+                                        </h:selectOneMenu>
+                                    </div>
+                                </div>
+
+
+                                <div class="filaDoble">
+
+                                    <div class="campo">
+                                        <h:outputLabel for="tipoServicio" value="Seleccine sus Servicios:" />
+                                        <p:selectCheckboxMenu id="tipoServicio"
+                                                              value="#{RegistroUI.idsServiciosSeleccionados}"
+                                                              label="Seleccione sus servicios"
+                                                              styleClass="custom-select"
+                                                              filter="true" filterMatchMode="contains"
+                                                              selectionLimit="5"
+                                                              selectionLimitMessage="Solo puedes seleccionar un máximo de 5 servicios.">
+                                            <f:selectItems value="#{RegistroUI.listaServicios}"
+                                                           var="servicio"
+                                                           itemLabel="#{servicio.nombre} ($#{servicio.precio} - #{servicio.duracionMin} min)"
+                                                           itemValue="#{servicio.id}" />
+
+                                            <p:ajax event="change" listener="#{RegistroUI.calcularTotales}" update="costoServicio duracionServicio" />
+                                            <p:ajax event="toggleSelect" listener="#{RegistroUI.calcularTotales}" update="costoServicio duracionServicio" />
+                                        </p:selectCheckboxMenu>
+                                    </div>
+
+
+                                    <div class="campo">
+                                    <h:outputLabel for="costoServicio" value="Costo Aproximado:" /> <br/>
+                                        <p:inputText id="costoServicio" value="#{RegistroUI.precioServicio}" readonly="true"
+                                                     placeholder="$"
+                                                     styleClass="custom-select">
+                                            <f:convertNumber type="currency" currencySymbol="$" />
+                                        </p:inputText>
+                                    </div>
+                                 </div>
+
+                                <div class="filaDoble">
+                                    <div class="campo">
+                                        <p:outputLabel for="hInicio" value="Hora Inicio" />
+                                        <p:datePicker id="hInicio" value="#{RegistroUI.horaInicio}" timeOnly="true" pattern="HH:mm" showIcon="true" icon="pi pi-clock" stepMinute="30" required="true"/>
+                                    </div>
+
+                                    <div class="campo">
+                                        <p:outputLabel for="fechaCita" value="Fecha"/>
+                                        <p:datePicker id="fechaCita" value="#{RegistroUI.fechaCita}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true"
+                                                      styleClass="custom-select" />
+                                    </div>
+
+
+                                </div>
+                                <div class="campo">
+                                    <h:outputLabel for="duracionServicio" value="Duración Estimada Total:" /> <br/>
+                                    <p:inputText id="duracionServicio"
+                                                 value="#{RegistroUI.duracionTotal} min"
+                                                 readonly="true"
+                                                 styleClass="custom-select" />
+                                </div>
+
+                            </div>
+
+                            <p:messages id="mensajesPopup" showDetail="true" closable="true">
+                                <p:autoUpdate />
+                            </p:messages>
+
+                            <button type="button" class="btnAgregar" onclick="cerrarFormulario()"> Cerrar </button>
+                            <h:commandButton value="Guardar Cita" action="#{RegistroUI.guardarCita}" styleClass="btnAgregar" />
+                        </div>
+
+                    </h:form>
+
+
+            </div>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>
