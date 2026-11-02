@@ -86,7 +86,7 @@ public class CitasAltasBeanUI implements Serializable {
 
     public void guardarCita() {
         try {
-            // 1. Validar campos obligatorios de selección
+
             if (this.idClienteSeleccionado == null) {
                 mensajeError("Debe seleccionar un cliente.");
                 return;
