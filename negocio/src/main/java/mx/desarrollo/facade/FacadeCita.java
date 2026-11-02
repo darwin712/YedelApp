@@ -39,8 +39,16 @@ return delegateCita.ObtenerCitasIndividuales(idEstilista);
         delegateCita.guardarCitaConServicios(cita, idsServicios);
     }
 
-    public boolean traslapeEstilista(Integer idEstilista, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin){
-        return delegateCita.traslapeEstilista(idEstilista,fecha,nuevaHoraInicio,nuevaHoraFin);
+    public void darDeBajaCita(Integer idCita) {
+        delegateCita.darDeBajaCita(idCita);
+    }
+
+    public boolean traslapeEstilista(Integer idEstilista, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin, Integer idCitaIgnorar) {
+        return delegateCita.traslapeEstilista(idEstilista, fecha, nuevaHoraInicio, nuevaHoraFin, idCitaIgnorar);
+    }
+
+    public void actualizarCitaConServicios(Integer idCita, Integer idCliente, Integer idEstilista, LocalDate fecha, LocalTime hora, List<Integer> idsServicios) {
+        delegateCita.actualizarCitaConServicios(idCita, idCliente, idEstilista, fecha, hora, idsServicios);
     }
 
 }

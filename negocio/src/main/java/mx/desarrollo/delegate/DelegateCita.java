@@ -58,16 +58,19 @@ public class DelegateCita {
         }
     }
 
-    public boolean traslapeEstilista(Integer idEstilista, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin) {
+    public boolean traslapeEstilista(Integer idEstilista, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin, Integer idCitaIgnorar) {
         EntityManager em = HibernateUtil.getEntityManager();
         try {
-            CitaDAO citaDAO = new CitaDAO(em);
-            return citaDAO.traslapeEstilista(idEstilista, fecha, nuevaHoraInicio, nuevaHoraFin);
+            return new CitaDAO(em).traslapeEstilista(idEstilista, fecha, nuevaHoraInicio, nuevaHoraFin, idCitaIgnorar);
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();
             }
         }
+    }
+
+    public void actualizarCitaConServicios(Integer idCita, Integer idCliente, Integer idEstilista, LocalDate fecha, LocalTime hora, List<Integer> idsServicios) {
+        citaDAO.actualizarCitaConServicios(idCita, idCliente, idEstilista, fecha, hora, idsServicios);
     }
 
 }

@@ -300,6 +300,19 @@
                 text-decoration: none;
             }
 
+            .filaBotones {
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .btnRegistrar.btnEliminar {
+                --relleno: #E0457B;
+                --relleno-h: #C93468;
+                --borde: #E0457B;
+            }
+
             .ui-datepicker,
             .ui-selectcheckboxmenu-panel,
             .ui-selectonemenu-panel {
@@ -398,7 +411,7 @@
 
                                     <ui:repeat value="#{dia.citas}" var="cita">
                                         <div class="evento" style="#{cita.estiloColor}" title="#{cita.servicio}">
-                                            <p:commandLink styleClass="enlaceCita" action="#{gestionCitasBean.verCita(cita)}" update=":formDetalle:detalleCita" process="@this" oncomplete="abrirFormulario('formDetalle')">
+                                            <p:commandLink styleClass="enlaceCita" actionListener="#{edicionCita.cancelar}" action="#{gestionCitasBean.verCita(cita)}" update=":formDetalle:detalleCita" process="@this" oncomplete="abrirFormulario('formDetalle')">
                                                 <strong>
                                                     <h:outputText value="#{cita.inicio}">
                                                         <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
@@ -444,7 +457,7 @@
                                 <div class="columnaDia #{col.finDeSemana ? 'finSemana' : ''} #{col.hoy ? 'hoy' : ''}" style="height: #{gestionCitasBean.alturaPixeles}px;">
                                     <ui:repeat value="#{col.citas}" var="cita">
                                         <div class="evento" style="#{cita.estiloPosicion}#{cita.estiloColor}" title="#{cita.servicio}">
-                                            <p:commandLink styleClass="enlaceCita" action="#{gestionCitasBean.verCita(cita)}" update=":formDetalle:detalleCita" process="@this" oncomplete="abrirFormulario('formDetalle')">
+                                            <p:commandLink styleClass="enlaceCita" actionListener="#{edicionCita.cancelar}" action="#{gestionCitasBean.verCita(cita)}" update=":formDetalle:detalleCita" process="@this" oncomplete="abrirFormulario('formDetalle')">
                                                 <strong>
                                                     <h:outputText value="#{cita.inicio}">
                                                         <f:convertDateTime type="localDateTime" pattern="h:mm a" locale="en" />
@@ -473,6 +486,7 @@
             <div class="contenedor" onclick="event.stopPropagation()">
                 <h:form id="formDetalle" styleClass="panelFormulario">
                     <h:panelGroup id="detalleCita" layout="block">
+                    <h:panelGroup layout="block" rendered="#{!edicionCita.editando}">
                         <h2 class="h2aqua">Detalle de la cita</h2>
 
                         <div class="datos">
@@ -534,9 +548,89 @@
                                 </div>
                             </div>
 
-                            <button type="button" class="btnRegistrar" onclick="cerrarFormulario()">Cerrar</button>
+                            <div class="filaBotones">
+                                <p:commandButton value="Modificar" styleClass="btnRegistrar" action="#{edicionCita.iniciarEdicion}" update="@form" />
+                                <p:commandButton value="Eliminar cita" styleClass="btnRegistrar btnEliminar" action="#{edicionCita.eliminar}" update=":formCalendario:calendario" onclick="return confirm('¿Eliminar esta cita?');" oncomplete="if (args &amp;&amp; !args.errorOcurred) { cerrarFormulario(); }" />
+
+                                <button type="button" class="btnRegistrar" onclick="cerrarFormulario()">Cerrar</button>
+                            </div>
                         </div>
                     </h:panelGroup>
+
+                        <h:panelGroup layout="block" rendered="#{edicionCita.editando}">
+                            <h2 class="h2aqua">Modificar cita</h2>
+                            <div class="datos">
+
+                                <div class="filaDoble">
+                                    <div class="campo aqua">
+                                        <h:outputLabel for="nombreCliente" value="Cliente" />
+                                        <h:selectOneMenu id="nombreCliente" value="#{edicionCita.idCliente}" styleClass="fieldSelect">
+                                            <f:selectItem itemLabel="-- Seleccione un Cliente --" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{edicionCita.listaClientes}" var="cliente" itemLabel="#{cliente.id} #{cliente.nombre} #{cliente.apellidoP} #{cliente.apellidoM}" itemValue="#{cliente.id}" />
+                                        </h:selectOneMenu>
+                                    </div>
+                                    <div class="campo aqua">
+                                        <h:outputLabel for="nombreEstilista" value="Estilista" />
+                                        <h:selectOneMenu id="nombreEstilista" value="#{edicionCita.idEstilista}" styleClass="fieldSelect">
+                                            <f:selectItem itemLabel="-- Seleccione un Estilista --" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItems value="#{edicionCita.estilistasActivos}" var="estilista" itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}" itemValue="#{estilista.id}" />
+                                            <f:ajax listener="#{edicionCita.onEstilistaChange}" render="tipoServicio" />
+                                        </h:selectOneMenu>
+                                    </div>
+                                </div>
+
+                                <div class="filaDoble">
+                                    <div class="campo aqua">
+                                        <h:outputLabel for="tipoServicio" value="Servicios" />
+                                        <p:selectCheckboxMenu id="tipoServicio" value="#{edicionCita.idsServicios}" label="Seleccione sus servicios" styleClass="custom-select" filter="true" filterMatchMode="contains" selectionLimit="5" selectionLimitMessage="Solo puedes seleccionar un máximo de 5 servicios.">
+                                            <f:selectItems value="#{edicionCita.listaServicios}" var="servicio" itemLabel="#{servicio.nombre} ($#{servicio.precio} - #{servicio.duracionMin} min)" itemValue="#{servicio.id}" />
+                                            <p:ajax event="change" listener="#{edicionCita.calcularTotales}" update="costoServicio duracionServicio" />
+                                            <p:ajax event="toggleSelect" listener="#{edicionCita.calcularTotales}" update="costoServicio duracionServicio" />
+                                        </p:selectCheckboxMenu>
+                                    </div>
+                                </div>
+
+                                <div class="filaDoble">
+                                    <div class="campo aqua">
+                                        <label>Costo aproximado</label>
+                                        <div class="valorDato">
+                                            <h:outputText id="costoServicio" value="#{edicionCita.precio}">
+                                                <f:convertNumber type="currency" currencySymbol="$" />
+                                            </h:outputText>
+                                        </div>
+                                    </div>
+                                    <div class="campo aqua">
+                                        <label>Duración estimada</label>
+                                        <div class="valorDato">
+                                            <h:outputText id="duracionServicio" value="#{edicionCita.duracion} min" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="filaDoble">
+                                    <div class="campo aqua">
+                                        <p:outputLabel for="hInicio" value="Hora inicio" />
+                                        <p:datePicker id="hInicio" value="#{edicionCita.hora}" timeOnly="true" pattern="HH:mm" showIcon="true" icon="pi pi-clock" stepMinute="30" required="true" />
+                                    </div>
+                                    <div class="campo aqua">
+                                        <p:outputLabel for="fechaCita" value="Fecha" />
+                                        <p:datePicker id="fechaCita" value="#{edicionCita.fecha}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" styleClass="custom-select" />
+                                    </div>
+                                </div>
+
+                                <p:messages id="mensajesEdicion" showDetail="true" closable="true">
+                                    <p:autoUpdate />
+                                </p:messages>
+
+                                <div class="filaBotones">
+                                    <p:commandButton value="Aceptar" styleClass="btnRegistrar" action="#{edicionCita.aceptar}" update="@form :formCalendario:calendario" oncomplete="if (args &amp;&amp; !args.errorOcurred) { cerrarFormulario(); }" />
+                                    <button type="button" class="btnRegistrar" onclick="cerrarFormulario()">Cerrar</button>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+
                 </h:form>
 
                 <h:form id="formNuevaCita" styleClass="panelFormulario">

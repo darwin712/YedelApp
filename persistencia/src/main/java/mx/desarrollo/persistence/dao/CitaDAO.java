@@ -44,7 +44,27 @@ public class CitaDAO extends AbstractDAO<Cita> {
         });
     }
 
-    public boolean traslapeEstilista(Integer idEstilista, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin){
+    public void actualizarCitaConServicios(Integer idCita, Integer idCliente, Integer idEstilista, LocalDate fecha, LocalTime horaInicio, List<Integer> idsServicios) {
+        execute(em -> {
+            Cita cita = em.find(Cita.class, idCita);
+            if (cita == null) return null;
+
+            cita.setIdCliente(idCliente);
+            cita.setIdEstilista(idEstilista);
+            cita.setFecha(fecha);
+            cita.setHoraInicio(horaInicio);
+            em.flush();
+
+            em.createNativeQuery("DELETE FROM cita_servicio WHERE id_cita = ?").setParameter(1, idCita).executeUpdate();
+
+            for (Integer idServicio : idsServicios) {
+                em.createNativeQuery("INSERT INTO cita_servicio (id_cita, id_servicio) VALUES (?, ?)").setParameter(1, idCita).setParameter(2, idServicio).executeUpdate();
+            }
+            return null;
+        });
+    }
+
+    public boolean traslapeEstilista(Integer idEstilista, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin, Integer idCitaIgnorar){
         return execute(em ->{
             String query = "SELECT cita.hora_inicio, COALESCE(SUM(serv.duracion_min), 30) AS duracion_total " +
                     "FROM cita cita " +
@@ -53,11 +73,20 @@ public class CitaDAO extends AbstractDAO<Cita> {
                     "WHERE cita.id_estilista = :idEstilista " +
                     "  AND cita.fecha = :fecha " +
                     "  AND cita.estado <> 'Cancelada' " +
+                    (idCitaIgnorar != null ? "  AND cita.id_cita <> :idIgnorar " : "") +
                     "GROUP BY cita.id_cita, cita.hora_inicio";
 
             @SuppressWarnings("unchecked")
-            List<Object[]> resultados= em.createNativeQuery(query).setParameter("idEstilista", idEstilista)
-                    .setParameter("fecha",fecha).getResultList();
+            Query q = em.createNativeQuery(query)
+                    .setParameter("idEstilista", idEstilista)
+                    .setParameter("fecha", fecha);
+            if (idCitaIgnorar != null) {
+                q.setParameter("idIgnorar", idCitaIgnorar);
+            }
+            @SuppressWarnings("unchecked")
+            List<Object[]> resultados = q.getResultList();
+
+
 
             for (Object[] row : resultados) {
                 java.sql.Time timeSql = (java.sql.Time) row[0];
@@ -74,6 +103,9 @@ public class CitaDAO extends AbstractDAO<Cita> {
 
     }
 
+    public boolean traslapeEstilista(Integer idEstilista, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin) {
+        return traslapeEstilista(idEstilista, fecha, nuevaHoraInicio, nuevaHoraFin, null);
+    }
 
     @Override
     public EntityManager getEntityManager() {
