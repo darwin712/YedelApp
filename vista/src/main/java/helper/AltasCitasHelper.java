@@ -31,7 +31,7 @@ public class AltasCitasHelper implements Serializable {
     }
 
     public boolean traslapeEstilista(Integer idEstilista, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin){
-        return ServiceFacadeLocator.getInstanceFacadeCita().traslapeEstilista(idEstilista, fecha, nuevaHoraInicio, nuevaHoraFin);
+        return ServiceFacadeLocator.getInstanceFacadeCita().traslapeEstilista(idEstilista, fecha, nuevaHoraInicio, nuevaHoraFin, null);
     }
 
     public List<Cliente> obtenerListaClientes (){

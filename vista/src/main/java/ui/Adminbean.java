@@ -61,9 +61,9 @@ public class Adminbean implements Serializable {
         String criterio = filtroBusqueda.toLowerCase();
         for(Administrador admin : administradores){
             if(admin.getNombre().toLowerCase().contains(criterio)
-                    || admin.getAppaterno().toLowerCase().contains(criterio)
-                    || admin.getApmaterno().toLowerCase().contains(criterio)
-                    || admin.getUsuario().toLowerCase().contains(criterio)){
+                    || admin.getApellidoP().toLowerCase().contains(criterio)
+                    || admin.getApellidoM().toLowerCase().contains(criterio)
+                    || admin.getCorreo().toLowerCase().contains(criterio)){
                 filtrados.add(admin);
             }
         }

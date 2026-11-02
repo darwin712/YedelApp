@@ -159,7 +159,9 @@ public class CalendarioCitasBean implements Serializable {
                     nombreEstilista = "Sin estilista";
                 }
 
-                citas.add(new CitaVista(nombreCliente, nombreServicio, idEstilista, telefono, correo, nombreEstilista, duracion, precio, inicio, fin));
+                CitaVista citaVista = new CitaVista(nombreCliente, nombreServicio, idEstilista, telefono, correo, nombreEstilista, duracion, precio, inicio, fin);
+                citaVista.setDatosEdicion(c.getId(), c.getIdCliente() == null ? 0 : c.getIdCliente(), serviciosPorCita.getOrDefault(c.getId(), new ArrayList<>()));
+                citas.add(citaVista);
             }
         }
     }
@@ -403,12 +405,31 @@ public class CalendarioCitasBean implements Serializable {
         private final String estilista;
         private final int duracion;
         private final float precio;
+        private int id;
+        private int idCliente;
+        private List<Integer> idsServicios = new ArrayList<>();
 
         private final LocalDateTime inicio;
         private final LocalDateTime fin;
 
         private int columna = 0;
         private int columnas = 1;
+
+        public void setDatosEdicion(int id, int idCliente, List<Integer> idsServicios) {
+            this.id = id;
+            this.idCliente = idCliente;
+            this.idsServicios = idsServicios;
+        }
+
+        public int getId() {
+            return id;
+        }
+        public int getIdCliente() {
+            return idCliente;
+        }
+        public List<Integer> getIdsServicios() {
+            return idsServicios;
+        }
 
         public CitaVista(String cliente, String servicio, int idEstilista, String telefono, String correo, String estilista, int duracion, float precio, LocalDateTime inicio, LocalDateTime fin) {
             this.cliente = cliente;
