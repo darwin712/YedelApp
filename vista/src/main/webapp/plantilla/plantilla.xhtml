@@ -3,7 +3,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:fn="jakarta.tags.functions">
 <h:head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0"> </meta>
     <title>  <ui:insert name="titulo"> YedelApp </ui:insert> </title>
@@ -759,6 +760,24 @@
             gap: 8px;
         }
 
+        .salir{
+            --boton: #D6249F;
+            display: inline-block;
+            padding: 10px 16px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--boton);
+            text-decoration: none;
+            border: 2px solid var(--boton);
+            border-radius: 999px;
+        }
+
+        .salir:hover{
+            --boton: #D6249F;
+            color: #FFFFFF;
+            background: var(--boton);
+        }
+
         /*todo esto es para la vista de celular de la pagina */
         @media (max-width: 768px) {
             header {
@@ -958,12 +977,12 @@
             </div>
 
             <nav class="navegacion">
-                <a href="#" class="apartado">
+                <a href="gestionCitas.xhtml" class="apartado">
                     <p:graphicImage url="resources/salir.png" class="icono"/>
-                    <span>Gestión de citas</span>
+                    <span>Agenda</span>
                 </a>
 
-                <a href="#" class="apartado">
+                <a href="inventario.xhtml" class="apartado">
                     <p:graphicImage url="resources/salir.png" class="icono"/>
                     <span>Inventario</span>
                 </a>
@@ -972,21 +991,25 @@
 
         <div class="parteDerecha">
             <div class="usuario">
-                <div class="avatar">AD</div>
-                <span>Administrador</span>
+                <div class="avatar">#{fn:toUpperCase(fn:substring(loginUI.usuario.nombre, 0, 2))}</div>
+                <span>#{loginUI.usuario.nombre}</span>
             </div>
 
             <div class="reloj">
                 <div class="hora" id="hora"></div>
                 <div class="fecha" id="fecha"></div>
             </div>
+
+            <h:form id="formSalir">
+                <h:commandLink id="salir" value="Cerrar sesión" action="#{loginUI.logout()}" styleClass="salir" />
+            </h:form>
         </div>
     </header>
 
     <div class="sidebar" id="sidebar">
-        <a href="#" class="apartado #{view.viewId eq '/index.xhtml' ? 'activo' : ''}">Inicio</a>
-        <a href="#" class="apartado #{view.viewId eq '/gestionCitas.xhtml' ? 'activo' : ''}">Gestión de citas</a>
-        <a href="#" class="apartado #{view.viewId eq '/inventario.xhtml' ? 'activo' : ''}">Inventario</a>
+        <a href="index.xhtml" class="apartado #{view.viewId eq '/index.xhtml' ? 'activo' : ''}">Inicio</a>
+        <a href="gestionCitas.xhtml" class="apartado #{view.viewId eq '/gestionCitas.xhtml' ? 'activo' : ''}">Agenda</a>
+        <a href="inventario.xhtml" class="apartado #{view.viewId eq '/inventario.xhtml' ? 'activo' : ''}">Inventario</a>
     </div>
 
     <div class="fondoOscuro" id="fondoOscuro" onclick="cerrarSidebar()"> </div>

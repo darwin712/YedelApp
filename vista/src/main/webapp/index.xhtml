@@ -1,170 +1,155 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<?xml version='1.0' encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/plantilla/plantilla.xhtml">
 
-<f:metadata>
-    <f:viewAction action="#{indexAdminUI.verificarAcceso()}" />
-</f:metadata>
+    <ui:define name="titulo"> Registro de profesores </ui:define>
+    <ui:define name="subtitulo"> Registro de profesores </ui:define>
 
-<h:head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Yedel Beauty Salón - Inicio</title>
-    <style>
+    <f:metadata>
+        <f:viewAction action="#{indexAdminUI.verificarAcceso()}" />
+    </f:metadata>
 
-        :root{
-            --fondo: #F4EEF8;
-            --titulo: #B5258F;
-            --boton: #D6249F;
-            --texto: #3A2A38;
-            --suave: #7A5A76;
-        }
+    <ui:define name="contenido">
+        <style>
 
-        *{
-            box-sizing: border-box;
-        }
+            :root{
+                --fondo: #F4EEF8;
+                --titulo: #B5258F;
+                --boton: #D6249F;
+                --texto: #3A2A38;
+                --suave: #7A5A76;
+            }
 
-        html, body{
-            margin: 0;
-            padding: 0;
-            min-height: 100%;
-        }
+            *{
+                box-sizing: border-box;
+            }
 
-        body{
-            background: var(--fondo);
-            color: var(--texto);
-            font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
-        }
-
-        .barra{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: #FFFFFF;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-        }
-
-        .logo{
-            height: 40px;
-            width: auto;
-        }
-
-        .salir{
-            display: inline-block;
-            padding: 10px 16px;
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--boton);
-            text-decoration: none;
-            border: 2px solid var(--boton);
-            border-radius: 999px;
-        }
-
-        .salir:hover{
-            color: #FFFFFF;
-            background: var(--boton);
-        }
-
-        .pagina{
-            width: 100%;
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 24px 16px 40px;
-        }
-
-        .saludo{
-            margin-bottom: 20px;
-        }
-
-        .saludo h1{
-            margin: 0 0 4px;
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--titulo);
-        }
-
-        .saludo p{
-            margin: 0;
-            font-size: 15px;
-            color: var(--suave);
-        }
-
-        .menu{
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
-        }
-
-        .opcion{
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 18px 20px;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--texto);
-            text-decoration: none;
-            background: #FFFFFF;
-            border-bottom: 3px solid var(--boton);
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(181, 37, 143, 0.1);
-        }
-
-        .opcion:hover{
-            box-shadow: 0 4px 14px rgba(181, 37, 143, 0.2);
-        }
-
-        .opcion img{
-            width: 56px;
-            height: 56px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-        @media (min-width: 600px){
-            .logo{
-                height: 48px;
+            html, body{
+                margin: 0;
+                padding: 0;
+                min-height: 100%;
             }
 
             .barra{
-                padding: 12px 32px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 16px;
+                background: #FFFFFF;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            }
+
+            .logo{
+                height: 40px;
+                width: auto;
+            }
+
+            .salir{
+                display: inline-block;
+                padding: 10px 16px;
+                font-size: 15px;
+                font-weight: 600;
+                color: var(--boton);
+                text-decoration: none;
+                border: 2px solid var(--boton);
+                border-radius: 999px;
+            }
+
+            .salir:hover{
+                color: #FFFFFF;
+                background: var(--boton);
             }
 
             .pagina{
-                padding: 40px 24px 56px;
+                width: 100%;
+                max-width: 860px;
+                margin: 0 auto;
+                padding: 24px 16px 40px;
+            }
+
+            .saludo{
+                margin-bottom: 20px;
             }
 
             .saludo h1{
-                font-size: 26px;
+                margin: 0 0 4px;
+                font-size: 22px;
+                font-weight: 600;
+                color: var(--titulo);
+            }
+
+            .saludo p{
+                margin: 0;
+                font-size: 15px;
+                color: var(--suave);
             }
 
             .menu{
-                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-                gap: 20px;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
             }
 
             .opcion{
-                flex-direction: column;
-                gap: 14px;
-                padding: 32px 20px;
-                text-align: center;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 18px 20px;
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--texto);
+                text-decoration: none;
+                background: #FFFFFF;
+                border-bottom: 3px solid var(--boton);
+                border-radius: 16px;
+                box-shadow: 0 2px 8px rgba(181, 37, 143, 0.1);
             }
-        }
-    </style>
-</h:head>
 
-<h:body>
-    <header class="barra">
-        <p:graphicImage url="resources/images/logo.png" alt="Yedel Beauty Salón" styleClass="logo" />
-        <h:form id="formSalir">
-            <h:commandLink id="salir" value="Cerrar sesión" action="#{loginUI.logout()}" styleClass="salir" />
-        </h:form>
-    </header>
+            .opcion:hover{
+                box-shadow: 0 4px 14px rgba(181, 37, 143, 0.2);
+            }
 
-    <main class="pagina">
+            .opcion img{
+                width: 56px;
+                height: 56px;
+                object-fit: contain;
+                flex-shrink: 0;
+            }
+
+            @media (min-width: 600px){
+                .logo{
+                    height: 48px;
+                }
+
+                .barra{
+                    padding: 12px 32px;
+                }
+
+                .pagina{
+                    padding: 40px 24px 56px;
+                }
+
+                .saludo h1{
+                    font-size: 26px;
+                }
+
+                .menu{
+                    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                    gap: 20px;
+                }
+
+                .opcion{
+                    flex-direction: column;
+                    gap: 14px;
+                    padding: 32px 20px;
+                    text-align: center;
+                }
+            }
+        </style>
 
         <section class="saludo">
             <h1>Hola, #{loginUI.usuario.nombre}</h1>
@@ -172,8 +157,7 @@
         </section>
 
         <nav class="menu">
-
-            <a class="opcion" href="agenda.xhtml">
+            <a class="opcion" href="gestionCitas.xhtml">
                 <p:graphicImage url="resources/images/icono-agenda.png" alt="" />
                 <span>Agenda</span>
             </a>
@@ -191,7 +175,5 @@
             </h:panelGroup>
 
         </nav>
-
-    </main>
-</h:body>
-</html>
+    </ui:define>
+</ui:composition>
