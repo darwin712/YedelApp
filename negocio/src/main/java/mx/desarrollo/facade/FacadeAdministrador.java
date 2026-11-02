@@ -25,8 +25,15 @@ public class FacadeAdministrador {
         return delegateAdministrador.findAll();
     }
 
+    public void actualizarAdministrador(Administrador administrador){
+        delegateAdministrador.updateAdministrador(administrador);
+    }
+
+    public void eliminarAdministrador(Administrador administrador){
+        delegateAdministrador.deleteAdministrador(administrador);
+    }
+
     public boolean esPrincipal(Integer id){
         return delegateAdministrador.esPrincipal(id);
     }
-
 }
