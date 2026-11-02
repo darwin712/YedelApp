@@ -1,17 +1,15 @@
 package mx.desarrollo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "servicio")
-public class Servicio {
+@Table(name = "servicio", schema = "yedelapp")
+public class    Servicio {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_servicio", nullable = false)
     private Integer id;
 

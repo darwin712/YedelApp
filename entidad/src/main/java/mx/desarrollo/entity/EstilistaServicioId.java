@@ -3,13 +3,14 @@ package mx.desarrollo.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.Hibernate;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class EstilistaServicioId implements Serializable {
+    @Serial
     private static final long serialVersionUID = 492186031190096242L;
     @NotNull
     @Column(name = "id_estilista", nullable = false)
@@ -38,15 +39,14 @@ public class EstilistaServicioId implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         EstilistaServicioId entity = (EstilistaServicioId) o;
-        return Objects.equals(this.idServicio, entity.idServicio) &&
-                Objects.equals(this.idEstilista, entity.idEstilista);
+        return Objects.equals(this.idEstilista, entity.idEstilista) &&
+                Objects.equals(this.idServicio, entity.idServicio);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idServicio, idEstilista);
+        return Objects.hash(idEstilista, idServicio);
     }
-
 }
