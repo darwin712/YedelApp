@@ -13,12 +13,20 @@ public class FacadeAdministrador {
         this.delegateAdministrador = new DelegateAdministrador();
     }
 
-    public Administrador login(String password, String correo){
-        return delegateAdministrador.login(password, correo);
+    public Administrador login(String password, String usuario){
+        return delegateAdministrador.login(password, usuario);
     }
 
     public void saveAdministrador(Administrador administrador){
         delegateAdministrador.saveAdministrador(administrador);
+    }
+
+    public void actualizarAdministrador(Administrador administrador){
+        delegateAdministrador.updateAdministrador(administrador);
+    }
+
+    public void eliminarAdministrador(Administrador administrador){
+        delegateAdministrador.deleteAdministrador(administrador);
     }
 
     public List<Administrador> findAll(){
