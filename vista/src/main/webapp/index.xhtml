@@ -6,8 +6,8 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/plantilla/plantilla.xhtml">
 
-    <ui:define name="titulo"> Registro de profesores </ui:define>
-    <ui:define name="subtitulo"> Registro de profesores </ui:define>
+    <ui:define name="titulo">Inicio</ui:define>
+    <ui:define name="subtitulo">Panel principal</ui:define>
 
     <f:metadata>
         <f:viewAction action="#{indexAdminUI.verificarAcceso()}" />
@@ -165,6 +165,11 @@
             <a class="opcion" href="inventario.xhtml">
                 <p:graphicImage url="resources/images/icono-inventario.png" alt="" />
                 <span>Inventario</span>
+            </a>
+
+            <a class="opcion" href="perfilAdministrador.xhtml">
+                <p:graphicImage url="resources/images/icono-administradores.png" alt="" />
+                <span>Mi perfil y servicios</span>
             </a>
 
             <h:panelGroup rendered="#{indexAdminUI.principal}">

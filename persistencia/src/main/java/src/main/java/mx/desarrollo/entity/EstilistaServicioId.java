@@ -1,4 +1,4 @@
-package mx.desarrollo.entity;
+package src.main.java.mx.desarrollo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

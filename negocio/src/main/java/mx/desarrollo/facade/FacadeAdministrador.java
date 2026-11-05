@@ -29,8 +29,16 @@ public class FacadeAdministrador {
         delegateAdministrador.updateAdministrador(administrador);
     }
 
+    public void actualizarAdministradorYEmpleado(Administrador administrador){
+        delegateAdministrador.updateAdministradorYEmpleado(administrador);
+    }
+
     public void eliminarAdministrador(Administrador administrador){
         delegateAdministrador.deleteAdministrador(administrador);
+    }
+
+    public void eliminarAdministradorYDesactivarEmpleado(Administrador administrador){
+        delegateAdministrador.deleteAdministradorYDesactivarEmpleado(administrador);
     }
 
     public boolean esPrincipal(Integer id){

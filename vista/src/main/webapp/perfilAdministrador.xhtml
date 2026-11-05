@@ -1,0 +1,355 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/plantilla/plantilla.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{perfilAdminUI.verificarAcceso()}"/>
+    </f:metadata>
+
+    <ui:define name="titulo">Mi perfil</ui:define>
+    <ui:define name="subtitulo">Mi perfil y servicios</ui:define>
+
+    <ui:define name="contenido">
+        <style>
+            .perfilPagina{
+                width: 100%;
+                max-width: 1050px;
+                margin: 0 auto;
+                display: grid;
+                gap: 22px;
+            }
+
+            .perfilPagina,
+            .perfilPagina *{
+                box-sizing: border-box;
+            }
+
+            .perfilSeccion{
+                padding: 24px;
+                border: 2px solid #E4D9EC;
+                border-radius: 18px;
+                background-color: #FFFFFF;
+                box-shadow: 0 4px 14px rgba(120, 21, 91, 0.08);
+            }
+
+            .perfilSeccion h2{
+                margin: 0 0 20px;
+                color: #B81B88;
+                font-size: 22px;
+            }
+
+            .perfilCampos{
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 16px;
+            }
+
+            .perfilCampo{
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+            }
+
+            .perfilCampo label{
+                color: #78155b;
+                font-size: 14px;
+                font-weight: bold;
+            }
+
+            .perfilEntrada{
+                width: 100%;
+                min-height: 44px;
+                padding: 9px 13px;
+                border: 2px solid #E4D9EC;
+                border-radius: 12px;
+                color: #78155b;
+                font-family: inherit;
+                font-size: 15px;
+            }
+
+            .perfilAcciones{
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .perfilBoton{
+                min-height: 42px;
+                padding: 9px 22px;
+                border: 1px solid #D6249F !important;
+                border-radius: 999px;
+                background: #D6249F !important;
+                color: #FFFFFF !important;
+                font-weight: bold;
+            }
+
+            .perfilBoton:hover,
+            .perfilBoton:focus{
+                border-color: #B81B88 !important;
+                background: #B81B88 !important;
+            }
+
+            .horarios{
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .horarioFila{
+                display: grid;
+                grid-template-columns: 80px minmax(0, 1fr) minmax(0, 1fr);
+                align-items: center;
+                gap: 10px;
+                padding: 12px;
+                border-radius: 12px;
+                background-color: #FDF2F9;
+            }
+
+            .horarioDia{
+                color: #78155b;
+                font-weight: bold;
+            }
+
+            .horarioHora{
+                display: flex !important;
+                width: 100% !important;
+                min-width: 0;
+            }
+
+            .horarioHora .ui-inputfield{
+                width: calc(100% - 38px) !important;
+                min-width: 0;
+                border-radius: 10px 0 0 10px !important;
+            }
+
+            .horarioHora .ui-datepicker-trigger{
+                width: 38px !important;
+                min-width: 38px !important;
+                margin: 0 !important;
+                border-color: #D6249F !important;
+                border-radius: 0 10px 10px 0 !important;
+                background: #D6249F !important;
+                color: #FFFFFF !important;
+            }
+
+            .perfilPagina .ui-inputfield{
+                border-color: #E4D9EC !important;
+                color: #78155b;
+            }
+
+            .perfilPagina .ui-inputfield:enabled:hover,
+            .perfilPagina .ui-inputfield:enabled:focus{
+                border-color: #D6249F !important;
+                box-shadow: 0 0 0 1px rgba(214, 36, 159, 0.18) !important;
+            }
+
+            .perfilPagina .ui-button:not(.perfilBoton){
+                border-color: #D6249F !important;
+                background: #D6249F !important;
+                color: #FFFFFF !important;
+            }
+
+            .tablaPerfil{
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed;
+            }
+
+            .tablaPerfil th,
+            .tablaPerfil td{
+                padding: 11px;
+                border-bottom: 1px solid #E4D9EC;
+                text-align: left;
+            }
+
+            .tablaPerfil th,
+            .tablaPerfil td{
+                width: 33.333%;
+            }
+
+            .tablaPerfil .perfilEntrada,
+            .tablaPerfil .ui-inputnumber,
+            .tablaPerfil .ui-inputnumber-input,
+            .nuevoServicio .ui-inputnumber,
+            .nuevoServicio .ui-inputnumber-input{
+                display: block;
+                width: 100% !important;
+                min-width: 0;
+            }
+
+            .nuevoServicio{
+                display: grid;
+                grid-template-columns: 2fr 1fr 1fr auto;
+                align-items: end;
+                gap: 12px;
+                margin-top: 22px;
+            }
+
+            @media (max-width: 900px){
+                .horarios{
+                    grid-template-columns: 1fr;
+                }
+
+                .nuevoServicio{
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+
+                .nuevoServicio .perfilBoton{
+                    width: 100%;
+                }
+            }
+
+            @media (max-width: 760px){
+                .perfilSeccion{
+                    padding: 18px 14px;
+                }
+
+                .perfilCampos,
+                .horarios,
+                .nuevoServicio{
+                    grid-template-columns: 1fr;
+                }
+
+                .horarioFila{
+                    grid-template-columns: 72px minmax(0, 1fr) minmax(0, 1fr);
+                }
+
+                .tablaPerfil{
+                    display: block;
+                    overflow-x: auto;
+                    white-space: nowrap;
+                }
+
+                .perfilAcciones{
+                    flex-direction: column;
+                }
+
+                .perfilBoton{
+                    width: 100%;
+                }
+            }
+
+            @media (max-width: 520px){
+                .perfilCampos,
+                .nuevoServicio{
+                    grid-template-columns: 1fr;
+                }
+
+                .horarioFila{
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+
+        <h:form id="formPerfil">
+            <p:messages id="mensajes" showDetail="true" closable="true">
+                <p:autoUpdate/>
+            </p:messages>
+
+            <div class="perfilPagina">
+                <h:panelGroup layout="block" styleClass="perfilSeccion" rendered="#{perfilAdminUI.principal}">
+                    <h2>Administrador</h2>
+                    <div class="perfilCampo">
+                        <h:outputLabel for="administrador" value="Seleccionar administrador"/>
+                        <h:selectOneMenu id="administrador" value="#{perfilAdminUI.idAdministradorSeleccionado}" styleClass="perfilEntrada">
+                            <f:selectItems value="#{perfilAdminUI.listaAdministradores}" var="admin" itemLabel="#{admin.nombre} #{admin.apellidoP} #{admin.apellidoM}" itemValue="#{admin.id}"/>
+                            <f:ajax listener="#{perfilAdminUI.cambiarAdministrador}" render="formPerfil"/>
+                        </h:selectOneMenu>
+                    </div>
+                </h:panelGroup>
+
+                <section class="perfilSeccion">
+                    <h2>Datos personales</h2>
+                    <div class="perfilCampos">
+                        <div class="perfilCampo">
+                            <h:outputLabel for="nombre" value="Nombre"/>
+                            <h:inputText id="nombre" value="#{perfilAdminUI.administrador.nombre}" styleClass="perfilEntrada" maxlength="100"/>
+                        </div>
+                        <div class="perfilCampo">
+                            <h:outputLabel for="apellidoP" value="Apellido paterno"/>
+                            <h:inputText id="apellidoP" value="#{perfilAdminUI.administrador.apellidoP}" styleClass="perfilEntrada" maxlength="100"/>
+                        </div>
+                        <div class="perfilCampo">
+                            <h:outputLabel for="apellidoM" value="Apellido materno"/>
+                            <h:inputText id="apellidoM" value="#{perfilAdminUI.administrador.apellidoM}" styleClass="perfilEntrada" maxlength="100"/>
+                        </div>
+                        <div class="perfilCampo">
+                            <h:outputLabel for="telefono" value="Teléfono"/>
+                            <h:inputText id="telefono" value="#{perfilAdminUI.administrador.telefono}" styleClass="perfilEntrada" maxlength="20"/>
+                        </div>
+                        <div class="perfilCampo">
+                            <h:outputLabel for="correo" value="Correo"/>
+                            <h:inputText id="correo" value="#{perfilAdminUI.administrador.correo}" styleClass="perfilEntrada" maxlength="150"/>
+                        </div>
+                        <div class="perfilCampo">
+                            <h:outputLabel for="especialidad" value="Especialidad"/>
+                            <h:inputText id="especialidad" value="#{perfilAdminUI.estilista.especialidad}" styleClass="perfilEntrada" maxlength="100"/>
+                        </div>
+                    </div>
+                    <div class="perfilAcciones">
+                        <p:commandButton value="Guardar datos" action="#{perfilAdminUI.guardarDatos}" update="@form" styleClass="perfilBoton"/>
+                    </div>
+                </section>
+
+                <section class="perfilSeccion">
+                    <h2>Horario</h2>
+                    <div class="horarios">
+                        <ui:repeat value="#{perfilAdminUI.horarios}" var="horario">
+                            <div class="horarioFila">
+                                <span class="horarioDia">#{horario.diaSemana}</span>
+                                <p:datePicker value="#{horario.horaInicio}" timeOnly="true" pattern="HH:mm" stepMinute="30" showIcon="true" styleClass="horarioHora"/>
+                                <p:datePicker value="#{horario.horaFin}" timeOnly="true" pattern="HH:mm" stepMinute="30" showIcon="true" styleClass="horarioHora"/>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                    <div class="perfilAcciones">
+                        <p:commandButton value="Guardar horario" action="#{perfilAdminUI.guardarHorarios}" update="@form" styleClass="perfilBoton"/>
+                    </div>
+                </section>
+
+                <section class="perfilSeccion">
+                    <h2>Servicios</h2>
+                    <h:dataTable value="#{perfilAdminUI.servicios}" var="servicio" styleClass="tablaPerfil">
+                        <h:column>
+                            <f:facet name="header">Servicio</f:facet>
+                            <h:inputText value="#{servicio.nombre}" styleClass="perfilEntrada" maxlength="100"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Precio</f:facet>
+                            <p:inputNumber value="#{servicio.precio}" symbol="$" symbolPosition="p" decimalPlaces="2" minValue="0" inputStyleClass="perfilEntrada"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">Duración</f:facet>
+                            <p:inputNumber value="#{servicio.duracionMin}" suffix=" min" decimalPlaces="0" minValue="1" inputStyleClass="perfilEntrada"/>
+                        </h:column>
+                    </h:dataTable>
+
+                    <div class="perfilAcciones">
+                        <p:commandButton value="Guardar servicios" action="#{perfilAdminUI.guardarServicios}" update="@form" styleClass="perfilBoton"/>
+                    </div>
+
+                    <div class="nuevoServicio">
+                        <div class="perfilCampo">
+                            <h:outputLabel for="servicioNombre" value="Nuevo servicio"/>
+                            <h:inputText id="servicioNombre" value="#{perfilAdminUI.servicioNuevo.nombre}" styleClass="perfilEntrada" maxlength="100"/>
+                        </div>
+                        <div class="perfilCampo">
+                            <h:outputLabel for="servicioPrecio" value="Precio"/>
+                            <p:inputNumber id="servicioPrecio" value="#{perfilAdminUI.servicioNuevo.precio}" symbol="$" symbolPosition="p" decimalPlaces="2" minValue="0" inputStyleClass="perfilEntrada"/>
+                        </div>
+                        <div class="perfilCampo">
+                            <h:outputLabel for="servicioDuracion" value="Duración"/>
+                            <p:inputNumber id="servicioDuracion" value="#{perfilAdminUI.servicioNuevo.duracionMin}" suffix=" min" decimalPlaces="0" minValue="1" inputStyleClass="perfilEntrada"/>
+                        </div>
+                        <p:commandButton value="Agregar servicio" action="#{perfilAdminUI.agregarServicio}" update="@form" styleClass="perfilBoton"/>
+                    </div>
+                </section>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

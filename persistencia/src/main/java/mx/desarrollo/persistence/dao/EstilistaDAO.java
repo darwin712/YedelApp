@@ -15,6 +15,7 @@ public class EstilistaDAO extends AbstractDAO<Estilista> {
     }
 
     public List<Estilista> findAll(){
+        entityManager.clear();
         return entityManager
                 .createQuery("SELECT e FROM Estilista e", Estilista.class)
                 .getResultList();

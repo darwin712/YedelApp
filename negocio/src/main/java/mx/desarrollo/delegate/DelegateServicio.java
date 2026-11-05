@@ -25,4 +25,8 @@ public class DelegateServicio {
     public List<Servicio> obtenerServiciosPorEstilista(Integer idEstilista){
         return ServiceLocator.getInstanceServicioDAO().obtenerServiciosPorEstilista(idEstilista);
     }
+
+    public void asignarServicioEstilista(Integer idEstilista, Integer idServicio){
+        ServiceLocator.getInstanceServicioDAO().asignarServicioEstilista(idEstilista, idServicio);
+    }
 }

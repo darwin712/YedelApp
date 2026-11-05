@@ -13,6 +13,7 @@ public class ServiceLocator {
     private static ClienteDAO clienteDAO;
     private static ServicioDAO servicioDAO;
     private static EstilistaDAO estilistaDAO;
+    private static HorarioDAO horarioDAO;
 
     private static EntityManager getEntityManager(){
         return HibernateUtil.getEntityManager();
@@ -60,6 +61,15 @@ public class ServiceLocator {
             return estilistaDAO;
         } else{
             return estilistaDAO;
+        }
+    }
+
+    public static HorarioDAO getInstanceHorarioDAO(){
+        if(horarioDAO == null){
+            horarioDAO = new HorarioDAO(getEntityManager());
+            return horarioDAO;
+        } else{
+            return horarioDAO;
         }
     }
 

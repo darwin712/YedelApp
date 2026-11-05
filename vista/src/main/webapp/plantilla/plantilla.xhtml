@@ -14,6 +14,7 @@
             font-family: Arial, sans-serif;
             color: #78155b;
             background-color: #F5F0F8;
+            overflow-x: hidden;
         }
 
         header {
@@ -438,9 +439,8 @@
             font-family: inherit;
             font-size: 16px;
             color: #78155b;
-            /* background: url('resources/busqueda-icon.png') no-repeat 14px center / 18px, */
-            linear-gradient(white, white) padding-box,
-            linear-gradient(#E4D9EC, #E4D9EC) border-box;
+        linear-gradient(white, white) padding-box,
+        linear-gradient(90deg, #D6249F, #B58CFF, #22D3D0) border-box;
             outline: none;
             box-sizing: border-box;
             transition: box-shadow 0.2s;
@@ -902,7 +902,66 @@
             }
 
             .tabla {
-                min-width: 550px;
+                display: block;
+                width: 100%;
+                max-width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 10px 12px;
+            }
+
+            .parteIzquierda,
+            .parteDerecha {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .parteIzquierda {
+                min-width: 0;
+            }
+
+            .textos {
+                min-width: 0;
+            }
+
+            .subtitulo {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .usuario span {
+                max-width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .salir {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            .contenido {
+                padding: 8px;
+            }
+
+            .contenedor {
+                padding: 12px;
+            }
+
+            .fondoFormulario {
+                padding: 6px;
+            }
+
+            .fondoFormulario .contenedor {
+                margin: 0;
+                padding: 14px 10px;
             }
         }
     </style>
@@ -982,21 +1041,25 @@
 
             <nav class="navegacion">
                 <a href="gestionCitas.xhtml" class="apartado">
-                    <p:graphicImage url="resources/salir.png" class="icono"/>
+                    <p:graphicImage url="resources/images/icono-agenda.png" class="icono"/>
                     <span>Agenda</span>
                 </a>
 
                 <a href="inventario.xhtml" class="apartado">
-                    <p:graphicImage url="resources/salir.png" class="icono"/>
+                    <p:graphicImage url="resources/images/icono-inventario.png" class="icono"/>
                     <span>Inventario</span>
+                </a>
+
+                <a href="perfilAdministrador.xhtml" class="apartado">
+                    <span>Mi perfil</span>
                 </a>
             </nav>
         </div>
 
         <div class="parteDerecha">
             <div class="usuario">
-                <div class="avatar">#{fn:toUpperCase(fn:substring(loginUI.usuario.nombre, 0, 2))}</div>
-                <span>#{loginUI.usuario.nombre}</span>
+                <div class="avatar">#{empty loginUI.usuario.nombre ? 'AD' : fn:toUpperCase(fn:substring(loginUI.usuario.nombre, 0, 2))}</div>
+                <span>#{empty loginUI.usuario.nombre ? loginUI.usuario.correo : loginUI.usuario.nombre}</span>
             </div>
 
             <div class="reloj">
@@ -1014,6 +1077,11 @@
         <a href="index.xhtml" class="apartado #{view.viewId eq '/index.xhtml' ? 'activo' : ''}">Inicio</a>
         <a href="gestionCitas.xhtml" class="apartado #{view.viewId eq '/gestionCitas.xhtml' ? 'activo' : ''}">Agenda</a>
         <a href="inventario.xhtml" class="apartado #{view.viewId eq '/inventario.xhtml' ? 'activo' : ''}">Inventario</a>
+        <a href="perfilAdministrador.xhtml" class="apartado #{view.viewId eq '/perfilAdministrador.xhtml' ? 'activo' : ''}">Mi perfil y servicios</a>
+        <ui:fragment rendered="#{loginUI.principal}">
+            <a href="registroAdministrador.xhtml" class="apartado #{view.viewId eq '/registroAdministrador.xhtml' ? 'activo' : ''}">Registrar administrador</a>
+            <a href="consultaAdmin.xhtml" class="apartado #{view.viewId eq '/consultaAdmin.xhtml' ? 'activo' : ''}">Consultar administradores</a>
+        </ui:fragment>
     </div>
 
     <div class="fondoOscuro" id="fondoOscuro" onclick="cerrarSidebar()"> </div>

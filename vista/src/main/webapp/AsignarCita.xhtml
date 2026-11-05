@@ -6,8 +6,12 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/plantilla/plantilla.xhtml">
 
-    <ui:define name="titulo"> Registro de profesores </ui:define>
-    <ui:define name="subtitulo"> Registro de profesores </ui:define>
+    <f:metadata>
+        <f:viewAction action="#{indexAdminUI.verificarAcceso()}"/>
+    </f:metadata>
+
+    <ui:define name="titulo">Asignar cita</ui:define>
+    <ui:define name="subtitulo">Asignar cita</ui:define>
 
     <ui:define name="contenido">
         <link rel="stylesheet" type="text/css" href="resources/style.css" />
@@ -181,11 +185,11 @@
                                     </div>
 
                                     <div class="campo">
-                                        <h:outputLabel for="nombreEstilista" value="Estilista:" />
+                                        <h:outputLabel for="nombreEstilista" value="Empleado:" />
                                         <h:selectOneMenu id="nombreEstilista"
                                                          value="#{RegistroUI.idEstilistaSeleccionado}"
                                                          styleClass="fieldSelect">
-                                            <f:selectItem itemLabel="-- Seleccione un Estilista --" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="-- Seleccione un Empleado --" itemValue="#{null}" noSelectionOption="true" />
                                             <f:selectItems value="#{RegistroUI.estilistasActivos}"
                                                            var="estilista"
                                                            itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}"

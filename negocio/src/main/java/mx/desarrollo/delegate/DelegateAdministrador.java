@@ -11,8 +11,11 @@ public class DelegateAdministrador {
         List<Administrador> administradores = ServiceLocator.getInstanceAdministradorDAO().findAll();
 
         for(Administrador ad:administradores){
-            if(ad.getContrasena().equals(password) && ad.getCorreo().equalsIgnoreCase(usuario)){
+            if(password != null && password.equals(ad.getContrasena())
+                    && usuario != null && ad.getCorreo() != null
+                    && usuario.equalsIgnoreCase(ad.getCorreo())){
                 administrador = ad;
+                break;
             }
         }
         return administrador;
@@ -41,8 +44,16 @@ public class DelegateAdministrador {
         ServiceLocator.getInstanceAdministradorDAO().update(administrador);
     }
 
+    public void updateAdministradorYEmpleado(Administrador administrador){
+        ServiceLocator.getInstanceAdministradorDAO().actualizarAdministradorYEmpleado(administrador);
+    }
+
     public void deleteAdministrador(Administrador administrador){
         ServiceLocator.getInstanceAdministradorDAO().delete(administrador);
+    }
+
+    public void deleteAdministradorYDesactivarEmpleado(Administrador administrador){
+        ServiceLocator.getInstanceAdministradorDAO().eliminarAdministradorYDesactivarEmpleado(administrador);
     }
 
 

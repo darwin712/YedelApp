@@ -35,6 +35,9 @@ public class Administrador {
     @Column(name = "telefono", length = 20)
     private String telefono;
 
+    @Column(name = "id_estilista")
+    private Integer idEstilista;
+
     public Integer getId() {
         return id;
     }
@@ -89,6 +92,14 @@ public class Administrador {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public Integer getIdEstilista() {
+        return idEstilista;
+    }
+
+    public void setIdEstilista(Integer idEstilista) {
+        this.idEstilista = idEstilista;
     }
 
 }

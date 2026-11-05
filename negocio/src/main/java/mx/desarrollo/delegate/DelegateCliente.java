@@ -30,6 +30,7 @@ public class DelegateCliente {
         for(Cliente cl: clientes){
             if(password != null && password.equals(cl.getContrasena()) && correo != null && correo.equalsIgnoreCase(cl.getCorreo())){
                 cliente = cl;
+                break;
             }
         }
         return cliente;

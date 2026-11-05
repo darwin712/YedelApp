@@ -9,6 +9,10 @@
     <ui:define name="titulo">Gestión de citas</ui:define>
     <ui:define name="subtitulo">Gestión de citas</ui:define>
 
+    <f:metadata>
+        <f:viewAction action="#{indexAdminUI.verificarAcceso()}"/>
+    </f:metadata>
+
     <ui:define name="contenido">
         <style>
             .calendario {
@@ -348,17 +352,41 @@
                     overflow-x: auto;
                 }
 
+                .encabezadoCalendario,
+                .barraCalendario {
+                    align-items: stretch;
+                    flex-direction: column;
+                }
+
+                .controlesEncabezado,
+                .controlesCalendario {
+                    width: 100%;
+                }
+
+                .controlesEncabezado .ui-button,
+                .controlesEncabezado .fieldSelect {
+                    width: 100%;
+                }
+
                 .tituloCalendario {
                     font-size: 18px;
                 }
 
                 .vistaMes,
                 .vistaHoras {
-                    min-width: 650px;
+                    min-width: 560px;
                 }
 
                 .cuadriculaCalendario {
                     grid-auto-rows: minmax(100px, auto);
+                }
+
+                .fondoFormulario .ui-datepicker,
+                .fondoFormulario .ui-inputfield,
+                .fondoFormulario .ui-selectonemenu,
+                .fondoFormulario .ui-selectcheckboxmenu {
+                    width: 100%;
+                    max-width: 100%;
                 }
             }
         </style>
@@ -369,11 +397,13 @@
 
                     <div class="controlesEncabezado">
                         <p:commandButton value="Agregar cita" styleClass="btnAgregar" type="button"  onclick="abrirFormulario('formNuevaCita')" />
-                        <h:selectOneMenu value="#{gestionCitasBean.estilistaSeleccionado}" styleClass="fieldSelect">
-                            <f:selectItem itemLabel="Todas las citas" itemValue="0" />
-                            <f:selectItems value="#{gestionCitasBean.opcionesEstilistas}" />
-                            <f:ajax event="change" listener="#{gestionCitasBean.filtrarPorEstilista}" render="calendario" />
-                        </h:selectOneMenu>
+                        <h:panelGroup rendered="#{gestionCitasBean.principal}">
+                            <h:selectOneMenu value="#{gestionCitasBean.estilistaSeleccionado}" styleClass="fieldSelect">
+                                <f:selectItem itemLabel="Todas las citas" itemValue="0" />
+                                <f:selectItems value="#{gestionCitasBean.opcionesEstilistas}" />
+                                <f:ajax event="change" listener="#{gestionCitasBean.filtrarPorEstilista}" render="calendario" />
+                            </h:selectOneMenu>
+                        </h:panelGroup>
                     </div>
                 </div>
 
@@ -496,7 +526,7 @@
                                     <div class="valorDato">#{gestionCitasBean.citaSeleccionada.cliente}</div>
                                 </div>
                                 <div class="campo aqua">
-                                    <label>Estilista</label>
+                                    <label>Empleado</label>
                                     <div class="valorDato">#{gestionCitasBean.citaSeleccionada.estilista}</div>
                                 </div>
                             </div>
@@ -570,12 +600,17 @@
                                         </h:selectOneMenu>
                                     </div>
                                     <div class="campo aqua">
-                                        <h:outputLabel for="nombreEstilista" value="Estilista" />
+                                        <h:outputLabel for="nombreEstilista" value="Empleado" />
+                                        <h:panelGroup rendered="#{edicionCita.principal}">
                                         <h:selectOneMenu id="nombreEstilista" value="#{edicionCita.idEstilista}" styleClass="fieldSelect">
-                                            <f:selectItem itemLabel="-- Seleccione un Estilista --" itemValue="#{null}" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="-- Seleccione un Empleado --" itemValue="#{null}" noSelectionOption="true" />
                                             <f:selectItems value="#{edicionCita.estilistasActivos}" var="estilista" itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}" itemValue="#{estilista.id}" />
                                             <f:ajax listener="#{edicionCita.onEstilistaChange}" render="tipoServicio" />
                                         </h:selectOneMenu>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{!edicionCita.principal}" layout="block" styleClass="valorDato">
+                                            #{edicionCita.nombreEstilista}
+                                        </h:panelGroup>
                                     </div>
                                 </div>
 
@@ -623,7 +658,7 @@
                                 </p:messages>
 
                                 <div class="filaBotones">
-                                    <p:commandButton value="Aceptar" styleClass="btnRegistrar" action="#{edicionCita.aceptar}" update="@form :formCalendario:calendario" oncomplete="if (args &amp;&amp; !args.errorOcurred) { cerrarFormulario(); }" />
+                                    <p:commandButton value="Aceptar" styleClass="btnRegistrar" action="#{edicionCita.aceptar}" update="@form :formCalendario:calendario" oncomplete="if (args &amp;&amp; args.errorOcurred === false) { cerrarFormulario(); }" />
                                     <button type="button" class="btnRegistrar" onclick="cerrarFormulario()">Cerrar</button>
                                 </div>
                             </div>
@@ -645,12 +680,17 @@
                                 </h:selectOneMenu>
                             </div>
                             <div class="campo">
-                                <h:outputLabel for="nombreEstilista" value="Estilista" />
+                                <h:outputLabel for="nombreEstilista" value="Empleado" />
+                                <h:panelGroup rendered="#{RegistroUI.principal}">
                                 <h:selectOneMenu id="nombreEstilista" value="#{RegistroUI.idEstilistaSeleccionado}" styleClass="fieldSelect">
-                                    <f:selectItem itemLabel="-- Seleccione un Estilista --" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="-- Seleccione un Empleado --" itemValue="#{null}" noSelectionOption="true" />
                                     <f:selectItems value="#{RegistroUI.estilistasActivos}" var="estilista" itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}" itemValue="#{estilista.id}" />
                                     <f:ajax listener="#{RegistroUI.onEstilistaChange}" render="tipoServicio" />
                                 </h:selectOneMenu>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!RegistroUI.principal}" layout="block" styleClass="valorDato">
+                                    #{RegistroUI.nombreEstilista}
+                                </h:panelGroup>
                             </div>
                         </div>
 
@@ -698,7 +738,7 @@
                         </p:messages>
 
                         <button type="button" class="btnAgregar" onclick="cerrarFormulario()">Cerrar</button>
-                        <h:commandButton value="Guardar cita" action="#{RegistroUI.guardarCita}" styleClass="btnAgregar" />
+                        <p:commandButton value="Guardar cita" action="#{RegistroUI.guardarCita}" styleClass="btnAgregar" update="@form :formCalendario:calendario" oncomplete="if (args &amp;&amp; args.errorOcurred === false) { cerrarFormulario(); }"/>
                     </div>
                 </h:form>
 

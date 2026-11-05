@@ -1,156 +1,171 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<?xml version='1.0' encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/plantilla/plantilla.xhtml">
 
-<f:metadata>
-    <f:viewAction action="#{registroAdminUI.verificarAcceso()}" />
-</f:metadata>
+    <f:metadata>
+        <f:viewAction action="#{registroAdminUI.verificarAcceso()}" />
+    </f:metadata>
 
-<h:head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Yedel Beauty Salón - Registrar administrador</title>
-    <style>
+    <ui:define name="titulo">Registrar administrador</ui:define>
+    <ui:define name="subtitulo">Registrar administrador</ui:define>
 
-        :root{
-            --fondo: #F4EEF8;
-            --titulo: #B5258F;
-            --boton: #D6249F;
-            --borde: #E6E6E6;
-            --placeholder: #BBA6B8;
-        }
-
-        *{
-            box-sizing: border-box;
-        }
-
-        html, body{
-            margin: 0;
-            padding: 0;
-            min-height: 100%;
-        }
-
-        body{
-            background: var(--fondo);
-            font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
-        }
-
-        .pagina{
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 24px 16px;
-        }
-
-        .tarjeta{
-            width: 100%;
-            max-width: 640px;
-            padding: 28px 24px 36px;
-            background: #FFFFFF;
-            border-radius: 16px;
-        }
-
-        .tarjeta h1{
-            margin: 0 0 24px;
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--titulo);
-        }
-
-        .campo{
-            margin-bottom: 22px;
-        }
-
-        .campo label{
-            display: block;
-            margin: 0 0 8px;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--titulo);
-        }
-
-        .campo input{
-            width: 100%;
-            padding: 14px 16px;
-            font-size: 16px;
-            font-family: inherit;
-            font-weight: 500;
-            color: #3A2A38;
-            background: #FFFFFF;
-            border: 3px solid var(--borde);
-            border-radius: 14px;
-            outline: none;
-        }
-
-        .campo input::placeholder{
-            color: var(--placeholder);
-        }
-
-        .campo input:focus{
-            border-color: var(--boton);
-        }
-
-        .acciones{
-            margin-top: 8px;
-            text-align: center;
-        }
-
-        .boton{
-            width: 100%;
-            max-width: 245px;
-            padding: 12px 24px;
-            font-size: 20px;
-            font-weight: 600;
-            font-family: inherit;
-            color: #FFFFFF;
-            background: var(--boton);
-            border: none;
-            border-radius: 999px;
-            cursor: pointer;
-        }
-
-        .boton:hover{
-            background: #BF1E8D;
-        }
-
-        @media (min-width: 600px){
-            .pagina{
-                padding: 52px 24px;
+    <ui:define name="contenido">
+        <style>
+            .registroPagina{
+                width: 100%;
+                min-height: calc(100vh - 150px);
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                padding: 28px 16px;
+                box-sizing: border-box;
             }
 
-            .tarjeta{
+            .registroPagina *{
+                box-sizing: border-box;
+            }
+
+            .registroTarjeta{
+                width: 100%;
+                max-width: 640px;
                 padding: 28px 32px 40px;
+                background: #FFFFFF;
+                border: 2px solid #E4D9EC;
+                border-radius: 18px;
+                box-shadow: 0 4px 14px rgba(120, 21, 91, 0.08);
             }
-        }
-    </style>
-</h:head>
 
-<h:body>
-    <main class="pagina">
-        <h:form id="formRegistroAdmin" styleClass="tarjeta">
+            .registroTarjeta h1{
+                margin: 0 0 24px;
+                color: #B5258F;
+                font-size: 22px;
+                font-weight: 600;
+            }
 
-            <h1>Registrar administrador</h1>
+            .registroCampo{
+                margin-bottom: 22px;
+            }
 
-            <div class="campo">
-                <h:outputLabel for="correo" value="Correo electrónico" />
-                <h:inputText id="correo" pt:type="email" pt:placeholder="ejemplo@gmail.com" pt:autocomplete="off" />
-            </div>
+            .registroCampo label{
+                display: block;
+                margin: 0 0 8px;
+                color: #B5258F;
+                font-size: 16px;
+                font-weight: 600;
+            }
 
-            <div class="campo">
-                <h:outputLabel for="contrasena" value="Contraseña" />
-                <h:inputSecret id="contrasena" pt:placeholder="*********" pt:autocomplete="new-password" />
-            </div>
+            .registroCampo input{
+                width: 100%;
+                padding: 14px 16px;
+                border: 3px solid #E6E6E6;
+                border-radius: 14px;
+                outline: none;
+                background: #FFFFFF;
+                color: #3A2A38;
+                font-family: inherit;
+                font-size: 16px;
+                font-weight: 500;
+            }
 
-            <div class="acciones">
-                <h:commandButton id="registrar" value="Registrar" type="button" styleClass="boton" />
-            </div>
+            .registroCampo input::placeholder{
+                color: #BBA6B8;
+            }
 
-        </h:form>
-    </main>
-</h:body>
-</html>
+            .registroCampo input:focus{
+                border-color: #D6249F;
+            }
+
+            .registroAcciones{
+                margin-top: 8px;
+                display: flex;
+                justify-content: center;
+                gap: 12px;
+                text-align: center;
+            }
+
+            .registroBoton{
+                width: 100%;
+                max-width: 245px;
+                padding: 12px 24px;
+                border: 1px solid #D6249F !important;
+                border-radius: 999px !important;
+                background: #D6249F !important;
+                color: #FFFFFF !important;
+                font-family: inherit;
+                font-size: 20px;
+                font-weight: 600;
+            }
+
+            .registroBoton:hover,
+            .registroBoton:focus{
+                border-color: #BF1E8D !important;
+                background: #BF1E8D !important;
+            }
+
+            .registroBotonSecundario{
+                border-color: #D6249F !important;
+                background: #FFFFFF !important;
+                color: #B5258F !important;
+            }
+
+            .registroBotonSecundario:hover,
+            .registroBotonSecundario:focus{
+                background: #FAE8F8 !important;
+                color: #B5258F !important;
+            }
+
+            .registroMensajes{
+                margin-bottom: 20px;
+            }
+
+            @media (max-width: 600px){
+                .registroPagina{
+                    min-height: 0;
+                    padding: 12px 0;
+                }
+
+                .registroTarjeta{
+                    padding: 22px 16px 28px;
+                }
+
+                .registroBoton{
+                    max-width: none;
+                }
+
+                .registroAcciones{
+                    flex-direction: column;
+                }
+            }
+        </style>
+
+        <div class="registroPagina">
+            <h:form id="formRegistroAdmin" styleClass="registroTarjeta">
+                <h1>Registrar administrador</h1>
+
+                <p:messages id="mensajes" showDetail="true" closable="true" styleClass="registroMensajes">
+                    <p:autoUpdate />
+                </p:messages>
+
+                <div class="registroCampo">
+                    <h:outputLabel for="correo" value="Correo electrónico" />
+                    <h:inputText id="correo" value="#{registroAdminUI.administrador.correo}" pt:type="email" pt:placeholder="ejemplo@gmail.com" pt:autocomplete="off" maxlength="150" />
+                </div>
+
+                <div class="registroCampo">
+                    <h:outputLabel for="contrasena" value="Contraseña" />
+                    <h:inputSecret id="contrasena" value="#{registroAdminUI.administrador.contrasena}" pt:placeholder="*********" pt:autocomplete="new-password" maxlength="255" />
+                </div>
+
+                <div class="registroAcciones">
+                    <p:commandButton id="registrar" value="Registrar" action="#{registroAdminUI.registrar}" process="@form" update="@form" styleClass="registroBoton" />
+                    <h:button value="Ver administradores" outcome="consultaAdmin" styleClass="registroBoton registroBotonSecundario" />
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

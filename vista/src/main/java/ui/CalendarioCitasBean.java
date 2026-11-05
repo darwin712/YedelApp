@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.faces.model.SelectItem;
 import jakarta.inject.Named;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
 import java.io.Serializable;
@@ -33,10 +34,13 @@ import mx.desarrollo.persistence.persistence.HibernateUtil;
 @ViewScoped
 public class CalendarioCitasBean implements Serializable {
 
+    @Inject
+    private LoginBeanUI loginUI;
+
     private static final ZoneId zona = ZoneId.of("America/Tijuana");
     private static final Locale esp = new Locale("es", "MX");
 
-    private static final int horaInicio = 7;
+    private static final int horaInicio = 8;
     private static final int horaFin = 20;
     private static final int minutosCalendario = (horaFin - horaInicio) * 60;
 
@@ -70,6 +74,9 @@ public class CalendarioCitasBean implements Serializable {
     public void init() {
         fechaReferencia = LocalDate.now(zona);
         cargarEstilistas();
+        if (loginUI != null && !loginUI.isPrincipal() && loginUI.getIdEstilista() != null) {
+            estilistaSeleccionado = loginUI.getIdEstilista();
+        }
         cargarCitas();
         actualizarCalendario();
     }
@@ -156,7 +163,7 @@ public class CalendarioCitasBean implements Serializable {
                 String nombreEstilista = nombresEstilistas.get(idEstilista);
 
                 if (nombreEstilista == null) {
-                    nombreEstilista = "Sin estilista";
+                    nombreEstilista = "Sin empleado";
                 }
 
                 CitaVista citaVista = new CitaVista(nombreCliente, nombreServicio, idEstilista, telefono, correo, nombreEstilista, duracion, precio, inicio, fin);
@@ -394,6 +401,10 @@ public class CalendarioCitasBean implements Serializable {
 
     public List<SelectItem> getOpcionesEstilistas() {
         return opcionesEstilistas;
+    }
+
+    public boolean isPrincipal() {
+        return loginUI != null && loginUI.isPrincipal();
     }
 
     public static class CitaVista implements Serializable {

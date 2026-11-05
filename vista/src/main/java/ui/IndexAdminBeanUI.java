@@ -25,7 +25,7 @@ public class IndexAdminBeanUI implements Serializable {
             return "login?faces-redirect=true";
         }
         if("CLIENTE".equals(loginUI.getRol())){
-            return "indexCliente?faces-redirect=true";
+            return "login?faces-redirect=true";
         }
         return null;
     }
