@@ -73,4 +73,13 @@ public class ServiceLocator {
         }
     }
 
+    private static ProductoDAO productoDAO;
+
+    public static ProductoDAO getInstanceProductoDAO() {
+        if (productoDAO == null) {
+            productoDAO = new ProductoDAO(); // Sin pasarle getEntityManager()
+        }
+        return productoDAO;
+    }
+
 }
