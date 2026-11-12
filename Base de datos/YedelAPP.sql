@@ -239,7 +239,7 @@ CREATE TABLE `inventario_estilista` (
 --
 
 CREATE TABLE `producto` (
-                            `id_producto` int(11) NOT NULL AUTO_INCREMENT,
+                            `id_producto` int(11) NOT NULL,
                             `nombre` varchar(100) DEFAULT NULL,
                             `categoria` varchar(50) DEFAULT NULL,
                             `precio` decimal(10,2) DEFAULT NULL,
@@ -385,6 +385,9 @@ ALTER TABLE `horario`
 --
 ALTER TABLE `servicio`
     MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+ALTER TABLE `producto`
+    MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
