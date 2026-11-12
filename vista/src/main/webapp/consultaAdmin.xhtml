@@ -6,7 +6,9 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/plantilla/plantilla.xhtml">
 
-
+    <f:metadata>
+        <f:viewAction action="#{adminBean.verificarAcceso()}"/>
+    </f:metadata>
 
     <ui:define name="titulo"> Consulta de administradores </ui:define>
     <ui:define name="subtitulo"> Consulta de administradores </ui:define>
@@ -16,7 +18,7 @@
             <h:form id="formAdmin">
 
                 <p:messages id="messages" showDetail="true" closable="true">
-
+                    <p:autoUpdate/>
                 </p:messages>
 
                 <div class="busqueda">
@@ -37,19 +39,19 @@
                             <div class="filaDoble">
                                 <div class="campo">
                                     <h:outputLabel value="Apellido paterno"/>
-                                    <h:inputText styleClass="fieldSmall" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.appaterno}"/>
+                                    <h:inputText styleClass="fieldSmall" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.apellidoP}"/>
                                 </div>
 
                                 <div class="campo">
                                     <h:outputLabel value="Apellido materno"/>
-                                    <h:inputText styleClass="fieldSmall" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.apmaterno}"/>
+                                    <h:inputText styleClass="fieldSmall" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.apellidoM}"/>
                                 </div>
                             </div>
 
                             <div class="filaDoble">
                                 <div class="campo">
-                                    <h:outputLabel value="Usuario"/>
-                                    <h:inputText styleClass="fieldSmall" maxlength="45" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.usuario}"/>
+                                    <h:outputLabel value="Correo"/>
+                                    <h:inputText styleClass="fieldSmall" maxlength="150" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.correo}"/>
                                 </div>
 
                                 <div class="campo">
@@ -73,12 +75,12 @@
                 <h:dataTable value="#{adminBean.listaAdmin}" var="admin" styleClass="tabla">
                     <h:column>
                         <f:facet name="header">Nombre completo</f:facet>
-                        <h:outputText value="#{admin.nombre} #{admin.appaterno} #{admin.apmaterno}"/>
+                        <h:outputText value="#{admin.nombre} #{admin.apellidoP} #{admin.apellidoM}"/>
                     </h:column>
 
                     <h:column>
-                        <f:facet name="header">Usuario</f:facet>
-                        <h:outputText value="#{admin.usuario}"/>
+                        <f:facet name="header">Correo</f:facet>
+                        <h:outputText value="#{admin.correo}"/>
                     </h:column>
 
                     <h:column>

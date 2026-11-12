@@ -33,4 +33,8 @@ public class FacadeServicio {
         return delegateServicio.obtenerServiciosPorEstilista(idEstilista);
     }
 
+    public void asignarServicioEstilista(Integer idEstilista, Integer idServicio){
+        delegateServicio.asignarServicioEstilista(idEstilista, idServicio);
+    }
+
 }

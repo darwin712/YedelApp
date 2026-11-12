@@ -13,6 +13,9 @@ public class ServiceLocator {
     private static ClienteDAO clienteDAO;
     private static ServicioDAO servicioDAO;
     private static EstilistaDAO estilistaDAO;
+    private static HorarioDAO horarioDAO;
+    private static ProductoDAO productoDAO;
+    private static InventarioDAO inventarioDAO;
 
     private static EntityManager getEntityManager(){
         return HibernateUtil.getEntityManager();
@@ -60,6 +63,33 @@ public class ServiceLocator {
             return estilistaDAO;
         } else{
             return estilistaDAO;
+        }
+    }
+
+    public static HorarioDAO getInstanceHorarioDAO(){
+        if(horarioDAO == null){
+            horarioDAO = new HorarioDAO(getEntityManager());
+            return horarioDAO;
+        } else{
+            return horarioDAO;
+        }
+    }
+
+    public static ProductoDAO getInstanceProductoDAO(){
+        if(productoDAO == null){
+            productoDAO = new ProductoDAO(getEntityManager());
+            return productoDAO;
+        } else{
+            return productoDAO;
+        }
+    }
+
+    public static InventarioDAO getInstanceInventarioDAO(){
+        if(inventarioDAO == null){
+            inventarioDAO = new InventarioDAO(getEntityManager());
+            return inventarioDAO;
+        } else{
+            return inventarioDAO;
         }
     }
 

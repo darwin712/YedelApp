@@ -6,6 +6,7 @@ import mx.desarrollo.delegate.DelegateServicio;
 import mx.desarrollo.entity.Cita;
 import mx.desarrollo.entity.Cliente;
 import mx.desarrollo.entity.Estilista;
+import mx.desarrollo.entity.Horario;
 import mx.desarrollo.entity.Servicio;
 import mx.desarrollo.integration.ServiceFacadeLocator;
 
@@ -34,6 +35,10 @@ public class AltasCitasHelper implements Serializable {
         return ServiceFacadeLocator.getInstanceFacadeCita().traslapeEstilista(idEstilista, fecha, nuevaHoraInicio, nuevaHoraFin, null);
     }
 
+    public boolean traslapeCliente(Integer idCliente, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin){
+        return ServiceFacadeLocator.getInstanceFacadeCita().traslapeCliente(idCliente, fecha, nuevaHoraInicio, nuevaHoraFin, null);
+    }
+
     public List<Cliente> obtenerListaClientes (){
         return new DelegateCliente().findAll();
     }
@@ -44,5 +49,9 @@ public class AltasCitasHelper implements Serializable {
     }
     public List<Estilista> obtenerListaEstilistas() {
         return new DelegateEstilista().findAll();
+    }
+
+    public List<Horario> obtenerHorariosPorEstilista(Integer idEstilista) {
+        return ServiceFacadeLocator.getInstanceFacadeHorario().obtenerPorEstilista(idEstilista);
     }
 }

@@ -10,6 +10,7 @@ import jakarta.inject.Named;
 import mx.desarrollo.entity.Cita;
 import mx.desarrollo.entity.Cliente;
 import mx.desarrollo.entity.Estilista;
+import mx.desarrollo.entity.Horario;
 import mx.desarrollo.entity.Servicio;
 import org.primefaces.PrimeFaces;
 
@@ -65,6 +66,11 @@ public class CitasAltasBeanUI implements Serializable {
 
             cargarEstilistasActivos();
 
+            if (loginUI != null && !loginUI.isPrincipal()) {
+                this.idEstilistaSeleccionado = loginUI.getIdEstilista();
+                onEstilistaChange();
+            }
+
         } catch (Throwable ex) {
             System.err.println("ERROR AL CARGAR LISTAS: " + ex);
             ex.printStackTrace();
@@ -72,6 +78,9 @@ public class CitasAltasBeanUI implements Serializable {
     }
 
     public void onEstilistaChange() {
+        if (loginUI != null && !loginUI.isPrincipal()) {
+            this.idEstilistaSeleccionado = loginUI.getIdEstilista();
+        }
         if (this.idEstilistaSeleccionado != null) {
             List<Servicio> filtrados = helper.ObtenerServicioPorEstilista(this.idEstilistaSeleccionado);
             this.listaServicios = (filtrados != null) ? filtrados : new ArrayList<>();
@@ -89,13 +98,17 @@ public class CitasAltasBeanUI implements Serializable {
     public void guardarCita() {
         try {
 
+            if (this.loginUI != null && !this.loginUI.isPrincipal()) {
+                this.idEstilistaSeleccionado = this.loginUI.getIdEstilista();
+            }
+
             if (this.idClienteSeleccionado == null) {
                 mensajeError("Debe seleccionar un cliente.");
                 return;
             }
 
             if (this.idEstilistaSeleccionado == null) {
-                mensajeError("Debe seleccionar un estilista.");
+                mensajeError("Debe seleccionar un empleado.");
                 return;
             }
 
@@ -110,7 +123,7 @@ public class CitasAltasBeanUI implements Serializable {
             }
 
             LocalDate fechaLocal;
-            if (this.fechaCita instanceof java.util.Date) {
+            if (this.fechaCita instanceof Date) {
                 fechaLocal = this.fechaCita.toInstant()
                         .atZone(ZoneId.systemDefault())
                         .toLocalDate();
@@ -129,10 +142,10 @@ public class CitasAltasBeanUI implements Serializable {
             }
 
             LocalTime apertura = LocalTime.of(8, 0);
-            LocalTime cierre = LocalTime.of(18, 0);
+            LocalTime cierre = LocalTime.of(20, 0);
 
             if (this.horaInicio.isBefore(apertura)) {
-                mensajeError("El salón abre a las 9:00 AM.");
+                mensajeError("El salón abre a las 8:00 AM.");
                 return;
             }
 
@@ -143,8 +156,18 @@ public class CitasAltasBeanUI implements Serializable {
                 return;
             }
 
+            if (!horarioDisponible(fechaLocal, this.horaInicio, horaFinEstimada)) {
+                mensajeError("La cita está fuera del horario del empleado seleccionado.");
+                return;
+            }
+
             if(this.helper.traslapeEstilista(this.idEstilistaSeleccionado, fechaLocal,this.horaInicio,horaFinEstimada)){
-                mensajeError("El estilista seleccionado ya tiene una cita ocupada en ese rango de horario.");
+                mensajeError("El empleado seleccionado ya tiene una cita ocupada en ese rango de horario.");
+                return;
+            }
+
+            if(this.helper.traslapeCliente(this.idClienteSeleccionado, fechaLocal,this.horaInicio,horaFinEstimada)){
+                mensajeError("El cliente seleccionado ya tiene una cita ocupada en ese rango de horario.");
                 return;
             }
 
@@ -174,19 +197,64 @@ public class CitasAltasBeanUI implements Serializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            mensajeError("No se pudo registrar la cita en la base de datos.");
+            mensajeError("No se pudo registrar la cita en la base de datos. " + obtenerDetalleError(e));
         }
+    }
+
+    private String obtenerDetalleError(Throwable error) {
+        Throwable causa = error;
+        while (causa.getCause() != null) {
+            causa = causa.getCause();
+        }
+        if (causa.getMessage() == null || causa.getMessage().isBlank()) {
+            return "Intente nuevamente.";
+        }
+        return causa.getMessage();
+    }
+
+    private boolean horarioDisponible(LocalDate fecha, LocalTime inicio, LocalTime fin) {
+        List<Horario> horarios = helper.obtenerHorariosPorEstilista(this.idEstilistaSeleccionado);
+        if (horarios == null || horarios.isEmpty()) {
+            return true;
+        }
+        String dia = nombreDia(fecha);
+        for (Horario horario : horarios) {
+            if (dia.equals(horario.getDiaSemana())) {
+                return horario.getHoraInicio() != null && horario.getHoraFin() != null
+                        && !inicio.isBefore(horario.getHoraInicio())
+                        && !fin.isAfter(horario.getHoraFin());
+            }
+        }
+        return false;
+    }
+
+    private String nombreDia(LocalDate fecha) {
+        return switch (fecha.getDayOfWeek()) {
+            case MONDAY -> "Lunes";
+            case TUESDAY -> "Martes";
+            case WEDNESDAY -> "Miércoles";
+            case THURSDAY -> "Jueves";
+            case FRIDAY -> "Viernes";
+            case SATURDAY -> "Sábado";
+            case SUNDAY -> "Domingo";
+        };
     }
 
     public void limpiarFormulario() {
         this.idClienteSeleccionado = null;
-        this.idEstilistaSeleccionado = null;
         this.idsServiciosSeleccionados = new ArrayList<>();
-        this.listaServicios = new ArrayList<>();
         this.fechaCita = null;
         this.horaInicio = null;
         this.precioServicio = BigDecimal.ZERO;
         this.duracionTotal = 0;
+        if (this.loginUI != null && !this.loginUI.isPrincipal()) {
+            this.idEstilistaSeleccionado = this.loginUI.getIdEstilista();
+            List<Servicio> filtrados = helper.ObtenerServicioPorEstilista(this.idEstilistaSeleccionado);
+            this.listaServicios = filtrados != null ? filtrados : new ArrayList<>();
+        } else {
+            this.idEstilistaSeleccionado = null;
+            this.listaServicios = new ArrayList<>();
+        }
     }
 
     private void mensajeError(String detalle){
@@ -198,11 +266,12 @@ public class CitasAltasBeanUI implements Serializable {
     public void cargarEstilistasActivos(){
 
         listaEstilistas = helper.obtenerListaEstilistas();
+        EstilistasActivos = new ArrayList<>();
 
 
         for (Estilista e : listaEstilistas){
 
-            if(e.getActivo() == true){
+            if(Boolean.TRUE.equals(e.getActivo())){
 
                 EstilistasActivos.add(e);
 
@@ -356,5 +425,23 @@ public class CitasAltasBeanUI implements Serializable {
 
     public void setDuracionTotal(Integer duracionTotal) {
         this.duracionTotal = duracionTotal;
+    }
+
+    public boolean isPrincipal() {
+        return loginUI != null && loginUI.isPrincipal();
+    }
+
+    public String getNombreEstilista() {
+        if (idEstilistaSeleccionado == null) {
+            return "Sin empleado asignado";
+        }
+        for (Estilista estilista : EstilistasActivos) {
+            if (estilista.getId().equals(idEstilistaSeleccionado)) {
+                return estilista.getNombre() + " "
+                        + (estilista.getApellidoP() == null ? "" : estilista.getApellidoP()) + " "
+                        + (estilista.getApellidoM() == null ? "" : estilista.getApellidoM());
+            }
+        }
+        return "Sin empleado asignado";
     }
 }

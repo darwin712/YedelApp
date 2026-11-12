@@ -107,6 +107,41 @@ public class CitaDAO extends AbstractDAO<Cita> {
         return traslapeEstilista(idEstilista, fecha, nuevaHoraInicio, nuevaHoraFin, null);
     }
 
+    public boolean traslapeCliente(Integer idCliente, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin, Integer idCitaIgnorar){
+        return execute(em ->{
+            String query = "SELECT cita.hora_inicio, COALESCE(SUM(serv.duracion_min), 30) AS duracion_total " +
+                    "FROM cita cita " +
+                    "LEFT JOIN cita_servicio cServicio ON cita.id_cita = cServicio.id_cita " +
+                    "LEFT JOIN servicio serv ON cServicio.id_servicio = serv.id_servicio " +
+                    "WHERE cita.id_cliente = :idCliente " +
+                    "  AND cita.fecha = :fecha " +
+                    "  AND cita.estado <> 'Cancelada' " +
+                    (idCitaIgnorar != null ? "  AND cita.id_cita <> :idIgnorar " : "") +
+                    "GROUP BY cita.id_cita, cita.hora_inicio";
+
+            Query q = em.createNativeQuery(query)
+                    .setParameter("idCliente", idCliente)
+                    .setParameter("fecha", fecha);
+            if (idCitaIgnorar != null) {
+                q.setParameter("idIgnorar", idCitaIgnorar);
+            }
+            @SuppressWarnings("unchecked")
+            List<Object[]> resultados = q.getResultList();
+
+            for (Object[] row : resultados) {
+                java.sql.Time timeSql = (java.sql.Time) row[0];
+                LocalTime existInicio = timeSql.toLocalTime();
+                int duracionMinutos = ((Number) row[1]).intValue();
+                LocalTime existFin = existInicio.plusMinutes(duracionMinutos);
+
+                if (nuevaHoraInicio.isBefore(existFin) && nuevaHoraFin.isAfter(existInicio)) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
     @Override
     public EntityManager getEntityManager() {
         return entityManager;

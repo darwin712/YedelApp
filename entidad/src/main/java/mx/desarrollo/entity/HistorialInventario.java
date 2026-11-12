@@ -2,6 +2,8 @@ package mx.desarrollo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
@@ -12,6 +14,7 @@ import java.time.Instant;
 @Table(name = "historial_inventario", schema = "yedelapp")
 public class HistorialInventario {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_historial", nullable = false)
     private Integer id;
 

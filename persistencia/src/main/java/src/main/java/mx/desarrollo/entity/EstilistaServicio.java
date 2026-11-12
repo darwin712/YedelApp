@@ -1,6 +1,9 @@
-package mx.desarrollo.entity;
+package src.main.java.mx.desarrollo.entity;
 
 import jakarta.persistence.*;
+import mx.desarrollo.entity.Estilista;
+import mx.desarrollo.entity.EstilistaServicioId;
+import mx.desarrollo.entity.Servicio;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 

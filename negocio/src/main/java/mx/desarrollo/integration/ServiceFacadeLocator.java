@@ -9,6 +9,8 @@ public class ServiceFacadeLocator {
     private static FacadeCliente facadeCliente;
     private static FacadeServicio facadeServicio;
     private static FacadeEstilista facadeEstilista;
+    private static FacadeHorario facadeHorario;
+    private static FacadeInventario facadeInventario;
 
     public static FacadeAdministrador getInstanceFacadeAdministrador() {
         if (facadeAdministrador == null) {
@@ -52,6 +54,24 @@ public class ServiceFacadeLocator {
             return facadeEstilista;
         } else {
             return facadeEstilista;
+        }
+    }
+
+    public static FacadeHorario getInstanceFacadeHorario() {
+        if (facadeHorario == null) {
+            facadeHorario = new FacadeHorario();
+            return facadeHorario;
+        } else {
+            return facadeHorario;
+        }
+    }
+
+    public static FacadeInventario getInstanceFacadeInventario() {
+        if (facadeInventario == null) {
+            facadeInventario = new FacadeInventario();
+            return facadeInventario;
+        } else {
+            return facadeInventario;
         }
     }
 }

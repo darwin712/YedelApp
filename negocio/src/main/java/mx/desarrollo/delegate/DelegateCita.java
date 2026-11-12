@@ -69,6 +69,17 @@ public class DelegateCita {
         }
     }
 
+    public boolean traslapeCliente(Integer idCliente, LocalDate fecha, LocalTime nuevaHoraInicio, LocalTime nuevaHoraFin, Integer idCitaIgnorar) {
+        EntityManager em = HibernateUtil.getEntityManager();
+        try {
+            return new CitaDAO(em).traslapeCliente(idCliente, fecha, nuevaHoraInicio, nuevaHoraFin, idCitaIgnorar);
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+
     public void actualizarCitaConServicios(Integer idCita, Integer idCliente, Integer idEstilista, LocalDate fecha, LocalTime hora, List<Integer> idsServicios) {
         citaDAO.actualizarCitaConServicios(idCita, idCliente, idEstilista, fecha, hora, idsServicios);
     }

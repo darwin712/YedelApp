@@ -13,6 +13,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import mx.desarrollo.entity.Administrador;
 import mx.desarrollo.entity.Cliente;
+import mx.desarrollo.integration.ServiceFacadeLocator;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -43,7 +44,6 @@ public class LoginBeanUI implements Serializable{
 
      public void login() throws IOException{
         String appURL = "/index.xhtml";
-        String appURLCliente = "/indexCliente.xhtml";
         // los atributos de usuario vienen del xhtml 
         if(correo == null || correo.trim().isEmpty() || contrasena == null || contrasena.isEmpty()){
             contrasena = null;
@@ -64,10 +64,8 @@ public class LoginBeanUI implements Serializable{
         }
         Cliente cl = loginHelper.LoginCliente(correo.trim(), contrasena);
         if(cl != null && cl.getId()!=null){
-            cliente = cl;
-            rol = "CLIENTE";
             contrasena = null;
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + appURLCliente);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Acceso no disponible:", "Esta cuenta no tiene acceso al panel de empleados"));
             return;
         }
         contrasena = null;
@@ -118,6 +116,15 @@ public class LoginBeanUI implements Serializable{
 
     public String getRol() {
         return rol;
+    }
+
+    public boolean isPrincipal() {
+        return usuario != null && usuario.getId() != null
+                && ServiceFacadeLocator.getInstanceFacadeAdministrador().esPrincipal(usuario.getId());
+    }
+
+    public Integer getIdEstilista() {
+        return usuario == null ? null : usuario.getIdEstilista();
     }
     
     

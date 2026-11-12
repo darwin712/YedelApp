@@ -1,6 +1,7 @@
 package mx.desarrollo.persistence.dao;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 
 import mx.desarrollo.entity.Servicio;
 import mx.desarrollo.persistence.persistence.AbstractDAO;
@@ -29,6 +30,28 @@ public class ServicioDAO extends AbstractDAO<Servicio> {
                         "WHERE es.id_estilista = :idEstilista", Servicio.class)
                 .setParameter("idEstilista", idEstilista)
                 .getResultList();
+    }
+
+    public void asignarServicioEstilista(Integer idEstilista, Integer idServicio) {
+        EntityManager em = getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.createNativeQuery("INSERT IGNORE INTO estilista_servicio (id_estilista, id_servicio) VALUES (:idEstilista, :idServicio)")
+                    .setParameter("idEstilista", idEstilista)
+                    .setParameter("idServicio", idServicio)
+                    .executeUpdate();
+            tx.commit();
+        } catch (RuntimeException e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            if (em.isOpen()) {
+                em.close();
+            }
+        }
     }
 
 
