@@ -2,6 +2,8 @@ package src.main.java.mx.desarrollo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -15,6 +17,7 @@ public class HistorialInventario implements Serializable {
     @Serial
     private static final long serialVersionUID = -4177493890999850250L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_historial", nullable = false)
     private Integer id;
 
