@@ -239,7 +239,7 @@ CREATE TABLE `inventario_estilista` (
 --
 
 CREATE TABLE `producto` (
-                            `id_producto` int(11) NOT NULL,
+                            `id_producto` int(11) NOT NULL AUTO_INCREMENT,
                             `nombre` varchar(100) DEFAULT NULL,
                             `categoria` varchar(50) DEFAULT NULL,
                             `precio` decimal(10,2) DEFAULT NULL,
