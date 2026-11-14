@@ -27,7 +27,8 @@ public class LoginBeanUI implements Serializable{
     private String correo;
     private String contrasena;
     private String rol;
-    
+    //private Cliente cliente;
+
     public LoginBeanUI() {
         loginHelper = new LoginHelper();
     }
@@ -42,18 +43,21 @@ public class LoginBeanUI implements Serializable{
         cliente = new Cliente();
     }
 
-     public void login() throws IOException{
+
+    public void login() throws IOException{
         String appURL = "/index.xhtml";
-        // los atributos de usuario vienen del xhtml 
+        String clienteURL = "/inicioCliente.xhtml";
+        // los atributos de usuario vienen del xhtml
         if(correo == null || correo.trim().isEmpty() || contrasena == null || contrasena.isEmpty()){
             contrasena = null;
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Datos incompletos:", "Ingrese su correo y contraseña"));
             return;
         }
+
         Administrador ad= new Administrador();
         ad.setId(0);
         ad = loginHelper.Login(correo.trim(), contrasena);
-          if(ad != null && ad.getId()!=null){
+        if(ad != null && ad.getId()!=null){
             // asigno el administrador encontrado al usuario de esta clase para que 
             // se muestre correctamente en la pagina de informacion
             usuario=ad;
@@ -72,7 +76,13 @@ public class LoginBeanUI implements Serializable{
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Correo o contraseña incorrecta:", "Intente de nuevo"));
     }
 
-    
+    public String verificarCliente(){
+        if(!"CLIENTE".equals(rol)){
+            return "login?faces-redirect=true";
+        }
+        return null;
+    }
+
     public void logout() throws IOException{
         String appURL = "/login.xhtml";
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();

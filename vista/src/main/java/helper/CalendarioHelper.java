@@ -13,7 +13,8 @@ public class CalendarioHelper implements ServletContextListener {
         try {
             HibernateUtil.getEntityManagerFactory();
         } catch (Throwable e) {
-        }
+        e.printStackTrace();
+    }
     }
 
     @Override
