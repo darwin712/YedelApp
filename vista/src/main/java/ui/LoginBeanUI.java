@@ -32,9 +32,7 @@ public class LoginBeanUI implements Serializable{
 
     private String alertaStockPendiente;
 
-
-    //private Cliente cliente;
-
+    
     public LoginBeanUI() {
         loginHelper = new LoginHelper();
     }
@@ -49,8 +47,7 @@ public class LoginBeanUI implements Serializable{
         cliente = new Cliente();
     }
 
-
-    public void login() throws IOException{
+     public void login() throws IOException{
         String appURL = "/index.xhtml";
         String clienteURL = "/calendarioCliente.xhtml";
         // los atributos de usuario vienen del xhtml
@@ -193,7 +190,7 @@ public class LoginBeanUI implements Serializable{
         }
     }
 
-
+    
     /* getters y setters*/
 
     public Administrador getUsuario() {
