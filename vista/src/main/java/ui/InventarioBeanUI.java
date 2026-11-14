@@ -104,6 +104,35 @@ public class InventarioBeanUI implements Serializable {
         }
     }
 
+    private void verificarStock(Integer idEstilista, Integer idProducto) {
+        if (idEstilista == null || idProducto == null) {
+            return;
+        }
+        if (!principal && !idEstilista.equals(loginUI.getIdEstilista())) {
+            return;
+        }
+
+        for (InventarioEstilista inv : inventarios) {
+            if (idEstilista.equals(inv.getId().getIdEstilista())
+                    && idProducto.equals(inv.getId().getIdProducto())) {
+                for (Producto p : productos) {
+                    if (idProducto.equals(p.getId())) {
+                        int cantidad = inv.getCantidad() == null ? 0 : inv.getCantidad();
+                        int minimo = p.getStockMinimo() == null ? 0 : p.getStockMinimo();
+                        if (cantidad <= minimo) {
+                            String sujeto = principal ? getNombreEmpleadoSeleccionado().trim() + " tiene" : "Tienes";
+                            FacesContext.getCurrentInstance().addMessage(null,
+                                    new FacesMessage(FacesMessage.SEVERITY_WARN,
+                                            "Alerta de Stock",
+                                            sujeto + " poco \"" + p.getNombre() + "\" (Quedan: " + cantidad + " / Mín: " + minimo + ")."));
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     private void cargarInventarioEmpleado() {
         inventarioEmpleado = new ArrayList<>();
         if (idEmpleadoSeleccionado == null) {
@@ -183,10 +212,17 @@ public class InventarioBeanUI implements Serializable {
             }
             prepararProducto(productoSeleccionado);
             ServiceFacadeLocator.getInstanceFacadeInventario().actualizarProducto(productoSeleccionado);
+
+            cargarDatos();
+
+
             productoSeleccionado = null;
             productoFilaSeleccionado = null;
-            cargarDatos();
+
             mensajeExito("El producto se modificó correctamente.");
+
+
+
         } catch (Exception e) {
             mensajeError(obtenerDetalle(e, "No se pudo modificar el producto."));
         }
@@ -233,9 +269,14 @@ public class InventarioBeanUI implements Serializable {
                     idProductoEmpleado,
                     cantidadEmpleado,
                     loginUI.getUsuario().getId());
-            cancelarInventarioEmpleado();
+
             cargarDatos();
+            verificarStock(idEmpleadoSeleccionado, idProductoEmpleado);
+            cancelarInventarioEmpleado();
+
             mensajeExito("El inventario del empleado se guardó correctamente.");
+
+
         } catch (Exception e) {
             mensajeError(obtenerDetalle(e, "No se pudo guardar el inventario del empleado."));
         }
