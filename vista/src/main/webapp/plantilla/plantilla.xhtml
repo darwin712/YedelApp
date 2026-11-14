@@ -963,7 +963,24 @@
                 margin: 0;
                 padding: 14px 10px;
             }
+
+
         }
+        .ui-growl-message p {
+            white-space: pre-line;
+            margin-top: 6px;
+            line-height: 1.4;
+
+            font-family: Roboto;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .ui-growl {
+            top: 90px !important;
+            right: 24px !important;
+        }
+
     </style>
     <script>
         function actualizarReloj() {
@@ -1031,6 +1048,10 @@
     </script>
 </h:head>
 <h:body>
+    <f:event type="preRenderView" listener="#{loginUI.mostrarAlertas()}" />
+    <p:growl id="alertaStockGlobal" showDetail="true" sticky="true" severity="warn" globalOnly="true">
+        <p:autoUpdate/>
+    </p:growl>
     <header>
         <div class="parteIzquierda">
             <button class="btnSidebar" onclick="alternarSidebar()" aria-label="Abrir menú">☰</button>
