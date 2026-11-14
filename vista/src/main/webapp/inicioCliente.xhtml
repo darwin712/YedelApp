@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<f:metadata>
+    <f:viewAction action="#{loginUI.verificarCliente()}" />
+</f:metadata>
+
+<h:head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Yedel Beauty Salon</title>
+</h:head>
+
+<h:body>
+    <main style="text-align: center; padding: 56px 24px; font-family: 'Segoe UI', Roboto, Arial, sans-serif;">
+        <h1 style="color: #B5258F;">Hola, #{loginUI.cliente.nombre}</h1>
+        <p>Has iniciado sesion correctamente.</p>
+        <h:form id="formSalirCliente">
+            <h:commandButton id="salir" value="Cerrar sesion" action="#{loginUI.logout()}" />
+        </h:form>
+    </main>
+</h:body>
+</html>

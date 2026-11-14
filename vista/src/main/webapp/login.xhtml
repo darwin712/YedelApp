@@ -168,7 +168,7 @@
     <main class="pagina">
 
         <div class="encabezado">
-            <p:graphicImage url="resources/images/logo.png" alt="Yedel Beauty Salón" styleClass="logo" />
+            <p:graphicImage url="resources/images/logo.png" alt="Yedel Beauty Salon" styleClass="logo" />
         </div>
 
         <h:form id="formLogin" styleClass="tarjeta">
@@ -181,7 +181,7 @@
             </div>
 
             <div class="campo">
-                <h:outputLabel for="contrasena" value="Contraseña" />
+                <h:outputLabel for="contrasena" value="Contrasena" />
                 <h:inputSecret id="contrasena" value="#{loginUI.contrasena}" pt:autocomplete="current-password" />
             </div>
 
@@ -191,8 +191,10 @@
 
         </h:form>
 
+
         <div class="registro">
-            <span>Acceso exclusivo para empleados</span>
+            <span>No tienes cuenta?</span>
+            <h:link value="Crear cuenta" outcome="registroCliente" />
         </div>
 
     </main>
