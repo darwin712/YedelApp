@@ -60,7 +60,7 @@ public class CalendarioCitasBean implements Serializable {
         }
     }
 
-    private Vista vista = Vista.MES;
+    private Vista vista = Vista.SEMANA;
     private LocalDate fechaReferencia;
 
     private List<CitaVista> citas = new ArrayList<>();
@@ -139,6 +139,14 @@ public class CalendarioCitasBean implements Serializable {
                     if (cliente.getCorreo() != null) {
                         correo = cliente.getCorreo();
                     }
+                }else if(c.getNombreCliente() != null && !c.getNombreCliente().isBlank()){
+                    nombreCliente = c.getNombreCliente();
+                    if (c.getTelefonoCliente() != null){
+                        telefono = c.getTelefonoCliente();
+                    }
+                    if (c.getCorreoCliente() != null){
+                        correo = c.getCorreoCliente();
+                    }
                 }
 
                 List<String> nombres = new ArrayList<>();
@@ -167,7 +175,7 @@ public class CalendarioCitasBean implements Serializable {
                 }
 
                 CitaVista citaVista = new CitaVista(nombreCliente, nombreServicio, idEstilista, telefono, correo, nombreEstilista, duracion, precio, inicio, fin);
-                citaVista.setDatosEdicion(c.getId(), c.getIdCliente() == null ? 0 : c.getIdCliente(), serviciosPorCita.getOrDefault(c.getId(), new ArrayList<>()));
+                citaVista.setDatosEdicion(c.getId(), c.getIdCliente() == null ? 0 : c.getIdCliente(), c.getNombreCliente(), serviciosPorCita.getOrDefault(c.getId(), new ArrayList<>()));
                 citas.add(citaVista);
             }
         }
@@ -418,6 +426,7 @@ public class CalendarioCitasBean implements Serializable {
         private final float precio;
         private int id;
         private int idCliente;
+        private String nombreClienteExterno;
         private List<Integer> idsServicios = new ArrayList<>();
 
         private final LocalDateTime inicio;
@@ -426,9 +435,10 @@ public class CalendarioCitasBean implements Serializable {
         private int columna = 0;
         private int columnas = 1;
 
-        public void setDatosEdicion(int id, int idCliente, List<Integer> idsServicios) {
+        public void setDatosEdicion(int id, int idCliente, String nombreClienteExterno, List<Integer> idsServicios) {
             this.id = id;
             this.idCliente = idCliente;
+            this.nombreClienteExterno = nombreClienteExterno;
             this.idsServicios = idsServicios;
         }
 
@@ -437,6 +447,9 @@ public class CalendarioCitasBean implements Serializable {
         }
         public int getIdCliente() {
             return idCliente;
+        }
+        public String getNombreClienteExterno() {
+            return nombreClienteExterno;
         }
         public List<Integer> getIdsServicios() {
             return idsServicios;

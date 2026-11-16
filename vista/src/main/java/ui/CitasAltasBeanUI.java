@@ -29,6 +29,10 @@ import java.util.List;
 public class CitasAltasBeanUI implements Serializable {
 
     private AltasCitasHelper helper;
+    private String nombreClienteExterno;
+    private String telefonoClienteExterno;
+    private String correoClienteExterno;
+    private boolean clienteSinCuenta;
 
     private List<Servicio> listaServicios= new ArrayList<>();
     private List<Estilista> listaEstilistas = new ArrayList<>();
@@ -102,9 +106,35 @@ public class CitasAltasBeanUI implements Serializable {
                 this.idEstilistaSeleccionado = this.loginUI.getIdEstilista();
             }
 
-            if (this.idClienteSeleccionado == null) {
-                mensajeError("Debe seleccionar un cliente.");
-                return;
+            String externo = "";
+            if (nombreClienteExterno != null) {
+                externo = nombreClienteExterno.trim();
+            }
+            String telefono = "";
+            if (telefonoClienteExterno != null) {
+                telefono = telefonoClienteExterno.trim();
+            }
+            String correo = "";
+            if (correoClienteExterno != null) {
+                correo = correoClienteExterno.trim();
+            }
+
+            if (clienteSinCuenta) {
+                if (externo.isEmpty()) {
+                    mensajeError("Debe escribir el nombre del cliente");
+                    return;
+                }
+                if (telefono.isEmpty() && correo.isEmpty()) {
+                    mensajeError("Debe escribir al menos un método de contacto para el cliente");
+                    return;
+                }
+                idClienteSeleccionado = null;
+            }else{
+                if (idClienteSeleccionado == null) {
+                    mensajeError("Debe seleccionar un cliente.");
+                    return;
+                }
+                externo = ""; telefono = ""; correo = "";
             }
 
             if (this.idEstilistaSeleccionado == null) {
@@ -178,6 +208,21 @@ public class CitasAltasBeanUI implements Serializable {
             nuevaCita.setFecha(fechaLocal);
             nuevaCita.setHoraInicio(this.horaInicio);
             nuevaCita.setEstado("Activa");
+            if(externo.isEmpty()){
+                nuevaCita.setNombreCliente(null);
+            }else{
+                nuevaCita.setNombreCliente(externo);
+            }
+            if(telefono.isEmpty()){
+                nuevaCita.setTelefonoCliente(null);
+            }else{
+                nuevaCita.setTelefonoCliente(telefono);
+            }
+            if(correo.isEmpty()){
+                nuevaCita.setCorreoCliente(null);
+            }else{
+                nuevaCita.setCorreoCliente(correo);
+            }
 
 
             if (this.loginUI != null && this.loginUI.getUsuario() != null) {
@@ -242,6 +287,10 @@ public class CitasAltasBeanUI implements Serializable {
 
     public void limpiarFormulario() {
         this.idClienteSeleccionado = null;
+        this.nombreClienteExterno = null;
+        this.telefonoClienteExterno = null;
+        this.correoClienteExterno = null;
+        this.clienteSinCuenta = false;
         this.idsServiciosSeleccionados = new ArrayList<>();
         this.fechaCita = null;
         this.horaInicio = null;
@@ -336,6 +385,41 @@ public class CitasAltasBeanUI implements Serializable {
     }
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
+    }
+
+    public String getNombreClienteExterno() {
+        return nombreClienteExterno;
+    }
+    public void setNombreClienteExterno(String nombreClienteExterno) {
+        this.nombreClienteExterno = nombreClienteExterno;
+    }
+
+    public String getTelefonoClienteExterno() {
+        return telefonoClienteExterno;
+    }
+    public void setTelefonoClienteExterno(String telefonoClienteExterno) {
+        this.telefonoClienteExterno = telefonoClienteExterno;
+    }
+
+    public String getCorreoClienteExterno() {
+        return correoClienteExterno;
+    }
+    public void setCorreoClienteExterno(String correoClienteExterno) {
+        this.correoClienteExterno = correoClienteExterno;
+    }
+
+    public boolean isClienteSinCuenta() {
+        return clienteSinCuenta;
+    }
+    public void setClienteSinCuenta(boolean clienteSinCuenta) {
+        this.clienteSinCuenta = clienteSinCuenta;
+    }
+
+    public void onTipoClienteChange() {
+        idClienteSeleccionado = null;
+        nombreClienteExterno = null;
+        telefonoClienteExterno = null;
+        correoClienteExterno = null;
     }
 
     public Integer getIdServicioSeleccionado() {

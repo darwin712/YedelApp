@@ -33,6 +33,10 @@ public class ModificarCitaBean implements Serializable {
 
     private boolean editando;
     private Integer idCliente;
+    private String nombreClienteExterno;
+    private String telefonoClienteExterno;
+    private String correoClienteExterno;
+    private boolean clienteSinCuenta;
     private Integer idEstilista;
     private List<Integer> idsServicios = new ArrayList<>();
     private LocalDate fecha;
@@ -60,6 +64,16 @@ public class ModificarCitaBean implements Serializable {
         }
 
         idCliente = cita.getIdCliente() == 0 ? null : cita.getIdCliente();
+        nombreClienteExterno = cita.getNombreClienteExterno();
+        clienteSinCuenta = idCliente == null && nombreClienteExterno != null && !nombreClienteExterno.isBlank();
+        if (clienteSinCuenta) {
+            telefonoClienteExterno = cita.getTelefono();
+            correoClienteExterno = cita.getCorreo();
+        } else {
+            telefonoClienteExterno = null;
+            correoClienteExterno = null;
+        }
+
         idEstilista = cita.getIdEstilista() == 0 ? null : cita.getIdEstilista();
         if (loginUI != null && !loginUI.isPrincipal()) {
             idEstilista = loginUI.getIdEstilista();
@@ -76,6 +90,10 @@ public class ModificarCitaBean implements Serializable {
 
     public void cancelar() {
         editando = false;
+        clienteSinCuenta = false;
+        nombreClienteExterno = null;
+        telefonoClienteExterno = null;
+        correoClienteExterno = null;
     }
 
     public void onEstilistaChange() {
@@ -128,10 +146,37 @@ public class ModificarCitaBean implements Serializable {
                 idEstilista = loginUI.getIdEstilista();
             }
 
-            if (idCliente == null) {
-                error("Debe seleccionar un cliente.");
-                return;
+            String externo = "";
+            if (nombreClienteExterno != null) {
+                externo = nombreClienteExterno.trim();
             }
+            String telefono = "";
+            if (telefonoClienteExterno != null) {
+                telefono = telefonoClienteExterno.trim();
+            }
+            String correo = "";
+            if (correoClienteExterno != null) {
+                correo = correoClienteExterno.trim();
+            }
+
+            if (clienteSinCuenta) {
+                if (externo.isEmpty()) {
+                    error("Debe escribir el nombre del cliente");
+                    return;
+                }
+                if (telefono.isEmpty() && correo.isEmpty()) {
+                    error("Debe escribir al menos un método de contacto para el cliente");
+                    return;
+                }
+                idCliente = null;
+            }else{
+                if (idCliente == null) {
+                    error("Debe seleccionar un cliente.");
+                    return;
+                }
+                externo = ""; telefono = ""; correo = "";
+            }
+
             if (idEstilista == null) {
                 error("Debe seleccionar un empleado.");
                 return;
@@ -181,8 +226,20 @@ public class ModificarCitaBean implements Serializable {
                 return;
             }
 
+            String nombreCliente = null;
+            if (!externo.isEmpty()) {
+                nombreCliente = externo;
+            }
+            String telefonoCliente = null;
+            if (!telefono.isEmpty()) {
+                telefonoCliente = telefono;
+            }
+            String correoCliente = null;
+            if (!correo.isEmpty()) {
+                correoCliente = correo;
+            }
             ServiceFacadeLocator.getInstanceFacadeCita()
-                    .actualizarCitaConServicios(idCita, idCliente, idEstilista, fecha, hora, idsServicios);
+                    .actualizarCitaConServicios(idCita, idCliente, nombreCliente, telefonoCliente, correoCliente, idEstilista, fecha, hora, idsServicios);
 
             calendario.recargar();
             editando = false;
@@ -254,6 +311,32 @@ public class ModificarCitaBean implements Serializable {
 
     public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
+    }
+
+    public String getNombreClienteExterno() {
+        return nombreClienteExterno;
+    }
+
+    public void setNombreClienteExterno(String nombreClienteExterno) {
+        this.nombreClienteExterno = nombreClienteExterno;
+    }
+
+    public String getTelefonoClienteExterno() {
+        return telefonoClienteExterno;
+    }
+    public void setTelefonoClienteExterno(String telefonoClienteExterno) {
+        this.telefonoClienteExterno = telefonoClienteExterno;
+    }
+
+    public String getCorreoClienteExterno() {
+        return correoClienteExterno;
+    }
+    public void setCorreoClienteExterno(String correoClienteExterno) {
+        this.correoClienteExterno = correoClienteExterno;
+    }
+
+    public boolean isClienteSinCuenta() {
+        return clienteSinCuenta;
     }
 
     public Integer getIdEstilista() {

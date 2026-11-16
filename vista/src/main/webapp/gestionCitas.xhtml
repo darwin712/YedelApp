@@ -251,8 +251,6 @@
                 background-color: #FDF2F9;
             }
 
-            /* Citas: bloque redondeado con borde de 2px y anillo de color al pasar el cursor,
-               igual que .opcion y los campos de la plantilla. Cada color solo cambia 3 variables. */
             .evento {
                 --h: 320;
                 --fondo: hsl(var(--h), 70%, 92%);
@@ -304,47 +302,179 @@
                 text-decoration: none;
             }
 
-            .filaBotones {
-                display: flex;
-                justify-content: flex-end;
-                gap: 12px;
-                flex-wrap: wrap;
-            }
-
             .btnRegistrar.btnEliminar {
                 --relleno: #E0457B;
                 --relleno-h: #C93468;
                 --borde: #E0457B;
             }
 
+            .horarioHora{
+                display: flex !important;
+                width: 100% !important;
+                min-width: 0;
+            }
+
+            .horarioHora .ui-inputfield{
+                width: calc(100% - 38px) !important;
+                min-width: 0;
+                border-radius: 10px 0 0 10px !important;
+            }
+
+            .horarioHora .ui-datepicker-trigger{
+                width: 38px !important;
+                min-width: 38px !important;
+                margin: 0 !important;
+                border-color: #D6249F !important;
+                border-radius: 0 10px 10px 0 !important;
+                background: #D6249F !important;
+                color: #FFFFFF !important;
+            }
+
+            .horarioHora .ui-inputfield{
+                border-color: #E4D9EC !important;
+                color: #78155b;
+            }
+
+            .horarioHora .ui-inputfield:enabled:hover,
+            .horarioHora .ui-inputfield:enabled:focus{
+                border-color: #D6249F !important;
+                box-shadow: 0 0 0 1px rgba(214, 36, 159, 0.18) !important;
+            }
+
             .ui-datepicker,
+            .p-datepicker.p-component:not(.ui-calendar),
             .ui-selectcheckboxmenu-panel,
-            .ui-selectonemenu-panel {
+            .ui-selectonemenu-panel{
                 z-index: 3000 !important;
             }
 
-            .ui-selectcheckboxmenu.custom-select {
-                background: #ffffff !important;
-                border: 1.5px solid #d8cde0 !important;
-                border-radius: 18px !important;
-                box-shadow: none !important;
-                height: 42px !important;
-                display: flex !important;
-                align-items: center !important;
-                padding: 2px 10px !important;
+            .horarioFila{
+                display: grid;
+                grid-template-columns: 200px minmax(0, 1fr);
+                align-items: center;
+                gap: 6px;
+                padding: 12px;
+                border-radius: 12px;
+                background-color: #FDF2F9;
             }
 
-            .ui-selectcheckboxmenu.custom-select .ui-selectcheckboxmenu-label {
-                color: #6b1250 !important;
-                font-weight: 500 !important;
-                background: transparent !important;
-                padding: 4px 8px !important;
+            .horarioDia{
+                color: #78155b;
+                font-weight: bold;
             }
 
-            .ui-selectcheckboxmenu.custom-select .ui-selectcheckboxmenu-trigger {
-                background: transparent !important;
-                border: none !important;
-                color: #6b1250 !important;
+            .ui-selectcheckboxmenu.custom-select{
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: 46px;
+                box-sizing: border-box;
+                border: 3px solid transparent;
+                border-radius: 14px;
+                background: linear-gradient(white, white) padding-box,
+                linear-gradient(#E4D9EC, #E4D9EC) border-box;
+                box-shadow: none;
+                transition: box-shadow 0.2s;
+            }
+            .ui-selectcheckboxmenu.custom-select .ui-selectcheckboxmenu-label-container{
+                flex: 1;
+                background: transparent;
+                border: 0;
+            }
+            .ui-selectcheckboxmenu.custom-select .ui-selectcheckboxmenu-label{
+                padding: 0 16px;
+                background: transparent;
+                color: #78155b;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+            }
+            .ui-selectcheckboxmenu.custom-select .ui-selectcheckboxmenu-trigger{
+                background: transparent;
+                border: 0;
+                box-shadow: none;
+                color: #D6249F;
+            }
+            .ui-selectcheckboxmenu.custom-select:not(.ui-state-disabled):hover,
+            .ui-selectcheckboxmenu.custom-select.ui-state-focus{
+                background: linear-gradient(white, white) padding-box,
+                linear-gradient(90deg, #D6249F, #B58CFF, #8FE9E5) border-box;
+                box-shadow: 0 6px 18px rgba(214, 36, 159, 0.16);
+            }
+
+            .custom-select-panel{
+                border: 2px solid #E4D9EC;
+                border-radius: 14px;
+                background: #FFFFFF;
+                box-shadow: 0 8px 24px rgba(120, 21, 91, 0.15);
+                overflow: hidden;
+                z-index: 3000;
+            }
+            .custom-select-panel .ui-selectcheckboxmenu-header{
+                background: #FDF2F9;
+                border: 0;
+                border-bottom: 1px solid #E4D9EC;
+            }
+            .custom-select-panel .ui-selectcheckboxmenu-filter-container .ui-inputfield{
+                border: 2px solid #E4D9EC;
+                border-radius: 10px;
+                background: #FFFFFF;
+                color: #78155b;
+                box-shadow: none;
+            }
+            .custom-select-panel .ui-selectcheckboxmenu-filter-container .ui-inputfield:focus{
+                border-color: #D6249F;
+            }
+            .custom-select-panel .ui-selectcheckboxmenu-close{
+                color: #D6249F;
+            }
+            .custom-select-panel .ui-selectcheckboxmenu-items-wrapper{
+                background: #FFFFFF;
+            }
+            .custom-select-panel .ui-selectcheckboxmenu-item{
+                color: #78155b;
+                font-family: inherit;
+                background: white;
+                border: 0;
+                text-shadow: non;
+            }
+            .custom-select-panel .ui-selectcheckboxmenu-item:hover{
+                background: #FDF2F9;
+            }
+
+            .custom-select-panel .ui-chkbox-box{
+                display: grid;
+                place-items: center;
+                width: 22px;
+                height: 22px;
+                box-sizing: border-box;
+                border: 3px solid #E4D9EC;
+                border-radius: 7px;
+                background: #FFFFFF;
+                background-image: none;
+                box-shadow: none;
+            }
+
+            .custom-select-panel .ui-chkbox-box .ui-chkbox-icon{
+                display: none;
+            }
+
+            .custom-select-panel .ui-chkbox-box.ui-state-active{
+                background: #D6249F;
+                border-color: #D6249F;
+            }
+
+            .custom-select-panel .ui-chkbox-box.ui-state-active::after{
+                content: "";
+                width: 5px;
+                height: 10px;
+                border: solid #FFFFFF;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg) translate(-1px, -1px);
+            }
+
+            .custom-select-panel .ui-chkbox-icon{
+                color: #FFFFFF;
             }
 
             @media (max-width: 768px) {
@@ -590,8 +720,7 @@
                         <h:panelGroup layout="block" rendered="#{edicionCita.editando}">
                             <h2 class="h2aqua">Modificar cita</h2>
                             <div class="datos">
-
-                                <div class="filaDoble">
+                                <ui:fragment rendered="#{!edicionCita.clienteSinCuenta}">
                                     <div class="campo aqua">
                                         <h:outputLabel for="nombreCliente" value="Cliente" />
                                         <h:selectOneMenu id="nombreCliente" value="#{edicionCita.idCliente}" styleClass="fieldSelect">
@@ -599,29 +728,46 @@
                                             <f:selectItems value="#{edicionCita.listaClientes}" var="cliente" itemLabel="#{cliente.id} #{cliente.nombre} #{cliente.apellidoP} #{cliente.apellidoM}" itemValue="#{cliente.id}" />
                                         </h:selectOneMenu>
                                     </div>
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{edicionCita.clienteSinCuenta}">
                                     <div class="campo aqua">
-                                        <h:outputLabel for="nombreEstilista" value="Empleado" />
-                                        <h:panelGroup rendered="#{edicionCita.principal}">
-                                        <h:selectOneMenu id="nombreEstilista" value="#{edicionCita.idEstilista}" styleClass="fieldSelect">
-                                            <f:selectItem itemLabel="-- Seleccione un Empleado --" itemValue="#{null}" noSelectionOption="true" />
-                                            <f:selectItems value="#{edicionCita.estilistasActivos}" var="estilista" itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}" itemValue="#{estilista.id}" />
-                                            <f:ajax listener="#{edicionCita.onEstilistaChange}" render="tipoServicio" />
-                                        </h:selectOneMenu>
-                                        </h:panelGroup>
-                                        <h:panelGroup rendered="#{!edicionCita.principal}" layout="block" styleClass="valorDato">
-                                            #{edicionCita.nombreEstilista}
-                                        </h:panelGroup>
+                                        <h:outputLabel for="nombreClienteExterno" value="Nombre del cliente" />
+                                        <h:inputText id="nombreClienteExterno" value="#{edicionCita.nombreClienteExterno}" maxlength="150" styleClass="fieldSelect" />
                                     </div>
-                                </div>
+                                    <div class="filaDoble">
+                                        <div class="campo aqua">
+                                            <h:outputLabel for="telefonoExterno" value="Teléfono" />
+                                            <h:inputText id="telefonoExterno" value="#{edicionCita.telefonoClienteExterno}" maxlength="20" styleClass="fieldSelect" />
+                                        </div>
+                                        <div class="campo aqua">
+                                            <h:outputLabel for="correoExterno" value="Correo" />
+                                            <h:inputText id="correoExterno" value="#{edicionCita.correoClienteExterno}" maxlength="150" styleClass="fieldSelect" />
+                                        </div>
+                                    </div>
+                                </ui:fragment>
 
                                 <div class="filaDoble">
                                     <div class="campo aqua">
                                         <h:outputLabel for="tipoServicio" value="Servicios" />
-                                        <p:selectCheckboxMenu id="tipoServicio" value="#{edicionCita.idsServicios}" label="Seleccione sus servicios" styleClass="custom-select" filter="true" filterMatchMode="contains" selectionLimit="5" selectionLimitMessage="Solo puedes seleccionar un máximo de 5 servicios.">
+                                        <p:selectCheckboxMenu id="tipoServicio" value="#{edicionCita.idsServicios}" label="Seleccione sus servicios" styleClass="custom-select" panelStyleClass="custom-select-panel" filter="true" filterMatchMode="contains" selectionLimit="5" selectionLimitMessage="Solo puedes seleccionar un máximo de 5 servicios.">
                                             <f:selectItems value="#{edicionCita.listaServicios}" var="servicio" itemLabel="#{servicio.nombre} ($#{servicio.precio} - #{servicio.duracionMin} min)" itemValue="#{servicio.id}" />
                                             <p:ajax event="change" listener="#{edicionCita.calcularTotales}" update="costoServicio duracionServicio" />
                                             <p:ajax event="toggleSelect" listener="#{edicionCita.calcularTotales}" update="costoServicio duracionServicio" />
                                         </p:selectCheckboxMenu>
+                                    </div>
+                                    <div class="campo aqua">
+                                        <h:outputLabel for="nombreEstilista" value="Empleado" />
+                                        <h:panelGroup rendered="#{edicionCita.principal}">
+                                            <h:selectOneMenu id="nombreEstilista" value="#{edicionCita.idEstilista}" styleClass="fieldSelect">
+                                                <f:selectItem itemLabel="-- Seleccione un Empleado --" itemValue="#{null}" noSelectionOption="true" />
+                                                <f:selectItems value="#{edicionCita.estilistasActivos}" var="estilista" itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}" itemValue="#{estilista.id}" />
+                                                <f:ajax listener="#{edicionCita.onEstilistaChange}" render="tipoServicio" />
+                                            </h:selectOneMenu>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{!edicionCita.principal}" layout="block" styleClass="valorDato">
+                                            #{edicionCita.nombreEstilista}
+                                        </h:panelGroup>
                                     </div>
                                 </div>
 
@@ -643,13 +789,13 @@
                                 </div>
 
                                 <div class="filaDoble">
-                                    <div class="campo aqua">
-                                        <p:outputLabel for="hInicio" value="Hora inicio" />
-                                        <p:datePicker id="hInicio" value="#{edicionCita.hora}" timeOnly="true" pattern="HH:mm" showIcon="true" icon="pi pi-clock" stepMinute="30" required="true" />
+                                    <div class="horarioFila">
+                                        <span class="horarioDia">Hora de inicio</span>
+                                        <p:datePicker id="hInicio" value="#{edicionCita.hora}" timeOnly="true" pattern="HH:mm" showIcon="true" icon="pi pi-clock" stepMinute="30" required="true" styleClass="horarioHora"/>
                                     </div>
-                                    <div class="campo aqua">
-                                        <p:outputLabel for="fechaCita" value="Fecha" />
-                                        <p:datePicker id="fechaCita" value="#{edicionCita.fecha}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" styleClass="custom-select" />
+                                    <div class="horarioFila">
+                                        <span class="horarioDia">Fecha</span>
+                                        <p:datePicker id="fechaCita" value="#{edicionCita.fecha}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" styleClass="horarioHora" />
                                     </div>
                                 </div>
 
@@ -671,37 +817,73 @@
                 <h:form id="formNuevaCita" styleClass="panelFormulario">
                     <h2 class="h2fucsia">Nueva cita</h2>
                     <div class="datos">
-                        <div class="filaDoble">
-                            <div class="campo">
-                                <h:outputLabel for="nombreCliente" value="Cliente" />
-                                <h:selectOneMenu id="nombreCliente" value="#{RegistroUI.idClienteSeleccionado}" styleClass="fieldSelect">
-                                    <f:selectItem itemLabel="-- Seleccione un Cliente --" itemValue="#{null}" noSelectionOption="true" />
-                                    <f:selectItems value="#{RegistroUI.listaCliente}" var="cliente" itemLabel="#{cliente.id} #{cliente.nombre} #{cliente.apellidoP} #{cliente.apellidoM}" itemValue="#{cliente.id}" />
-                                </h:selectOneMenu>
-                            </div>
-                            <div class="campo">
-                                <h:outputLabel for="nombreEstilista" value="Empleado" />
-                                <h:panelGroup rendered="#{RegistroUI.principal}">
-                                <h:selectOneMenu id="nombreEstilista" value="#{RegistroUI.idEstilistaSeleccionado}" styleClass="fieldSelect">
-                                    <f:selectItem itemLabel="-- Seleccione un Empleado --" itemValue="#{null}" noSelectionOption="true" />
-                                    <f:selectItems value="#{RegistroUI.estilistasActivos}" var="estilista" itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}" itemValue="#{estilista.id}" />
-                                    <f:ajax listener="#{RegistroUI.onEstilistaChange}" render="tipoServicio" />
-                                </h:selectOneMenu>
-                                </h:panelGroup>
-                                <h:panelGroup rendered="#{!RegistroUI.principal}" layout="block" styleClass="valorDato">
-                                    #{RegistroUI.nombreEstilista}
-                                </h:panelGroup>
+                        <div class="campo">
+                            <div class="opciones">
+                                <label class="opcion">
+                                        <span class="opcionTexto">
+                                            Cliente sin cuenta
+                                            <small>Selecciona para agendar la cita de un cliente de forma manual</small>
+                                        </span>
+                                    <h:selectBooleanCheckbox id="sinCuenta" value="#{RegistroUI.clienteSinCuenta}" styleClass="fieldCheckbox">
+                                        <f:ajax listener="#{RegistroUI.onTipoClienteChange}" render="panelCliente panelContacto"/>
+                                    </h:selectBooleanCheckbox>
+                                </label>
                             </div>
                         </div>
+
+                        <div class="campo">
+                            <h:panelGroup id="panelCliente" layout="block" styleClass="panelCliente">
+                                <h:panelGroup rendered="#{!RegistroUI.clienteSinCuenta}" layout="block">
+                                    <h:outputLabel for="nombreCliente" value="Cliente" />
+                                    <h:selectOneMenu id="nombreCliente" value="#{RegistroUI.idClienteSeleccionado}" styleClass="fieldSelect">
+                                        <f:selectItem itemLabel="-- Seleccione un Cliente --" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItems value="#{RegistroUI.listaCliente}" var="cliente" itemLabel="#{cliente.id} #{cliente.nombre} #{cliente.apellidoP} #{cliente.apellidoM}" itemValue="#{cliente.id}" />
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+
+                                <h:panelGroup rendered="#{RegistroUI.clienteSinCuenta}" layout="block">
+                                    <h:outputLabel for="nombreClienteExterno" value="Nombre del cliente" />
+                                    <h:inputText id="nombreClienteExterno" value="#{RegistroUI.nombreClienteExterno}" maxlength="150" styleClass="fieldSelect" />
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </div>
+
+                        <h:panelGroup id="panelContacto" layout="block">
+                            <h:panelGroup rendered="#{RegistroUI.clienteSinCuenta}" layout="block">
+                                <div class="filaDoble">
+                                    <div class="campo">
+                                        <h:outputLabel for="telefonoExterno" value="Teléfono" />
+                                        <h:inputText id="telefonoExterno" value="#{RegistroUI.telefonoClienteExterno}" maxlength="20" styleClass="fieldSelect" />
+                                    </div>
+                                    <div class="campo">
+                                        <h:outputLabel for="correoExterno" value="Correo" />
+                                        <h:inputText id="correoExterno" value="#{RegistroUI.correoClienteExterno}" maxlength="150" styleClass="fieldSelect" />
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
 
                         <div class="filaDoble">
                             <div class="campo">
                                 <h:outputLabel for="tipoServicio" value="Servicios" />
-                                <p:selectCheckboxMenu id="tipoServicio" value="#{RegistroUI.idsServiciosSeleccionados}" label="Seleccione sus servicios" styleClass="custom-select" filter="true" filterMatchMode="contains" selectionLimit="5" selectionLimitMessage="Solo puedes seleccionar un máximo de 5 servicios.">
+                                <p:selectCheckboxMenu id="tipoServicio" value="#{RegistroUI.idsServiciosSeleccionados}" label="-- Seleccione sus Servicios --" styleClass="custom-select" panelStyleClass="custom-select-panel" filter="true" filterMatchMode="contains" selectionLimit="5" selectionLimitMessage="Solo puedes seleccionar un máximo de 5 servicios.">
                                     <f:selectItems value="#{RegistroUI.listaServicios}" var="servicio" itemLabel="#{servicio.nombre} ($#{servicio.precio} - #{servicio.duracionMin} min)" itemValue="#{servicio.id}" />
                                     <p:ajax event="change" listener="#{RegistroUI.calcularTotales}" update="costoServicio duracionServicio" />
                                     <p:ajax event="toggleSelect" listener="#{RegistroUI.calcularTotales}" update="costoServicio duracionServicio" />
                                 </p:selectCheckboxMenu>
+                            </div>
+                            <div class="campo">
+                                <h:outputLabel for="nombreEstilista" value="Empleado" />
+                                <h:panelGroup rendered="#{RegistroUI.principal}">
+                                    <h:selectOneMenu id="nombreEstilista" value="#{RegistroUI.idEstilistaSeleccionado}" styleClass="fieldSelect">
+                                        <f:selectItem itemLabel="-- Seleccione un Empleado --" itemValue="#{null}" noSelectionOption="true" />
+                                        <f:selectItems value="#{RegistroUI.estilistasActivos}" var="estilista" itemLabel="#{estilista.nombre} #{estilista.apellidoP} #{estilista.apellidoM}" itemValue="#{estilista.id}" />
+                                        <f:ajax listener="#{RegistroUI.onEstilistaChange}" render="tipoServicio" />
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!RegistroUI.principal}" layout="block" styleClass="valorDato">
+                                    #{RegistroUI.nombreEstilista}
+                                </h:panelGroup>
                             </div>
                         </div>
 
@@ -723,13 +905,13 @@
                         </div>
 
                         <div class="filaDoble">
-                            <div class="campo">
-                                <p:outputLabel for="hInicio" value="Hora inicio" />
-                                <p:datePicker id="hInicio" value="#{RegistroUI.horaInicio}" timeOnly="true" pattern="HH:mm" showIcon="true" icon="pi pi-clock" stepMinute="30" required="true" />
+                            <div class="horarioFila">
+                                <span class="horarioDia">Hora de inicio</span>
+                                <p:datePicker id="hInicio" value="#{RegistroUI.horaInicio}" timeOnly="true" pattern="HH:mm" showIcon="true" icon="pi pi-clock" stepMinute="30" required="true" styleClass="horarioHora"/>
                             </div>
-                            <div class="campo">
-                                <p:outputLabel for="fechaCita" value="Fecha" />
-                                <p:datePicker id="fechaCita" value="#{RegistroUI.fechaCita}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" styleClass="custom-select" />
+                            <div class="horarioFila">
+                                <span class="horarioDia">Fecha</span>
+                                <p:datePicker id="fechaCita" value="#{RegistroUI.fechaCita}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" styleClass="horarioHora" />
                             </div>
                         </div>
 
@@ -737,8 +919,10 @@
                             <p:autoUpdate />
                         </p:messages>
 
-                        <button type="button" class="btnAgregar" onclick="cerrarFormulario()">Cerrar</button>
-                        <p:commandButton value="Guardar cita" action="#{RegistroUI.guardarCita}" styleClass="btnAgregar" update="@form :formCalendario:calendario" oncomplete="if (args &amp;&amp; args.errorOcurred === false) { cerrarFormulario(); }"/>
+                        <div class="filaBotones">
+                            <p:commandButton value="Guardar cita" styleClass="btnAgregar" action="#{RegistroUI.guardarCita}" update="@form :formCalendario:calendario" oncomplete="if (args &amp;&amp; args.errorOcurred === false) { cerrarFormulario(); }" />
+                            <button type="button" class="btnAgregar" onclick="cerrarFormulario()">Cerrar</button>
+                        </div>
                     </div>
                 </h:form>
 

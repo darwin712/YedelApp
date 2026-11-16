@@ -33,6 +33,18 @@ public class Cita {
     @Column(name = "estado", length = 20)
     private String estado;
 
+    @Size(max = 150)
+    @Column(name = "nombre_cliente", length = 150)
+    private String nombreCliente;
+
+    @Size(max = 20)
+    @Column(name = "telefono_cliente", length = 20)
+    private String telefonoCliente;
+
+    @Size(max = 150)
+    @Column(name = "correo_cliente", length = 150)
+    private String correoCliente;
+
     public Integer getId() {
         return id;
     }
@@ -87,6 +99,30 @@ public class Cita {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
+    public String getTelefonoCliente() {
+        return telefonoCliente;
+    }
+
+    public void setTelefonoCliente(String telefonoCliente) {
+        this.telefonoCliente = telefonoCliente;
+    }
+
+    public String getCorreoCliente(){
+        return correoCliente;
+    }
+
+    public void setCorreoCliente(String correoCliente){
+        this.correoCliente = correoCliente;
     }
 
 }

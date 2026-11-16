@@ -433,14 +433,14 @@
 
         .busq {
             flex-grow: 1;
-            padding: 10px 15px 10px 44px;
+            padding: 10px 15px 10px 15px;
             border: 3px solid transparent;
             border-radius: 20px;
             font-family: inherit;
             font-size: 16px;
             color: #78155b;
-        linear-gradient(white, white) padding-box,
-        linear-gradient(90deg, #D6249F, #B58CFF, #22D3D0) border-box;
+            background: linear-gradient(white, white) padding-box,
+            linear-gradient(#E4D9EC, #E4D9EC) border-box;
             outline: none;
             box-sizing: border-box;
             transition: box-shadow 0.2s;
@@ -452,8 +452,7 @@
 
         .busq:hover,
         .busq:focus {
-        /*    background: url('resources/busqueda-icon.png') no-repeat 14px center / 18px,*/
-            linear-gradient(white, white) padding-box,
+            background: linear-gradient(white, white) padding-box,
             linear-gradient(90deg, #D6249F, #B58CFF, #22D3D0) border-box;
         }
 
@@ -552,12 +551,12 @@
             justify-content: space-between;
             gap: 16px;
             padding: 12px 16px;
-            border: 3px solid transparent;
+            border: 3px solid  #e4d9ec98;
+            border-radius: 14px;
             font-size: 15px;
             color: #78155b;
             cursor: pointer;
             transition: background 0.2s, box-shadow 0.2s;
-            border-bottom-color: #e4d9ec98;
         }
 
         .opcion:hover,
@@ -776,6 +775,145 @@
             --boton: #D6249F;
             color: #FFFFFF;
             background: var(--boton);
+        }
+
+        .opcionCliente .ui-chkbox-label {
+            color: #78155b;
+            font-weight: 500;
+            margin-left: 6px;
+            cursor: pointer;
+        }
+
+        .panelCliente {
+            width: 100%;
+        }
+
+        .panelCliente label {
+            display: block;
+            font-weight: bold;
+            color: #78155b;
+            margin-bottom: 8px;
+        }
+
+        .panelCliente .fieldSelect {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .opcionCliente.aqua .ui-chkbox-label {
+            color: #1ca3a0;
+        }
+
+        .panelCliente.aqua label {
+            color: #1ca3a0;
+        }
+
+        .filaBotones {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filaBotones .btnAgregar{
+            height: auto;
+            margin: 0;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+
+        .ui-datepicker{
+            padding: 10px;
+            border: 2px solid #E4D9EC;
+            border-radius: 14px;
+            background: #FFFFFF;
+            box-shadow: 0 8px 24px rgba(120, 21, 91, 0.15);
+            color: #78155b;
+            font-family: inherit;
+            z-index: 3000;
+        }
+
+        .ui-datepicker .ui-datepicker-header{
+            background: #FDF2F9;
+            border: 0;
+            border-radius: 10px;
+            color: #78155b;
+        }
+        .ui-datepicker .ui-datepicker-title,
+        .ui-datepicker .ui-datepicker-title select{
+            color: #78155b;
+            font-weight: bold;
+        }
+        .ui-datepicker .ui-datepicker-prev,
+        .ui-datepicker .ui-datepicker-next{
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+            color: #D6249F;
+        }
+
+        .ui-datepicker table th{
+            color: #78155b !important;
+            font-weight: bold !important;
+        }
+        .ui-datepicker table td > a,
+        .ui-datepicker table td > span{
+            border: 2px solid transparent !important;
+            border-radius: 10px !important;
+            background: #f8f8f8 !important;
+            color: #78155b !important;
+            text-shadow: none !important;
+            box-shadow: none !important;
+        }
+        .ui-datepicker table td > a:hover,
+        .ui-datepicker table td > span:hover{
+            background: #FDF2F9 !important;
+        }
+        .ui-datepicker table td > .ui-state-highlight{
+            border-color: #D6249F !important;
+            background: #FFFFFF !important;
+        }
+        .ui-datepicker table td > .ui-state-active{
+            background: #D6249F !important;
+            border-color: #D6249F !important;
+            color: #FFFFFF !important;
+        }
+        .ui-datepicker table td > .ui-state-active:hover{
+            background: #ef59be !important;
+            border-color: #ef59be !important;
+            color: #FFFFFF !important;
+        }
+
+        .ui-datepicker .ui-timepicker{
+            background: #FFFFFF;
+            border: 0;
+            color: #78155b;
+        }
+        .ui-datepicker .ui-timepicker span{
+            color: #78155b;
+            font-weight: bold;
+            text-shadow: none;
+        }
+        .ui-datepicker .ui-picker-up,
+        .ui-datepicker .ui-picker-down{
+            border: 2px solid #E4D9EC;
+            border-radius: 8px;
+            background: #FFFFFF;
+            box-shadow: none;
+            color: #D6249F;
+        }
+        .ui-datepicker .ui-picker-up:hover,
+        .ui-datepicker .ui-picker-down:hover{
+            background: #FDF2F9;
+        }
+
+        .ui-datepicker,
+        .ui-datepicker .ui-datepicker-calendar,
+        .ui-datepicker .ui-datepicker-group,
+        .ui-datepicker .ui-datepicker-buttonpane{
+            background: #FFFFFF;
+            border-color: #E4D9EC
         }
 
         /*todo esto es para la vista de celular de la pagina */

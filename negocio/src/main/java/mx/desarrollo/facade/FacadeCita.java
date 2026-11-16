@@ -51,8 +51,8 @@ return delegateCita.ObtenerCitasIndividuales(idEstilista);
         return delegateCita.traslapeCliente(idCliente, fecha, nuevaHoraInicio, nuevaHoraFin, idCitaIgnorar);
     }
 
-    public void actualizarCitaConServicios(Integer idCita, Integer idCliente, Integer idEstilista, LocalDate fecha, LocalTime hora, List<Integer> idsServicios) {
-        delegateCita.actualizarCitaConServicios(idCita, idCliente, idEstilista, fecha, hora, idsServicios);
+    public void actualizarCitaConServicios(Integer idCita, Integer idCliente, String nombreCliente, String telefonoCliente, String correoCliente, Integer idEstilista, LocalDate fecha, LocalTime hora, List<Integer> idsServicios) {
+        delegateCita.actualizarCitaConServicios(idCita, idCliente, nombreCliente, telefonoCliente, correoCliente, idEstilista, fecha, hora, idsServicios);
     }
 
 }

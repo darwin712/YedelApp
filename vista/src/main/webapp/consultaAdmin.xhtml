@@ -26,52 +26,6 @@
                     <h:commandButton image = "resources/busqueda-icon.png" styleClass="btnRegistrar" action="#{adminBean.buscar()}" />
                 </div>
 
-                <h:panelGroup id="boxEdicion" rendered="#{adminBean.adminSeleccionado != null}" layout="block" styleClass="fondoFormulario abierto">
-                    <div class="contenedor">
-                        <div class="datos">
-                            <h3>Modificar un administrador</h3>
-
-                            <div class="campo">
-                                <h:outputLabel value="Nombre"/>
-                                <h:inputText styleClass="fieldLarge" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.nombre}"/>
-                            </div>
-
-                            <div class="filaDoble">
-                                <div class="campo">
-                                    <h:outputLabel value="Apellido paterno"/>
-                                    <h:inputText styleClass="fieldSmall" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.apellidoP}"/>
-                                </div>
-
-                                <div class="campo">
-                                    <h:outputLabel value="Apellido materno"/>
-                                    <h:inputText styleClass="fieldSmall" maxlength="50" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.apellidoM}"/>
-                                </div>
-                            </div>
-
-                            <div class="filaDoble">
-                                <div class="campo">
-                                    <h:outputLabel value="Correo"/>
-                                    <h:inputText styleClass="fieldSmall" maxlength="150" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.correo}"/>
-                                </div>
-
-                                <div class="campo">
-                                    <h:outputLabel value="Contrasena"/>
-                                    <h:inputText styleClass="fieldSmall" maxlength="45" autocomplete="false" required="true" value="#{adminBean.adminSeleccionado.contrasena}"/>
-                                </div>
-                            </div>
-
-                            <div class="acciones">
-                                <h:commandLink action="#{adminBean.guardarEdicion()}" styleClass="btn-icono">
-                                    <h:graphicImage url="resources/confirmar-icon.png"/>
-                                </h:commandLink>
-                                <h:commandLink immediate="true" action="#{adminBean.cancelarEdicion()}" styleClass="btn-icono">
-                                    <h:graphicImage url="resources/cancelar-icon.png"/>
-                                </h:commandLink>
-                            </div>
-                        </div>
-                    </div>
-                </h:panelGroup>
-
                 <h:dataTable value="#{adminBean.listaAdmin}" var="admin" styleClass="tabla">
                     <h:column>
                         <f:facet name="header">Nombre completo</f:facet>
@@ -86,18 +40,61 @@
                     <h:column>
                         <f:facet name="header"></f:facet>
                         <div class="acciones">
-                            <h:commandLink action="#{adminBean.setAdminSeleccionado(admin)}" styleClass="btn-icono">
+                            <p:commandLink styleClass="btn-icono" action="#{adminBean.setAdminSeleccionado(admin)}" update=":formEdicion:panelEdicion" process="@this" oncomplete="abrirFormulario('formEdicion')">
                                 <h:graphicImage url="resources/edit-icon.png"/>
-                            </h:commandLink>
+                            </p:commandLink>
                             <h:commandLink action="#{adminBean.elim(admin)}" onclick="return confirm('Seguro de eliminarlo?');" styleClass="btn-icono">
                                 <h:graphicImage url="resources/elimin-icon.png"/>
                             </h:commandLink>
                         </div>
                     </h:column>
                 </h:dataTable>
-
-
             </h:form>
+        </div>
+
+        <div class="fondoFormulario" id="fondoFormulario" onclick="cerrarFormulario()">
+            <div class="contenedor" onclick="event.stopPropagation()">
+                <h:form id="formEdicion" styleClass="panelFormulario">
+                    <h:panelGroup id="panelEdicion" layout="block">
+                        <h:panelGroup layout="block" rendered="#{adminBean.adminSeleccionado != null}">
+                            <h2 class="h2aqua">Modificar administrador</h2>
+                            <div class="datos">
+                                <div class="campo aqua">
+                                    <h:outputLabel for="nombreAdmin" value="Nombre"/>
+                                    <h:inputText id="nombreAdmin" styleClass="fieldLarge" maxlength="50" autocomplete="off" required="true" value="#{adminBean.adminSeleccionado.nombre}"/>
+                                </div>
+
+                                <div class="filaDoble">
+                                    <div class="campo aqua">
+                                        <h:outputLabel for="apellidoPAdmin" value="Apellido paterno"/>
+                                        <h:inputText id="apellidoPAdmin" styleClass="fieldSmall" maxlength="50" autocomplete="off" required="true" value="#{adminBean.adminSeleccionado.apellidoP}"/>
+                                    </div>
+                                    <div class="campo aqua">
+                                        <h:outputLabel for="apellidoMAdmin" value="Apellido materno"/>
+                                        <h:inputText id="apellidoMAdmin" styleClass="fieldSmall" maxlength="50" autocomplete="off" required="true" value="#{adminBean.adminSeleccionado.apellidoM}"/>
+                                    </div>
+                                </div>
+
+                                <div class="filaDoble">
+                                    <div class="campo aqua">
+                                        <h:outputLabel for="correoAdmin" value="Correo"/>
+                                        <h:inputText id="correoAdmin" styleClass="fieldSmall" maxlength="150" autocomplete="off" required="true" value="#{adminBean.adminSeleccionado.correo}"/>
+                                    </div>
+                                    <div class="campo aqua">
+                                        <h:outputLabel for="contrasenaAdmin" value="Contraseña"/>
+                                        <h:inputText id="contrasenaAdmin" styleClass="fieldSmall" maxlength="45" autocomplete="off" required="true" value="#{adminBean.adminSeleccionado.contrasena}"/>
+                                    </div>
+                                </div>
+
+                                <div class="filaBotones">
+                                    <p:commandButton value="Guardar cambios" styleClass="btnRegistrar" action="#{adminBean.guardarEdicion()}" update=":formAdmin" oncomplete="if (args &amp;&amp; !args.validationFailed) { cerrarFormulario(); }"/>
+                                    <p:commandButton value="Cancelar" styleClass="btnRegistrar" action="#{adminBean.cancelarEdicion()}" process="@this" immediate="true" update=":formAdmin" oncomplete="cerrarFormulario()"/>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:form>
+            </div>
         </div>
     </ui:define>
 </ui:composition>

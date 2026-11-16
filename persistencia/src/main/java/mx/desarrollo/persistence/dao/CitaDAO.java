@@ -44,12 +44,15 @@ public class CitaDAO extends AbstractDAO<Cita> {
         });
     }
 
-    public void actualizarCitaConServicios(Integer idCita, Integer idCliente, Integer idEstilista, LocalDate fecha, LocalTime horaInicio, List<Integer> idsServicios) {
+    public void actualizarCitaConServicios(Integer idCita, Integer idCliente, String nombreCliente, String telefonoCliente, String correoCliente, Integer idEstilista, LocalDate fecha, LocalTime horaInicio, List<Integer> idsServicios) {
         execute(em -> {
             Cita cita = em.find(Cita.class, idCita);
             if (cita == null) return null;
 
             cita.setIdCliente(idCliente);
+            cita.setNombreCliente(nombreCliente);
+            cita.setTelefonoCliente(telefonoCliente);
+            cita.setCorreoCliente(correoCliente);
             cita.setIdEstilista(idEstilista);
             cita.setFecha(fecha);
             cita.setHoraInicio(horaInicio);
