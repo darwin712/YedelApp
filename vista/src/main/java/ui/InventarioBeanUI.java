@@ -32,14 +32,20 @@ public class InventarioBeanUI implements Serializable {
     private List<InventarioEmpleadoVista> inventarioEmpleado = new ArrayList<>();
     private Producto productoNuevo;
     private Producto productoSeleccionado;
+    private Producto productoEmpleadoSeleccionado;
     private ProductoVista productoFilaSeleccionado;
     private InventarioEmpleadoVista inventarioFilaSeleccionado;
     private Integer idEmpleadoSeleccionado;
     private Integer idProductoEmpleado;
     private Integer cantidadEmpleado;
+    private BigDecimal precioEmpleado = BigDecimal.ZERO;
+    private Integer stockMinimoEmpleado = 0;
+    private Integer cantidadProductoNuevo = 0;
     private boolean principal;
     private boolean inventarioNuevo;
     private boolean productoNuevoAbierto;
+    private boolean confirmacionEliminarProducto;
+    private boolean confirmacionEliminarInventario;
     private String vistaInventario = "EMPLEADO";
 
     @PostConstruct
@@ -93,14 +99,19 @@ public class InventarioBeanUI implements Serializable {
 
     private void cargarInventarioGeneral() {
         Map<Integer, Integer> cantidades = new HashMap<>();
+        Map<Integer, Integer> empleadosPorProducto = new HashMap<>();
         for (InventarioEstilista inventario : inventarios) {
             Integer idProducto = inventario.getId().getIdProducto();
             int cantidad = inventario.getCantidad() == null ? 0 : inventario.getCantidad();
             cantidades.put(idProducto, cantidades.getOrDefault(idProducto, 0) + cantidad);
+            empleadosPorProducto.put(idProducto, empleadosPorProducto.getOrDefault(idProducto, 0) + 1);
         }
         inventarioGeneral = new ArrayList<>();
         for (Producto producto : productos) {
-            inventarioGeneral.add(new ProductoVista(producto, cantidades.getOrDefault(producto.getId(), 0)));
+            inventarioGeneral.add(new ProductoVista(
+                    producto,
+                    cantidades.getOrDefault(producto.getId(), 0),
+                    empleadosPorProducto.getOrDefault(producto.getId(), 0)));
         }
     }
 
@@ -118,7 +129,7 @@ public class InventarioBeanUI implements Serializable {
                 for (Producto p : productos) {
                     if (idProducto.equals(p.getId())) {
                         int cantidad = inv.getCantidad() == null ? 0 : inv.getCantidad();
-                        int minimo = p.getStockMinimo() == null ? 0 : p.getStockMinimo();
+                        int minimo = inv.getStockMinimo() == null ? 0 : inv.getStockMinimo();
                         if (cantidad <= minimo) {
                             String sujeto = principal ? getNombreEmpleadoSeleccionado().trim() + " tiene" : "Tienes";
                             FacesContext.getCurrentInstance().addMessage(null,
@@ -146,7 +157,11 @@ public class InventarioBeanUI implements Serializable {
             if (idEmpleadoSeleccionado.equals(inventario.getId().getIdEstilista())) {
                 Producto producto = productosPorId.get(inventario.getId().getIdProducto());
                 if (producto != null) {
-                    inventarioEmpleado.add(new InventarioEmpleadoVista(producto, inventario.getCantidad()));
+                    inventarioEmpleado.add(new InventarioEmpleadoVista(
+                            producto,
+                            inventario.getCantidad(),
+                            inventario.getPrecio(),
+                            inventario.getStockMinimo()));
                 }
             }
         }
@@ -161,15 +176,66 @@ public class InventarioBeanUI implements Serializable {
 
     public void guardarProductoNuevo() {
         try {
+            if (!principal) {
+                idEmpleadoSeleccionado = loginUI.getIdEstilista();
+            }
+            if (idEmpleadoSeleccionado == null) {
+                mensajeError("Debe seleccionar un empleado.");
+                return;
+            }
+            if (productoNuevo == null || productoNuevo.getNombre() == null || productoNuevo.getNombre().trim().isEmpty()) {
+                mensajeError("Debe ingresar el nombre del producto.");
+                return;
+            }
+            if (cantidadProductoNuevo == null || cantidadProductoNuevo < 0) {
+                mensajeError("La cantidad debe ser igual o mayor a cero.");
+                return;
+            }
+            if (productoNuevo.getPrecio() == null || productoNuevo.getPrecio().compareTo(BigDecimal.ZERO) < 0
+                    || productoNuevo.getStockMinimo() == null || productoNuevo.getStockMinimo() < 0) {
+                mensajeError("El precio y el mínimo deben ser iguales o mayores a cero.");
+                return;
+            }
+            Producto productoExistente = buscarProductoPorNombre(productoNuevo.getNombre());
+            if (productoExistente != null) {
+                if (productoAsignadoEmpleado(productoExistente.getId())) {
+                    mensajeError("Este producto ya está en el inventario del empleado. Selecciónelo en la tabla para modificar su cantidad.");
+                    return;
+                }
+                ServiceFacadeLocator.getInstanceFacadeInventario().guardarCantidad(
+                        idEmpleadoSeleccionado,
+                        productoExistente.getId(),
+                        cantidadProductoNuevo,
+                        productoNuevo.getPrecio(),
+                        productoNuevo.getStockMinimo(),
+                        loginUI.getUsuario().getId());
+                productoNuevo = nuevoProducto();
+                cantidadProductoNuevo = 0;
+                productoNuevoAbierto = false;
+                cargarDatos();
+                mensajeExito("El producto existente se agregó al inventario del empleado correctamente.");
+                return;
+            }
             if (!productoValido(productoNuevo, null)) {
                 return;
             }
+            Integer cantidadInicial = cantidadProductoNuevo;
+            productoNuevo.setStockBodega(0);
+            productoNuevo.setIdAdministrador(loginUI.getUsuario().getId());
             prepararProducto(productoNuevo);
             ServiceFacadeLocator.getInstanceFacadeInventario().guardarProducto(productoNuevo);
+            ServiceFacadeLocator.getInstanceFacadeInventario().guardarCantidad(
+                    idEmpleadoSeleccionado,
+                    productoNuevo.getId(),
+                    cantidadInicial,
+                    productoNuevo.getPrecio(),
+                    productoNuevo.getStockMinimo(),
+                    loginUI.getUsuario().getId());
             productoNuevo = nuevoProducto();
+            cantidadProductoNuevo = 0;
             productoNuevoAbierto = false;
             cargarDatos();
-            mensajeExito("El producto se registró correctamente.");
+            mensajeExito("El producto se agregó al inventario del empleado correctamente.");
         } catch (Exception e) {
             mensajeError(obtenerDetalle(e, "No se pudo registrar el producto."));
         }
@@ -177,12 +243,68 @@ public class InventarioBeanUI implements Serializable {
 
     public void prepararProductoNuevo() {
         productoNuevo = nuevoProducto();
+        cantidadProductoNuevo = 0;
         productoNuevoAbierto = true;
     }
 
     public void cancelarProductoNuevo() {
         productoNuevo = nuevoProducto();
+        cantidadProductoNuevo = 0;
         productoNuevoAbierto = false;
+    }
+
+    public List<String> completarProductos(String consulta) {
+        List<String> coincidencias = new ArrayList<>();
+        String texto = consulta == null ? "" : consulta.trim().toLowerCase();
+        for (Producto producto : productos) {
+            if (producto.getNombre() != null && producto.getNombre().toLowerCase().contains(texto)) {
+                coincidencias.add(producto.getNombre());
+            }
+        }
+        return coincidencias;
+    }
+
+    public void seleccionarProductoExistente(SelectEvent<String> evento) {
+        Producto existente = buscarProductoPorNombre(evento.getObject());
+        if (existente != null) {
+            productoNuevo = copiarProducto(existente);
+        }
+    }
+
+    public void cambiarNombreProductoNuevo() {
+        if (productoNuevo == null || productoNuevo.getNombre() == null) {
+            return;
+        }
+        String nombre = productoNuevo.getNombre();
+        Producto existente = buscarProductoPorNombre(nombre);
+        if (existente != null) {
+            productoNuevo = copiarProducto(existente);
+        } else if (productoNuevo.getId() != null) {
+            productoNuevo = nuevoProducto();
+            productoNuevo.setNombre(nombre);
+        }
+    }
+
+    private Producto buscarProductoPorNombre(String nombre) {
+        if (nombre == null) {
+            return null;
+        }
+        for (Producto producto : productos) {
+            if (producto.getNombre() != null && producto.getNombre().equalsIgnoreCase(nombre.trim())) {
+                return producto;
+            }
+        }
+        return null;
+    }
+
+    private boolean productoAsignadoEmpleado(Integer idProducto) {
+        for (InventarioEstilista inventario : inventarios) {
+            if (idEmpleadoSeleccionado.equals(inventario.getId().getIdEstilista())
+                    && idProducto.equals(inventario.getId().getIdProducto())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void cambiarVista() {
@@ -193,20 +315,28 @@ public class InventarioBeanUI implements Serializable {
     }
 
     public void prepararAgregar() {
-        if ("GENERAL".equals(vistaInventario)) {
-            prepararProductoNuevo();
-        } else {
-            prepararInventarioNuevo();
-        }
+        prepararProductoNuevo();
     }
 
     public void seleccionarProducto(SelectEvent<ProductoVista> evento) {
+        if (!principal) {
+            productoFilaSeleccionado = null;
+            mensajeError("Solamente el administrador principal puede modificar productos del inventario general.");
+            return;
+        }
         Producto producto = evento.getObject().getProducto();
         productoSeleccionado = copiarProducto(producto);
+        confirmacionEliminarProducto = false;
     }
 
     public void guardarProductoSeleccionado() {
         try {
+            if (!principal) {
+                mensajeError("Solamente el administrador principal puede modificar productos del inventario general.");
+                productoSeleccionado = null;
+                productoFilaSeleccionado = null;
+                return;
+            }
             if (!productoValido(productoSeleccionado, productoSeleccionado.getId())) {
                 return;
             }
@@ -228,23 +358,65 @@ public class InventarioBeanUI implements Serializable {
         }
     }
 
+    public void eliminarProductoSeleccionado() {
+        try {
+            if (!principal) {
+                mensajeError("Solamente el administrador principal puede eliminar productos del inventario general.");
+                confirmacionEliminarProducto = false;
+                return;
+            }
+            if (productoSeleccionado == null || productoSeleccionado.getId() == null) {
+                mensajeError("Debe seleccionar un producto.");
+                return;
+            }
+            ServiceFacadeLocator.getInstanceFacadeInventario().eliminarProducto(productoSeleccionado.getId());
+            productoSeleccionado = null;
+            productoFilaSeleccionado = null;
+            confirmacionEliminarProducto = false;
+            cargarDatos();
+            mensajeExito("El producto se eliminó correctamente.");
+        } catch (Exception e) {
+            mensajeError(obtenerDetalle(e, "No se pudo eliminar el producto."));
+        }
+    }
+
     public void cancelarProducto() {
         productoSeleccionado = null;
         productoFilaSeleccionado = null;
+        confirmacionEliminarProducto = false;
+    }
+
+    public void solicitarEliminarProducto() {
+        if (!principal) {
+            mensajeError("Solamente el administrador principal puede eliminar productos del inventario general.");
+            return;
+        }
+        confirmacionEliminarProducto = true;
+    }
+
+    public void cancelarEliminarProducto() {
+        confirmacionEliminarProducto = false;
     }
 
     public void prepararInventarioNuevo() {
         inventarioNuevo = true;
         inventarioFilaSeleccionado = null;
+        productoEmpleadoSeleccionado = null;
         idProductoEmpleado = null;
         cantidadEmpleado = 0;
+        precioEmpleado = BigDecimal.ZERO;
+        stockMinimoEmpleado = 0;
     }
 
     public void seleccionarInventario(SelectEvent<InventarioEmpleadoVista> evento) {
         inventarioNuevo = false;
+        confirmacionEliminarInventario = false;
         InventarioEmpleadoVista inventario = evento.getObject();
+        productoEmpleadoSeleccionado = copiarProducto(inventario.getProducto());
         idProductoEmpleado = inventario.getProducto().getId();
         cantidadEmpleado = inventario.getCantidad();
+        precioEmpleado = inventario.getPrecio();
+        stockMinimoEmpleado = inventario.getStockMinimo();
     }
 
     public void guardarInventarioEmpleado() {
@@ -264,17 +436,31 @@ public class InventarioBeanUI implements Serializable {
                 mensajeError("La cantidad debe ser igual o mayor a cero.");
                 return;
             }
+            if (precioEmpleado == null || precioEmpleado.compareTo(BigDecimal.ZERO) < 0
+                    || stockMinimoEmpleado == null || stockMinimoEmpleado < 0) {
+                mensajeError("El precio y el mínimo deben ser iguales o mayores a cero.");
+                return;
+            }
+            if (!inventarioNuevo && isPuedeModificarProductoEmpleado()) {
+                if (!productoValido(productoEmpleadoSeleccionado, idProductoEmpleado)) {
+                    return;
+                }
+                prepararProducto(productoEmpleadoSeleccionado);
+                ServiceFacadeLocator.getInstanceFacadeInventario().actualizarProducto(productoEmpleadoSeleccionado);
+            }
             ServiceFacadeLocator.getInstanceFacadeInventario().guardarCantidad(
                     idEmpleadoSeleccionado,
                     idProductoEmpleado,
                     cantidadEmpleado,
+                    precioEmpleado,
+                    stockMinimoEmpleado,
                     loginUI.getUsuario().getId());
 
             cargarDatos();
             verificarStock(idEmpleadoSeleccionado, idProductoEmpleado);
             cancelarInventarioEmpleado();
 
-            mensajeExito("El inventario del empleado se guardó correctamente.");
+            mensajeExito("El producto y el inventario del empleado se guardaron correctamente.");
 
 
         } catch (Exception e) {
@@ -285,8 +471,45 @@ public class InventarioBeanUI implements Serializable {
     public void cancelarInventarioEmpleado() {
         inventarioNuevo = false;
         inventarioFilaSeleccionado = null;
+        productoEmpleadoSeleccionado = null;
         idProductoEmpleado = null;
         cantidadEmpleado = null;
+        precioEmpleado = BigDecimal.ZERO;
+        stockMinimoEmpleado = 0;
+        confirmacionEliminarInventario = false;
+    }
+
+    public void solicitarEliminarInventario() {
+        if (idProductoEmpleado == null) {
+            mensajeError("Debe seleccionar un producto.");
+            return;
+        }
+        confirmacionEliminarInventario = true;
+    }
+
+    public void cancelarEliminarInventario() {
+        confirmacionEliminarInventario = false;
+    }
+
+    public void eliminarInventarioEmpleado() {
+        try {
+            if (!principal) {
+                idEmpleadoSeleccionado = loginUI.getIdEstilista();
+            }
+            if (idEmpleadoSeleccionado == null || idProductoEmpleado == null) {
+                mensajeError("Debe seleccionar un producto del empleado.");
+                return;
+            }
+            ServiceFacadeLocator.getInstanceFacadeInventario().eliminarInventario(
+                    idEmpleadoSeleccionado,
+                    idProductoEmpleado,
+                    loginUI.getUsuario().getId());
+            cancelarInventarioEmpleado();
+            cargarDatos();
+            mensajeExito("El producto se quitó del inventario del empleado correctamente.");
+        } catch (Exception e) {
+            mensajeError(obtenerDetalle(e, "No se pudo quitar el producto del inventario del empleado."));
+        }
     }
 
     private boolean productoValido(Producto producto, Integer idIgnorar) {
@@ -320,6 +543,7 @@ public class InventarioBeanUI implements Serializable {
     private Producto copiarProducto(Producto original) {
         Producto copia = new Producto();
         copia.setId(original.getId());
+        copia.setIdAdministrador(original.getIdAdministrador());
         copia.setNombre(original.getNombre());
         copia.setCategoria(original.getCategoria());
         copia.setPrecio(original.getPrecio());
@@ -390,8 +614,24 @@ public class InventarioBeanUI implements Serializable {
         return productoNuevo;
     }
 
+    public Integer getCantidadProductoNuevo() {
+        return cantidadProductoNuevo;
+    }
+
+    public void setCantidadProductoNuevo(Integer cantidadProductoNuevo) {
+        this.cantidadProductoNuevo = cantidadProductoNuevo;
+    }
+
+    public boolean isProductoNuevoExistente() {
+        return productoNuevo != null && productoNuevo.getId() != null;
+    }
+
     public Producto getProductoSeleccionado() {
         return productoSeleccionado;
+    }
+
+    public Producto getProductoEmpleadoSeleccionado() {
+        return productoEmpleadoSeleccionado;
     }
 
     public ProductoVista getProductoFilaSeleccionado() {
@@ -434,6 +674,22 @@ public class InventarioBeanUI implements Serializable {
         this.cantidadEmpleado = cantidadEmpleado;
     }
 
+    public BigDecimal getPrecioEmpleado() {
+        return precioEmpleado;
+    }
+
+    public void setPrecioEmpleado(BigDecimal precioEmpleado) {
+        this.precioEmpleado = precioEmpleado;
+    }
+
+    public Integer getStockMinimoEmpleado() {
+        return stockMinimoEmpleado;
+    }
+
+    public void setStockMinimoEmpleado(Integer stockMinimoEmpleado) {
+        this.stockMinimoEmpleado = stockMinimoEmpleado;
+    }
+
     public boolean isPrincipal() {
         return principal;
     }
@@ -450,6 +706,25 @@ public class InventarioBeanUI implements Serializable {
         return productoNuevoAbierto;
     }
 
+    public boolean isConfirmacionEliminarProducto() {
+        return confirmacionEliminarProducto;
+    }
+
+    public boolean isConfirmacionEliminarInventario() {
+        return confirmacionEliminarInventario;
+    }
+
+    public boolean isPuedeModificarProductoEmpleado() {
+        if (principal) {
+            return true;
+        }
+        return productoEmpleadoSeleccionado != null
+                && productoEmpleadoSeleccionado.getIdAdministrador() != null
+                && loginUI != null
+                && loginUI.getUsuario() != null
+                && productoEmpleadoSeleccionado.getIdAdministrador().equals(loginUI.getUsuario().getId());
+    }
+
     public String getVistaInventario() {
         return vistaInventario;
     }
@@ -460,40 +735,39 @@ public class InventarioBeanUI implements Serializable {
 
     public static class ProductoVista implements Serializable {
         private final Producto producto;
-        private final Integer cantidadEmpleados;
+        private final Integer cantidadTotal;
+        private final Integer empleados;
 
-        public ProductoVista(Producto producto, Integer cantidadEmpleados) {
+        public ProductoVista(Producto producto, Integer cantidadTotal, Integer empleados) {
             this.producto = producto;
-            this.cantidadEmpleados = cantidadEmpleados;
+            this.cantidadTotal = cantidadTotal;
+            this.empleados = empleados;
         }
 
         public Producto getProducto() {
             return producto;
         }
 
-        public Integer getCantidadEmpleados() {
-            return cantidadEmpleados;
+        public Integer getEmpleados() {
+            return empleados;
         }
 
         public Integer getCantidadTotal() {
-            int bodega = producto.getStockBodega() == null ? 0 : producto.getStockBodega();
-            return bodega + cantidadEmpleados;
-        }
-
-        public boolean isStockBajo() {
-            int stock = producto.getStockBodega() == null ? 0 : producto.getStockBodega();
-            int minimo = producto.getStockMinimo() == null ? 0 : producto.getStockMinimo();
-            return stock <= minimo;
+            return cantidadTotal;
         }
     }
 
     public static class InventarioEmpleadoVista implements Serializable {
         private final Producto producto;
         private final Integer cantidad;
+        private final BigDecimal precio;
+        private final Integer stockMinimo;
 
-        public InventarioEmpleadoVista(Producto producto, Integer cantidad) {
+        public InventarioEmpleadoVista(Producto producto, Integer cantidad, BigDecimal precio, Integer stockMinimo) {
             this.producto = producto;
             this.cantidad = cantidad;
+            this.precio = precio;
+            this.stockMinimo = stockMinimo;
         }
 
         public Producto getProducto() {
@@ -504,8 +778,16 @@ public class InventarioBeanUI implements Serializable {
             return cantidad;
         }
 
+        public BigDecimal getPrecio() {
+            return precio;
+        }
+
+        public Integer getStockMinimo() {
+            return stockMinimo;
+        }
+
         public boolean isStockBajo() {
-            int minimo = producto.getStockMinimo() == null ? 0 : producto.getStockMinimo();
+            int minimo = stockMinimo == null ? 0 : stockMinimo;
             return cantidad != null && cantidad <= minimo;
         }
     }

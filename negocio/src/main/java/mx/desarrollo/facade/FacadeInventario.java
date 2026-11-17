@@ -4,6 +4,7 @@ import mx.desarrollo.delegate.DelegateInventario;
 import mx.desarrollo.entity.InventarioEstilista;
 import mx.desarrollo.entity.Producto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class FacadeInventario {
@@ -25,6 +26,10 @@ public class FacadeInventario {
         delegateInventario.actualizarProducto(producto);
     }
 
+    public void eliminarProducto(Integer idProducto) {
+        delegateInventario.eliminarProducto(idProducto);
+    }
+
     public List<InventarioEstilista> obtenerInventarios() {
         return delegateInventario.obtenerInventarios();
     }
@@ -33,7 +38,11 @@ public class FacadeInventario {
         return delegateInventario.obtenerPorEmpleado(idEmpleado);
     }
 
-    public void guardarCantidad(Integer idEmpleado, Integer idProducto, Integer cantidad, Integer idAdministrador) {
-        delegateInventario.guardarCantidad(idEmpleado, idProducto, cantidad, idAdministrador);
+    public void guardarCantidad(Integer idEmpleado, Integer idProducto, Integer cantidad, BigDecimal precio, Integer stockMinimo, Integer idAdministrador) {
+        delegateInventario.guardarCantidad(idEmpleado, idProducto, cantidad, precio, stockMinimo, idAdministrador);
+    }
+
+    public void eliminarInventario(Integer idEmpleado, Integer idProducto, Integer idAdministrador) {
+        delegateInventario.eliminarInventario(idEmpleado, idProducto, idAdministrador);
     }
 }

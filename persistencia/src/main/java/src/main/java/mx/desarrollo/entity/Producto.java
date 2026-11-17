@@ -16,6 +16,9 @@ public class Producto implements Serializable {
     @Column(name = "id_producto", nullable = false)
     private Integer id;
 
+    @Column(name = "id_administrador")
+    private Integer idAdministrador;
+
     @Column(name = "nombre", length = 100)
     private String nombre;
 
@@ -37,6 +40,14 @@ public class Producto implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getIdAdministrador() {
+        return idAdministrador;
+    }
+
+    public void setIdAdministrador(Integer idAdministrador) {
+        this.idAdministrador = idAdministrador;
     }
 
     public String getNombre() {

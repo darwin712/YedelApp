@@ -368,6 +368,12 @@ public class CitasAltasBeanUI implements Serializable {
         return fechaCita;
     }
 
+    public Date getFechaMinima() {
+        return Date.from(LocalDate.now(ZoneId.of("America/Tijuana"))
+                .atStartOfDay(ZoneId.of("America/Tijuana"))
+                .toInstant());
+    }
+
     public void setFechaCita(Date fechaCita) {
         this.fechaCita = fechaCita;
     }

@@ -286,7 +286,7 @@ public class CalendarioCitasBean implements Serializable {
                 asignarColumnas(citasDelDia);
             }
 
-            Dia dia = new Dia(fecha, fecha.equals(hoy), citasDelDia);
+            Dia dia = new Dia(fecha, fecha.equals(hoy), fecha.isBefore(hoy), citasDelDia);
             dias.add(dia);
         }
     }
@@ -560,11 +560,13 @@ public class CalendarioCitasBean implements Serializable {
     public static class Dia implements Serializable {
         private final LocalDate fecha;
         private final boolean hoy;
+        private final boolean pasado;
         private final List<CitaVista> citas;
 
-        public Dia(LocalDate fecha, boolean hoy, List<CitaVista> citas) {
+        public Dia(LocalDate fecha, boolean hoy, boolean pasado, List<CitaVista> citas) {
             this.fecha = fecha;
             this.hoy = hoy;
+            this.pasado = pasado;
             this.citas = citas;
         }
 
@@ -573,6 +575,9 @@ public class CalendarioCitasBean implements Serializable {
         }
         public boolean isHoy() {
             return hoy;
+        }
+        public boolean isPasado() {
+            return pasado;
         }
         public List<CitaVista> getCitas() {
             return citas;

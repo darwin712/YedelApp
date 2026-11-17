@@ -108,25 +108,6 @@ public class LoginBeanUI implements Serializable{
 
         StringBuilder mensaje = new StringBuilder();
 
-        //revisa el stock general de la bodega si es administrador principal
-        if (verTodos) {
-            StringBuilder general = new StringBuilder();
-            for (Producto prod : listaProductos) {
-                int stock = prod.getStockBodega() == null ? 0 : prod.getStockBodega();
-                int minimo = prod.getStockMinimo() == null ? 0 : prod.getStockMinimo();
-
-                if (stock <= minimo) {
-                    if (general.length() > 0) {
-                        general.append("\n");
-                    }
-                    general.append(prod.getNombre()).append(" (quedan ").append(stock).append(")");
-                }
-            }
-            if (general.length() > 0) {
-                mensaje.append("general:\n").append(general);
-            }
-        }
-
         //se arma el StringBuilder para la notificacion verificando si la cantidad actual es igual o menor a la minima
         for (Estilista est : listaEstilistas) {
             if (!Boolean.TRUE.equals(est.getActivo())) {
@@ -143,7 +124,7 @@ public class LoginBeanUI implements Serializable{
                     if (prod != null) {
 
                         int cantidad = inv.getCantidad() == null ? 0 : inv.getCantidad();
-                        int minimo = prod.getStockMinimo() == null ? 0 : prod.getStockMinimo();
+                        int minimo = inv.getStockMinimo() == null ? 0 : inv.getStockMinimo();
 
                         if (cantidad <= minimo) {
                             if (faltantes.length() > 0) {

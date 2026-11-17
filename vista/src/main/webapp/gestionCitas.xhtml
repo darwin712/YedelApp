@@ -187,6 +187,19 @@
                 font-weight: bold;
             }
 
+            .diaCalendario.diaPasado {
+                background: #ECECEC;
+            }
+
+            .diaCalendario.diaPasado .numeroDia {
+                color: #858585;
+            }
+
+            .diaCalendario.diaPasado .evento {
+                filter: grayscale(1);
+                opacity: 0.72;
+            }
+
             .encabezadoHoras,
             .cuerpoHoras {
                 display: grid;
@@ -226,6 +239,15 @@
                 color: #FFFFFF;
             }
 
+            .encabezadoDiaHoras.pasado {
+                background: #E1E1E1;
+            }
+
+            .encabezadoDiaHoras.pasado .dia,
+            .encabezadoDiaHoras.pasado .numero {
+                color: #858585;
+            }
+
             .etiquetaHora {
                 height: 60px;
                 box-sizing: border-box;
@@ -249,6 +271,16 @@
 
             .columnaDia.hoy {
                 background-color: #FDF2F9;
+            }
+
+            .columnaDia.pasado {
+                background-color: #ECECEC;
+                background-image: repeating-linear-gradient(to bottom, #D7D7D7 0, #D7D7D7 1px, transparent 1px, transparent 60px);
+            }
+
+            .columnaDia.pasado .evento {
+                filter: grayscale(1);
+                opacity: 0.72;
             }
 
             .evento {
@@ -566,7 +598,7 @@
 
                         <div class="cuadriculaCalendario">
                             <ui:repeat value="#{gestionCitasBean.dias}" var="dia">
-                                <div class="diaCalendario #{dia.sabado ? 'diaSabado' : ''} #{dia.hoy ? 'diaActual' : ''}" style="#{dia.estiloMes}">
+                                <div class="diaCalendario #{dia.sabado ? 'diaSabado' : ''} #{dia.hoy ? 'diaActual' : ''} #{dia.pasado ? 'diaPasado' : ''}" aria-disabled="#{dia.pasado}" style="#{dia.estiloMes}">
                                     <span class="numeroDia">#{dia.fecha.dayOfMonth}</span>
 
                                     <ui:repeat value="#{dia.citas}" var="cita">
@@ -594,7 +626,7 @@
                             <div></div>
 
                             <ui:repeat value="#{gestionCitasBean.dias}" var="col">
-                                <div class="encabezadoDiaHoras #{col.hoy ? 'hoy' : ''}">
+                                <div class="encabezadoDiaHoras #{col.hoy ? 'hoy' : ''} #{col.pasado ? 'pasado' : ''}">
                                     <span class="dia">#{col.nombreDia}</span>
                                     <span class="numero">#{col.fecha.dayOfMonth}</span>
                                 </div>
@@ -614,7 +646,7 @@
                             </div>
 
                             <ui:repeat value="#{gestionCitasBean.dias}" var="col">
-                                <div class="columnaDia #{col.finDeSemana ? 'finSemana' : ''} #{col.hoy ? 'hoy' : ''}" style="height: #{gestionCitasBean.alturaPixeles}px;">
+                                <div class="columnaDia #{col.finDeSemana ? 'finSemana' : ''} #{col.hoy ? 'hoy' : ''} #{col.pasado ? 'pasado' : ''}" aria-disabled="#{col.pasado}" style="height: #{gestionCitasBean.alturaPixeles}px;">
                                     <ui:repeat value="#{col.citas}" var="cita">
                                         <div class="evento" style="#{cita.estiloPosicion}#{cita.estiloColor}" title="#{cita.servicio}">
                                             <p:commandLink styleClass="enlaceCita" actionListener="#{edicionCita.cancelar}" action="#{gestionCitasBean.verCita(cita)}" update=":formDetalle:detalleCita" process="@this" oncomplete="abrirFormulario('formDetalle')">
@@ -795,7 +827,7 @@
                                     </div>
                                     <div class="horarioFila">
                                         <span class="horarioDia">Fecha</span>
-                                        <p:datePicker id="fechaCita" value="#{edicionCita.fecha}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" styleClass="horarioHora" />
+                                        <p:datePicker id="fechaCita" value="#{edicionCita.fecha}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" mindate="#{edicionCita.fechaMinima}" styleClass="horarioHora" />
                                     </div>
                                 </div>
 
@@ -911,7 +943,7 @@
                             </div>
                             <div class="horarioFila">
                                 <span class="horarioDia">Fecha</span>
-                                <p:datePicker id="fechaCita" value="#{RegistroUI.fechaCita}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" styleClass="horarioHora" />
+                                <p:datePicker id="fechaCita" value="#{RegistroUI.fechaCita}" pattern="dd/MM/yyyy" showIcon="true" readonlyInput="true" mindate="#{RegistroUI.fechaMinima}" styleClass="horarioHora" />
                             </div>
                         </div>
 

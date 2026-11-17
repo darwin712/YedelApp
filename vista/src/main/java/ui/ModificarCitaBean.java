@@ -16,6 +16,7 @@ import org.primefaces.PrimeFaces;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -357,6 +358,10 @@ public class ModificarCitaBean implements Serializable {
 
     public LocalDate getFecha() {
         return fecha;
+    }
+
+    public LocalDate getFechaMinima() {
+        return LocalDate.now(ZoneId.of("America/Tijuana"));
     }
 
     public void setFecha(LocalDate fecha) {

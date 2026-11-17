@@ -13,6 +13,9 @@ public class Producto {
     @Column(name = "id_producto", nullable = false)
     private Integer id;
 
+    @Column(name = "id_administrador")
+    private Integer idAdministrador;
+
     @Size(max = 100)
     @Column(name = "nombre", length = 100)
     private String nombre;
@@ -36,6 +39,14 @@ public class Producto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getIdAdministrador() {
+        return idAdministrador;
+    }
+
+    public void setIdAdministrador(Integer idAdministrador) {
+        this.idAdministrador = idAdministrador;
     }
 
     public String getNombre() {
