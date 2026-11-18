@@ -34,7 +34,7 @@ public class HibernateUtil {
         try (Connection conexion = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/yedelapp?useSSL=false&serverTimezone=UTC",
                 "root",
-                "12345678")) {
+                "root")) {
             DatabaseMetaData datos = conexion.getMetaData();
             boolean existeColumna;
             try (ResultSet columnas = datos.getColumns("yedelapp", null, "producto", "id_administrador")) {
